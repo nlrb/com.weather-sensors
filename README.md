@@ -1,4 +1,9 @@
-﻿# com.jilles.plugwisesource
-homey app to integrate plugwise desktop source in homey
+﻿# com.jilles.oregon
+homey app to view sensor info in Athom Homey
 
-works with plugwise source with only circles and an smile added.
+
+
+I have now 2 sensor devices  added the BTHR968 device id 5d60  and the THGR122NX device id 1d20 
+
+http://wmrx00.sourceforge.net/Arduino/OregonScientific-RF-Protocols.pdf
+
