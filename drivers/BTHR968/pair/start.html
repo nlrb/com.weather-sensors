@@ -1,0 +1,45 @@
+
+<button class="right" onclick="save()">Show Thermometers</button>
+
+<div id='text'></div>
+
+<script type="text/javascript">
+//Homey.setTitle( __('pair.press_button.title') );
+
+    //Homey.emit('press_button');
+
+    
+
+
+
+    Homey.on('button_pressed', function () {
+
+        //alert('driver is ready with reading source')
+	Homey.showView('list_sensors');
+    });
+
+    Homey.on('pairingdone', function () {
+        pairingdone();
+    });
+
+
+
+    function save() {
+      //  Homey.set('test', "this is pair page");
+      //  Homey.set('test2', "this is pair page2");
+        //alert("yes");
+        document.getElementById('text').innerHTML = 'on save ';
+        Homey.emit('press_button');
+        document.getElementById('text').innerHTML = '<h3>after emit press button</h3>';
+        //alert('after emit press button');
+    }
+
+    function pairingdone() {
+        Homey.done()
+
+
+    }
+    
+
+
+</script>

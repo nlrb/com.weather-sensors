@@ -1,0 +1,184 @@
+{
+  "id": "com.jilles.oregon",
+  "version": "0.0.4",
+  "compatibility": ">=0.9.1",
+  "category": [ "climate" ],
+  "name": {
+    "en": "Oregon Scientific Sensors",
+    "nl": "Oregon Scientific Sensors"
+  },
+  "description": {
+    "en": "imports oregonscientific sensor data ",
+    "nl": "importeerd oregonscientific sensor data"
+  },
+  "author": {
+    "name": "Jilles Miedema"
+  },
+  "images": {
+    "large": "./assets/images/large.jpg",
+    "small": "./assets/images/small.jpg"
+  },
+  "permissions": [
+    "homey:wireless:433",
+    "homey:wireless:868"
+  ],
+
+  "drivers": [
+    {
+      "id": "BTHR968",
+      "name": {
+        "en": "BTHR968",
+        "nl": "BTHR968"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "measure_battery" ],
+      "images": {
+        "large": "drivers/BTHR968/assets/images/large.jpg",
+        "small": "drivers/BTHR968/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "THGR122NX",
+      "name": {
+        "en": "THGR122NX",
+        "nl": "THGR122NX"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "measure_humidity","measure_battery" ],
+      "images": {
+        "large": "drivers/THGR122NX/assets/images/large.jpg",
+        "small": "drivers/THGR122NX/assets/images/small.jpg"
+      },
+      "pair": [
+
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    }
+
+
+  ],
+  "signals": {
+    "433": {
+      "oregonV2": {
+        "sof": [
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0,
+          1,
+          0,
+          0,
+          1,
+          0,
+          1,
+          1,
+          0
+        ],
+        "eof": [],
+        "words": [
+          [ 0, 1 ],
+          [ 1, 0 ]
+        ],
+        "manchesterUnit": 488,
+        "manchesterMaxUnits": 2,
+        "interval": 32000,
+        "repetitions": 0,
+        "sensitivity": 2,
+        "minimalLength": 150,
+        "maximalLength": 180
+      }
+    }
+  }
+}

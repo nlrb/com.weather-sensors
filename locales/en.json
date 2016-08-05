@@ -1,0 +1,24 @@
+{
+  "settings": {
+    "title_sounds": "Your sounds",
+    "title_upload": "Upload a sound",
+    "no_sounds": "You don't have any sounds yet!",
+    "delete": "Remove",
+    "confirm_delete": "Are you sure you want to remove this sound?",
+    "invalid_type": "Invalid file type! Supported types are .mp3 or .wav",
+    "too_large": "That file is too large. Max size: 900 Kb",
+    "file_api_err": "The File APIs are not fully supported in this browser."
+  },
+
+    "pair": {
+      "press_button": {
+        "title": "Press the button",
+        "description": "Press the button on your Philips Hue bridge"
+      }
+    },
+    "unreachable": "Unreachable"
+ 
+
+
+
+}
