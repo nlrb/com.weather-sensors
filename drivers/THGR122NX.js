@@ -152,7 +152,7 @@ function createDriver(driver) {
                     console.log('driver 279 capabilitis get device. measure_temperature  ', device.measure_temperature)
                     console.log('driver 201 device_data  ', device_data)
                     if (device instanceof Error) return callback(device);
-
+                
                     self.realtime(device_data, 'measure_temperature', device.measure_temperature);
 
                     // send the dim value to Homey
@@ -207,7 +207,7 @@ function createDriver(driver) {
                     if (device instanceof Error) return callback(device);
 
                     self.realtime(device_data, 'measure_battery', device.measure_battery);
-
+                   
                     // send the dim value to Homey
                     if (typeof callback == 'function') {
                         callback(null, device.measure_battery);
@@ -259,10 +259,11 @@ function createDriver(driver) {
                 self.homeyDevices[i].measure_humidity = dev.measure_humidity;
                 self.homeyDevices[i].measure_battery = dev.measure_battery;
 
-                self.realtime(self.homeyDevices[i], 'measure_temperature', dev.measure_temperature);
-                self.realtime(self.homeyDevices[i], 'measure_humidity', dev.measure_humidity);
-                self.realtime(self.homeyDevices[i], 'measure_battery', dev.measure_battery);
+                self.realtime(self.homeyDevices[i].data, 'measure_temperature', dev.measure_temperature);
+                self.realtime(self.homeyDevices[i].data, 'measure_humidity', dev.measure_humidity);
+                self.realtime(self.homeyDevices[i].data, 'measure_battery', dev.measure_battery);
 
+                console.log('updateCapabilitiesHomeyDevice self.homeyDevices[i].data   ', self.homeyDevices[i].data)
 
 
 

@@ -179,7 +179,7 @@ var self = {
                 console.log('driver 279 capabilitis get homeyDevices.measure_humidity  ', device.measure_humidity)
                 console.log('driver 201 device_data  ', device_data)
                 if (device instanceof Error) return callback(device);
-
+                
                 self.realtime(device_data, 'measure_humidity', device.measure_humidity);
 
                 // send the dim value to Homey
@@ -283,13 +283,13 @@ self.updateCapabilitiesHomeyDevice = function(dev) {
             self.homeyDevices[i].measure_pressure = dev.measure_pressure;
             self.homeyDevices[i].measure_battery = dev.measure_battery;
 
-            self.realtime(self.homeyDevices[i], 'measure_humidity', dev.measure_humidity);
-            self.realtime(self.homeyDevices[i], 'measure_temperature', dev.measure_temperature);
-            self.realtime(self.homeyDevices[i], 'measure_pressure', dev.measure_pressure);
-            self.realtime(self.homeyDevices[i], 'measure_battery', dev.measure_battery);
+            self.realtime(self.homeyDevices[i].data, 'measure_humidity', dev.measure_humidity);
+            self.realtime(self.homeyDevices[i].data, 'measure_temperature', dev.measure_temperature);
+            self.realtime(self.homeyDevices[i].data, 'measure_pressure', dev.measure_pressure);
+            self.realtime(self.homeyDevices[i].data, 'measure_battery', dev.measure_battery);
 
 
-
+            console.log('updateCapabilitiesHomeyDevice self.homeyDevices[i].data   ', self.homeyDevices[i].data)
 
             console.log('567 updateCapabilitiesHomeyDevice after change homeyDevices[i]  ', util.inspect(self.homeyDevices[i], false, null))
 
