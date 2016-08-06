@@ -153,7 +153,7 @@ function createDriver(driver) {
                     console.log('driver 201 device_data  ', device_data)
                     if (device instanceof Error) return callback(device);
 
-                    self.realtime(device_data, ' measure_temperature', device.measure_temperature);
+                    self.realtime(device_data, 'measure_temperature', device.measure_temperature);
 
                     // send the dim value to Homey
                     if (typeof callback == 'function') {
