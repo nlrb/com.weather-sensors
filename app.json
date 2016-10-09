@@ -1,33 +1,26 @@
 {
-  "id": "com.jilles.oregon",
-  "version": "0.0.8",
-  "compatibility": ">=0.9.1",
+  "id": "com.weather-sensors",
+  "version": "0.0.1",
+  "compatibility": ">=0.10",
   "category": [ "climate" ],
   "name": {
-    "en": "Oregon Scientific Sensors",
-    "nl": "Oregon Scientific Sensors"
+    "en": "Wireless Weather Sensors",
+    "nl": "Draadloze Weersensoren"
   },
   "description": {
-    "en": "imports oregonscientific sensor data ",
-    "nl": "importeerd oregonscientific sensor data"
+    "en": "Reads data from several types of wireless weather sensors.",
+    "nl": "Leest data van verschillende soorten draadloze weersensoren."
   },
   "author": {
-    "name": "Jilles Miedema"
+    "name": "Ramón Baas"
   },
-
-    "contributors": {
+  "contributors": {
     "developers": [
       {
-        "name": "Floris van Ingen",
-        "email": "floris.vaningen@isds.nl"
+        "name": "Jilles Miedema"
       }
     ]
-   
   },
-
-
-
-
   "images": {
     "large": "./assets/images/large.jpg",
     "small": "./assets/images/small.jpg"
@@ -36,22 +29,20 @@
     "homey:wireless:433",
     "homey:wireless:868"
   ],
-
   "drivers": [
     {
-      "id": "BTHR968",
+      "id": "rain",
       "name": {
-        "en": "BTHR968",
-        "nl": "BTHR968"
+        "en": "Rain",
+        "nl": "Regen"
       },
       "class": "sensor",
-      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "measure_battery" ],
+      "capabilities": [ "measure_rain", "meter_rain", "alarm_battery" ],
       "images": {
-        "large": "drivers/BTHR968/assets/images/large.jpg",
-        "small": "drivers/BTHR968/assets/images/small.jpg"
+        "large": "drivers/rain/assets/images/large.jpg",
+        "small": "drivers/rain/assets/images/small.jpg"
       },
       "pair": [
-
         {
           "id": "list_sensors",
           "template": "list_devices",
@@ -66,19 +57,69 @@
       ]
     },
     {
-      "id": "THGR122NX",
+      "id": "temphumbar",
       "name": {
-        "en": "THGR122NX",
-        "nl": "THGR122NX"
+        "en": "Temperature/Humidity/Pressure",
+        "nl": "Temperatuur/Vochtigheid/Druk"
       },
       "class": "sensor",
-      "capabilities": [ "measure_temperature", "measure_humidity", "measure_battery" ],
+      "capabilities": [ "measure_temperature", "measure_humidity", "measure_pressure", "alarm_battery" ],
       "images": {
-        "large": "drivers/THGR122NX/assets/images/large.jpg",
-        "small": "drivers/THGR122NX/assets/images/small.jpg"
+        "large": "drivers/temphumbar/assets/images/large.jpg",
+        "small": "drivers/temphumbar/assets/images/small.jpg"
       },
       "pair": [
-
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "temphum",
+      "name": {
+        "en": "Temperature/Humidity",
+        "nl": "Temperatuur/Vochtigheid"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_temperature", "measure_humidity", "alarm_battery" ],
+      "images": {
+        "large": "drivers/temphum/assets/images/large.jpg",
+        "small": "drivers/temphum/assets/images/small.jpg"
+      },
+      "pair": [
+        {
+          "id": "list_sensors",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_sensors"
+          }
+        },
+        {
+          "id": "add_sensors",
+          "template": "add_devices"
+        }
+      ]
+    },
+    {
+      "id": "wind",
+      "name": {
+        "en": "Wind"
+      },
+      "class": "sensor",
+      "capabilities": [ "measure_wind_angle", "measure_wind_strength", "measure_gust_strength", "alarm_battery" ],
+      "images": {
+        "large": "drivers/wind/assets/images/large.jpg",
+        "small": "drivers/wind/assets/images/small.jpg"
+      },
+      "pair": [
         {
           "id": "list_sensors",
           "template": "list_devices",
@@ -92,93 +133,16 @@
         }
       ]
     }
-
-
   ],
   "signals": {
     "433": {
-      "oregonV2": {
+      "OregonV2": {
         "sof": [
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          0,
-          1,
-          1,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          1,
-          1,
-          0,
-          1,
-          0,
-          0,
-          1,
-          0,
-          1,
-          1,
-          0
+          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+          0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+          1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
         ],
         "eof": [],
         "words": [
@@ -192,6 +156,64 @@
         "sensitivity": 2,
         "minimalLength": 150,
         "maximalLength": 180
+      },
+      "OregonV3": {
+        "sof": [
+          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+          1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+          0, 1, 1, 0, 0, 1, 1, 0
+        ],
+        "eof": [],
+        "words": [
+          [ 0, 1 ],
+          [ 1, 0 ]
+        ],
+        "manchesterUnit": 488.28125,
+        "manchesterMaxUnits": 2,
+        "repetitions": 0,
+        "sensitivity": 2,
+        "minimalLength": 60,
+        "maximalLength": 120
+      },
+      "Hideki": {
+        "sof": [
+		  0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0
+		],
+        "eof": [],
+        "words": [
+          [ 1, 0 ],
+          [ 0, 1 ]
+        ],
+        "manchesterUnit": 450,
+        "manchesterMaxUnits": 2,
+        "repetitions": 0,
+        "sensitivity": 2,
+        "minimalLength": 51,
+        "maximalLength": -1,
+		"rxTimeout": 200,
+		"modulation": {
+			"type": "GFSK",
+			"baudRate": 100000,
+			"channelSpacing": 100000,
+			"channelDeviation": 50000
+		}
+      },
+      "Cresta": {
+        "sof": [
+		  1, 0, 1, 0, 1, 1, 1, 0, 0
+        ],
+        "eof": [],
+        "words": [
+          [ 0, 1 ],
+          [ 1, 0 ]
+        ],
+        "manchesterUnit": 500,
+        "manchesterMaxUnits": 2,
+        "repetitions": 0,
+        "sensitivity": 2,
+        "minimalLength": 45,
+        "maximalLength": -1
       }
     }
   }
