@@ -29,7 +29,7 @@ var self = module.exports = {
 		
 		// TODO: make app settings for protocol selection
 		var setting = { 
-			oregonv2: false, 
+			oregonv2: true, 
 			oregonv3: true,
 			cresta: true
 		};

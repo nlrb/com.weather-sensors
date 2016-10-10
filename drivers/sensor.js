@@ -14,6 +14,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 const utils = require('utils');
 
+const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
+
 var Sensors = {}; // all sensors we've found
 var Devices = {}; // all devices that have been added
 
@@ -26,6 +28,14 @@ var capability = {
 	currentspeed: 'measure_gust_strength',
 	averagespeed: 'measure_wind_strength',
 	lowbattery: 'alarm_battery'
+}
+
+var genericName = {
+	R: { en: 'Rain gauge', nl: 'Regenmeter' },
+	TH: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' },
+	THB: { en: 'Weather station', nl: 'Weerstation' },
+	UV: { en: 'Ultra Violet' },
+	W: { en: 'Anemometer', nl: 'Windmeter' }
 }
 
 // Update the sensor data
@@ -69,6 +79,11 @@ function update(result) {
 		result.lastupdate = new Date();
 		result.count = (Sensors[id].count || 0) + 1;
 		result.newdata = newdata;
+		// Update settings
+		if (Devices[id] != null) {
+			var when = result.lastupdate.toLocaleString(locale);
+			Devices[id].driver.setSettings(Devices[id].device_data, { update: when });
+		}
 		// Update the sensor log
 		Sensors[id] = result;
 		utils.debug(Sensors);
@@ -86,7 +101,14 @@ function getSensors(type) {
 		if (Sensors[i].type == type) {
 			list.push({ 
 				name: Sensors[i].name || (type + ' ' + Sensors[i].id),
-				data: {	id: i, type: type }
+				data: {	id: i, type: type },
+				settings: {
+					protocol: Sensors[i].protocol,
+					name: Sensors[i].name || genericName[type][locale] || genericName[type].en,
+					channel: Sensors[i].channel.toString(),
+					id: Sensors[i].id,
+					update: Sensors[i].lastupdate.toLocaleString(locale)
+				}
 			});
 		}
 	}
