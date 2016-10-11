@@ -48,6 +48,51 @@
 		}, {
 			"id": "add_sensors",
 			"template": "add_devices"
+		}],
+		"settings": [{
+			"type": "group",
+			"label": {
+				"en": "Sensor information",
+				"nl": "Sensor informatie"
+			},
+			"children": [{
+				"id": "protocol",
+				"type": "label",
+				"label": {
+					"en": "Protocol"
+				},
+				"value": ""
+			}, {
+				"id": "name",
+				"type": "label",
+				"label": {
+					"en": "Type"
+				},
+				"value": ""
+			}, {
+				"id": "channel",
+				"type": "label",
+				"label": {
+					"en": "Channel",
+					"nl": "Kanaal"
+				},
+				"value": ""
+			}, {
+				"id": "id",
+				"type": "label",
+				"label": {
+					"en": "ID"
+				},
+				"value": ""
+			}, {
+				"id": "update",
+				"type": "label",
+				"label": {
+					"en": "Last update",
+					"nl": "Laaste data van"
+				},
+				"value": ""
+			}]
 		}]
 	}, {
 		"id": "temphumbar",
