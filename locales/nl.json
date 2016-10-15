@@ -1,0 +1,18 @@
+{
+	"settings": {
+		"sensors": {
+			"title": "Beschikbare sensoren",
+			"description": "Hieronder staan de sensoren die tot nu toe door Homey zijn gevonden. Zodra een sensor in de lijst staat, kan deze indien gewenst toegevoegd worden in Homey onder 'Apparaten' ('+') 'Draadloze Weersensoren'.",
+			"header": "Sensoren",
+			"details": {
+				"protocol": "Protocol",
+				"type": "Type",
+				"channel": "Kanaal",
+				"id": "ID",
+				"update": "Laatste data van",
+				"data": "Ruwe data",
+				"paired": "Homey apparaat"
+			}
+		}
+	}
+}

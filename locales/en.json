@@ -1,2 +1,18 @@
 {
+	"settings": {
+		"sensors": {
+			"title": "Available sensors",
+			"description": "Below the sensors are listed that have been found by Homey until now. Once a sensor is in the list, it can be added to Homey under 'Devices' ('+') 'Wireless Weather Sensors' if desired.",
+			"header": "Sensors",
+			"details": {
+				"protocol": "Protocol",
+				"type": "Type",
+				"channel": "Channel",
+				"id": "ID",
+				"update": "Last update",
+				"data": "Raw data",
+				"paired": "Homey device"
+			}
+		}
+	}
 }

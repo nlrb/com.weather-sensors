@@ -87,6 +87,8 @@ function update(result) {
 		// Update the sensor log
 		Sensors[id] = result;
 		utils.debug(Sensors);
+		// Send an event to the front-end as well for the app settings page
+		Homey.manager('api').realtime('new_sensor', getSensors() );
 	} else {
 		utils.debug('Error:', result);
 	}
@@ -95,21 +97,36 @@ function update(result) {
 }
 
 // getSensors: return a list of sensors of type <x>
+// if type is null, all sensors are returned
 function getSensors(type) {
 	var list = [];
 	for (var i in Sensors) {
-		if (Sensors[i].type == type) {
-			list.push({ 
-				name: Sensors[i].name || (type + ' ' + Sensors[i].id),
-				data: {	id: i, type: type },
-				settings: {
+		if (type == null || Sensors[i].type == type) {
+			if (type == null) {
+				var hid = Sensors[i].protocol + ':' + Sensors[i].id + ':' + Sensors[i].channel;
+				list.push({
 					protocol: Sensors[i].protocol,
-					name: Sensors[i].name || genericName[type][locale] || genericName[type].en,
+					type: genericName[Sensors[i].type][locale] || genericName[Sensors[i].type].en,
+					name: Sensors[i].name,
 					channel: Sensors[i].channel.toString(),
 					id: Sensors[i].id,
-					update: Sensors[i].lastupdate.toLocaleString(locale)
-				}
-			});
+					update: Sensors[i].lastupdate.toLocaleString(locale),
+					data: Sensors[i].data,
+					paired: Devices[hid] != null
+				});
+			} else {
+				list.push({ 
+					name: Sensors[i].name || (type + ' ' + Sensors[i].id),
+					data: {	id: i, type: type },
+					settings: {
+						protocol: Sensors[i].protocol,
+						type: Sensors[i].name || genericName[type][locale] || genericName[type].en,
+						channel: Sensors[i].channel.toString(),
+						id: Sensors[i].id,
+						update: Sensors[i].lastupdate.toLocaleString(locale)
+					}
+				});
+			}
 		}
 	}
 	return list;
@@ -262,5 +279,6 @@ function createDriver(driver) {
 
 module.exports = { 
 	createDriver: createDriver,
+	getSensors: getSensors,
 	update: update
 };

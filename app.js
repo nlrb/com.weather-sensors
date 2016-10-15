@@ -45,7 +45,7 @@ var self = module.exports = {
 						utils.debug('Signal', s, '; err', err, 'success', success);
 					} else { 
 						utils.debug('Signal', s, 'registered.')
-						// Register data receive envent
+						// Register data receive event
 						signals[s].on('payload', function (payload, first) {
 							var result = protocols[s].parser(payload);
 							sensor.update(result);
@@ -57,5 +57,8 @@ var self = module.exports = {
     },
     deleted: function () {
 		// TODO
-    }
+    },
+	api: {
+		getSensors: sensor.getSensors
+	}
 }
