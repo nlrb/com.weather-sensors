@@ -2,6 +2,14 @@
 <html>
 	<head>
 		<style>
+			.message {
+				background: #f8f8f8;
+				display: none;
+			}
+			.message-bar {
+				font-style: italic;
+				font-weight: bolder;
+			}
 			.table {
 				padding-left: 5px;
 				padding-right: 5px;
@@ -11,9 +19,28 @@
 		<script type="text/javascript" src="/manager/webserver/assets/js/angular.js"></script>
 		<script>
 			angular.module('WeatherSettings', [])
-			.controller('SettingsCtrl', ['$scope', function($scope) {
+			.controller('SettingsCtrl', ['$scope', '$timeout', function($scope, $timeout) {
 				$scope.sensors = {};
+				$scope.protocols = {};
+				$scope.message = '';
+				$scope.timeout;
+				$scope.msgPromise;
 				
+				// Display message to the user
+				$scope.displayMessage = function(text) {
+					if ($scope.msgPromise != null) {
+						$timeout.cancel($scope.msgPromise);
+					}
+					$scope.$apply(function() {
+						$scope.message = text;
+					});
+					$(".message").slideDown();
+					$scope.msgPromise = $timeout(function() {
+						$scope.message = '';
+						$(".message").slideUp();
+					}, 5000);
+				}
+
 				// Update the list when a new sensor is found
 				Homey.on('new_sensor', function(value) {
 					if (value) {
@@ -28,6 +55,31 @@
 						$scope.$apply();
 					}
 				});
+				Homey.get('protocols', function(err, value) {
+					// Get list of supported protocols
+					Homey.api('GET', '/getProtocols/', {}, function(err, protocols) {
+						if (protocols) {
+							$scope.protocols = protocols;
+							if (value) {
+								for (var v in value) {
+									if (value[v].watching != null) {
+										$scope.protocols[v].watching = value[v].watching;
+									}
+								}
+							}
+							$scope.$apply();
+						}
+					});
+				});
+				// Save the protocols
+				$scope.protocolSave = function() {
+					// Store the protocol settings
+					Homey.set('protocols', $scope.protocols, function(err, value) {
+						if (!err) {
+							$scope.displayMessage(__('settings.protocols.success'));
+						}
+					});
+				};
 			}]);
 			
 			function onHomeyReady(){
@@ -38,6 +90,26 @@
 	</head>
 
 	<body ng-controller="SettingsCtrl">
+		<fieldset id="message" class="message">
+			<legend data-i18n="settings.message"></legend>
+			<div class="message-bar">
+				{{message}}
+			</div>
+		</fieldset>
+		<div id="protocols">
+			<h1 data-i18n="settings.protocols.title"></h1>
+			<p data-i18n="settings.protocols.description"></p>
+			<fieldset>
+				<legend data-i18n="settings.protocols.header"></legend>
+				<form name="protoclForm" ng-submit="protocolSave()">
+					<div ng-repeat="item in protocols | orderBy: 'id'">
+						<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
+					</div>
+					<p></p>
+					<button type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.protocols.submit"></button>
+				</form>
+			</fieldset>
+		</div>
 		<div id="sensors">
 			<h1 data-i18n="settings.sensors.title"></h1>
 			<p data-i18n="settings.sensors.description"></p>

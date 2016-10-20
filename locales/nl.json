@@ -1,5 +1,13 @@
 {
 	"settings": {
+		"message": "Mededeling",
+		"protocols": {
+			"title": "Protocol selectie",
+			"description": "Selecteer de draadloze weersensor protocollen die Homey moet ontvangen. Het wordt aanbevolen om alleen de protocollen te selecteren die echt nodig zijn voor de beste prestaties van Homey.",
+			"header": "Protocollen",
+			"submit": "Instellingen opslaan",
+			"success": "Instellingen zijn opgeslagen."
+		},
 		"sensors": {
 			"title": "Beschikbare sensoren",
 			"description": "Hieronder staan de sensoren die tot nu toe door Homey zijn gevonden. Zodra een sensor in de lijst staat, kan deze indien gewenst toegevoegd worden in Homey onder 'Apparaten' ('+') 'Draadloze Weersensoren'.",

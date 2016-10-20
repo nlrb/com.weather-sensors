@@ -5,9 +5,16 @@ module.exports = [
         path: '/getSensors/',
         requires_authorizaton: false,
         fn: function(callback, args) {
-            var getSensors = Homey.app.api.getSensors;
-			var ok = getSensors();
-			callback(null, ok);
+			callback(null, Homey.app.api.getSensors());
+        }
+    },
+    {
+        description: 'Get a list of all protocols',
+        method: 'GET',
+        path: '/getProtocols/',
+        requires_authorizaton: false,
+        fn: function(callback, args) {
+			callback(null, Homey.app.api.getProtocols());
         }
     }
 ];

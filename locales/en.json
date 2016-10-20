@@ -1,5 +1,13 @@
 {
 	"settings": {
+		"message": "Message",
+		"protocols": {
+			"title": "Protocol selection",
+			"description": "Select the wireless weather sensor protocols that Homey needs to receive. It is advised for best performance of Homey to only select the protocols that are really needed.",
+			"header": "Protocols",
+			"submit": "Save settings",
+			"success": "Settings have been saved."
+		},
 		"sensors": {
 			"title": "Available sensors",
 			"description": "Below the sensors are listed that have been found by Homey until now. Once a sensor is in the list, it can be added to Homey under 'Devices' ('+') 'Wireless Weather Sensors' if desired.",

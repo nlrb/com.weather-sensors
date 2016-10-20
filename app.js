@@ -14,11 +14,13 @@ const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
 
 const protocols = { 
-	oregonv2: { signal: 'OregonV2', parser: oregon.parsev2 },
-	oregonv3: { signal: 'OregonV3', parser: oregon.parsev3 },
-	cresta: { signal: 'Cresta', parser: cresta.parse }
+	oregonv2: { name: 'Oregon Scientific v2', signal: 'OregonV2', parser: oregon.parsev2 },
+	oregonv3: { name: 'Oregon Scientific v3', signal: 'OregonV3', parser: oregon.parsev3 },
+	cresta: { name: 'Cresta / TFA', signal: 'Cresta', parser: cresta.parse }
 };
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
+
+var signals = {};
 
 var self = module.exports = {
 
@@ -27,18 +29,13 @@ var self = module.exports = {
 		// Uncomment to turn on debugging
 		utils.setDebug(true);
 		
-		// TODO: make app settings for protocol selection
-		var setting = { 
-			oregonv2: true, 
-			oregonv3: true,
-			cresta: true
-		};
+		// Read app settings for protocol selection
+		var setting = Homey.manager('settings').get('protocols');
 		
 		var HomeySignal = Homey.wireless('433').Signal;
-		var signals = {};
 		
 		Object.keys(protocols).forEach(function(s) {
-			if (setting[s]) {
+			if (setting && setting[s] && setting[s].watching) {
 				signals[s] = new HomeySignal(protocols[s].signal);
 				signals[s].register(function (err, success) {
 					if (err != null) {
@@ -56,9 +53,18 @@ var self = module.exports = {
 		});
     },
     deleted: function () {
-		// TODO
+		for (var s in signals) {
+			signals[s].unregister();
+		}
     },
 	api: {
-		getSensors: sensor.getSensors
+		getSensors: sensor.getSensors,
+		getProtocols: function() {
+			var result = {};
+			for (var p in protocols) {
+				result[p] = { id: p, name: protocols[p].name }
+			}
+			return result
+		}
 	}
 }
