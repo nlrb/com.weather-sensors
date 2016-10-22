@@ -22,20 +22,13 @@ const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // onl
 
 var signals = {};
 
-var self = module.exports = {
-
-    init: function () {
-        
-		// Uncomment to turn on debugging
-		utils.setDebug(true);
-		
-		// Read app settings for protocol selection
-		var setting = Homey.manager('settings').get('protocols');
-		
-		var HomeySignal = Homey.wireless('433').Signal;
-		
-		Object.keys(protocols).forEach(function(s) {
-			if (setting && setting[s] && setting[s].watching) {
+// Register all needed signals with Homey
+function registerSignals(setting) {
+	var HomeySignal = Homey.wireless('433').Signal;
+	Object.keys(protocols).forEach(function(s) {
+		if (setting && setting[s]) {
+			if (setting[s].watching && signals[s] == null) {
+				// Register signal defitinion with Homey
 				signals[s] = new HomeySignal(protocols[s].signal);
 				signals[s].register(function (err, success) {
 					if (err != null) {
@@ -49,8 +42,34 @@ var self = module.exports = {
 						});
 					}
 				});
+			} else if (!setting[s].watching && signals[s] != null) {
+				// Un-register signal with Homey
+				signals[s].unregister();
+				utils.debug('Signal', s, 'unregistered.')
+			}
+		}
+	});
+}
+
+var self = module.exports = {
+
+    init: function () {
+        
+		// Uncomment to turn on debugging
+		//utils.setDebug(true);
+		
+		// Read app settings for protocol selection
+		var setting = Homey.manager('settings').get('protocols');
+		registerSignals(setting);
+		
+		// Catch update of settings
+		Homey.manager('settings').on('set', function(varName) {
+			if (varName == 'protocols') {
+				setting = Homey.manager('settings').get('protocols');
+				registerSignals(setting);
 			}
 		});
+		
     },
     deleted: function () {
 		for (var s in signals) {
