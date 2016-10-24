@@ -62,7 +62,7 @@
 							$scope.protocols = protocols;
 							if (value) {
 								for (var v in value) {
-									if (value[v].watching != null) {
+									if (value[v].watching != null && $scope.protocols[v] != null) {
 										$scope.protocols[v].watching = value[v].watching;
 									}
 								}
