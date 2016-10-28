@@ -352,6 +352,17 @@
 				"minimalLength": 45,
 				"maximalLength": 90
 			},
+			"AlectoV1": {
+				"sof": [500,9000],
+				"eof": [],
+				"words": [
+					[500, 2000],
+					[500, 4000]
+				],
+				"sensitivity": 0.9,
+				"minimalLength": 36,
+				"maximalLength": 37
+			},
 			"AlectoV3": {
 				"sof": [],
 				"eof": [],

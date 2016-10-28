@@ -18,7 +18,8 @@ const protocols = {
 	oregonv2: { name: 'Oregon Scientific v2', signal: 'OregonV2', parser: oregon.parsev2 },
 	oregonv3: { name: 'Oregon Scientific v3', signal: 'OregonV3', parser: oregon.parsev3 },
 	cresta: { name: 'Cresta / TFA', signal: 'Cresta', parser: cresta.parse },
-	alecto: { name: 'Alecto v3', signal: 'AlectoV3', parser: alecto.parsev3 }
+	alectov1: { name: 'Alecto v1 (test)', signal: 'AlectoV1', parser: alecto.parsev1 },
+	alectov3: { name: 'Alecto v3', signal: 'AlectoV3', parser: alecto.parsev3 }
 };
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
 
@@ -58,7 +59,7 @@ var self = module.exports = {
     init: function () {
         
 		// Uncomment to turn on debugging
-		//utils.setDebug(true);
+		utils.setDebug(true);
 		
 		// Read app settings for protocol selection
 		var setting = Homey.manager('settings').get('protocols');
