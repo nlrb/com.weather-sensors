@@ -76,7 +76,6 @@ function update(result) {
 		utils.debug('Sensor value has changed:', newdata);
 		
 		// Add additional data
-		result.lastupdate = new Date();
 		result.count = (Sensors[id].count || 0) + 1;
 		result.newdata = newdata;
 		// Update settings
@@ -112,6 +111,7 @@ function getSensors(type) {
 					id: Sensors[i].id,
 					update: Sensors[i].lastupdate.toLocaleString(locale),
 					data: Sensors[i].data,
+					batt: Sensors[i].lowbattery,
 					paired: Devices[hid] != null
 				});
 			} else {

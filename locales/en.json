@@ -19,6 +19,7 @@
 				"id": "ID",
 				"update": "Last update",
 				"data": "Raw data",
+				"lowbattery": "Low battery",
 				"paired": "Homey device"
 			}
 		}

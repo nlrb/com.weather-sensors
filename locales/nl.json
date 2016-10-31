@@ -19,6 +19,7 @@
 				"id": "ID",
 				"update": "Laatste data van",
 				"data": "Ruwe data",
+				"lowbattery": "Lage batterijspanning",
 				"paired": "Homey apparaat"
 			}
 		}

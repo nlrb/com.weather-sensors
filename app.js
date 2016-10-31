@@ -8,31 +8,32 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-const alecto = require('alecto');
-const cresta = require('cresta');
-const oregon = require('oregon');
+const libs = [ 'alecto', 'cresta', 'oregon' ];
 const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
-
-const protocols = { 
-	oregonv2: { name: 'Oregon Scientific v2', signal: 'OregonV2', parser: oregon.parsev2 },
-	oregonv3: { name: 'Oregon Scientific v3', signal: 'OregonV3', parser: oregon.parsev3 },
-	cresta: { name: 'Cresta / TFA', signal: 'Cresta', parser: cresta.parse },
-	alectov1: { name: 'Alecto v1 (test)', signal: 'AlectoV1', parser: alecto.parsev1 },
-	alectov3: { name: 'Alecto v3', signal: 'AlectoV3', parser: alecto.parsev3 }
-};
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
 
 var signals = {};
+var protocols = {};
 
 // Register all needed signals with Homey
 function registerSignals(setting) {
 	var HomeySignal = Homey.wireless('433').Signal;
-	Object.keys(protocols).forEach(function(s) {
+	for (let l in libs) {
+		let lib = require(libs[l]);
+		// Initialize library
+		lib.init();
+	}
+	var ws = utils.WeatherSignal.get();
+	Homey.log(ws);
+	for (let sig in ws) {
+		let s = ws[sig];
+		let signal = utils.WeatherSignal.get(s);
+		protocols[s] = { id: s, name: signal.getName(), hint: signal.getHint(locale) };
 		if (setting && setting[s]) {
 			if (setting[s].watching && signals[s] == null) {
 				// Register signal defitinion with Homey
-				signals[s] = new HomeySignal(protocols[s].signal);
+				signals[s] = new HomeySignal(signal.getSignal());
 				signals[s].register(function (err, success) {
 					if (err != null) {
 						utils.debug('Signal', s, '; err', err, 'success', success);
@@ -40,7 +41,8 @@ function registerSignals(setting) {
 						utils.debug('Signal', s, 'registered.')
 						// Register data receive event
 						signals[s].on('payload', function (payload, first) {
-							var result = protocols[s].parser(payload);
+							utils.debug('Received payload for', signal.getName());
+							let result = signal.parse(payload);
 							sensor.update(result);
 						});
 					}
@@ -51,18 +53,16 @@ function registerSignals(setting) {
 				utils.debug('Signal', s, 'unregistered.')
 			}
 		}
-	});
+	}
 }
 
-var self = module.exports = {
-
+module.exports = {
     init: function () {
-        
 		// Uncomment to turn on debugging
 		utils.setDebug(true);
 		
 		// Read app settings for protocol selection
-		var setting = Homey.manager('settings').get('protocols');
+		let setting = Homey.manager('settings').get('protocols');
 		registerSignals(setting);
 		
 		// Catch update of settings
@@ -75,18 +75,12 @@ var self = module.exports = {
 		
     },
     deleted: function () {
-		for (var s in signals) {
+		for (let s in signals) {
 			signals[s].unregister();
 		}
     },
 	api: {
 		getSensors: sensor.getSensors,
-		getProtocols: function() {
-			var result = {};
-			for (var p in protocols) {
-				result[p] = { id: p, name: protocols[p].name }
-			}
-			return result
-		}
+		getProtocols: () => protocols
 	}
 }
