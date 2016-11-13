@@ -449,6 +449,17 @@
 				"sensitivity": 0.7,
 				"minimalLength": 44,
 				"maximalLength": 44
+			},
+			"LaCrosseWS": {
+				"sof": [],
+				"eof": [],
+				"words": [
+					[800, 400],
+					[400, 800]
+				],
+				"sensitivity": 0.7,
+				"minimalLength": 46,
+				"maximalLength": 81
 			}
 		},
 		"868": {
