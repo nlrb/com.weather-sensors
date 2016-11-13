@@ -16,12 +16,13 @@ const utils = require('utils');
 
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
 
-var Sensors = {}; // all sensors we've found
-var Devices = {}; // all devices that have been added
+var Sensors = new Map(); // all sensors we've found
+var Devices = new Map(); // all devices that have been added
 
-var capability = {
+const capability = {
 	temperature: 'measure_temperature',
 	humidity: 'measure_humidity',
+	pressure: 'measure_pressure',
 	rainrate: 'measure_rain',
 	raintotal: 'meter_rain',
 	direction: 'measure_wind_angle',
@@ -30,7 +31,7 @@ var capability = {
 	lowbattery: 'alarm_battery'
 }
 
-var genericName = {
+const genericType = {
 	R: { en: 'Rain gauge', nl: 'Regenmeter' },
 	TH: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' },
 	THB: { en: 'Weather station', nl: 'Weerstation' },
@@ -39,94 +40,84 @@ var genericName = {
 }
 
 // Update the sensor data
-function update(result) {
-	var sendRealtime = (device, r, newVal) => {
-		if (device != null) {
-			var cap = capability[r];
-			if (cap != null) {
-				device.driver.realtime(device.device_data, cap, newVal, function(err, success) {
-					utils.debug('Real-time', cap, 'update', (err ? err : 'OK'));
-				});
-			}
+function update(signal) {
+	let result = signal.getResult();
+	if (typeof result !== 'string' && result != null) {
+		let did = result.protocol + ':' + result.id + ':' + result.channel;
+		if (Sensors.get(did) == null) {
+			Sensors.set(did, { raw: { data: {} } });
+			signal.debug('Found a new sensor. Total found is now', Sensors.size);
 		}
-	}
-	var newdata = false;
-	if (typeof result != 'string' && result != null) {
-		var id = result.protocol + ':' + result.id + ':' + result.channel;
-		if (Sensors[id] == null) {
-			Sensors[id] = { data: {} };
-			utils.debug('Found a new sensor. Total found is now', (Object.keys(Sensors).length));
-		}
+		let current = Sensors.get(did).raw;
+		let device = Devices.get(did);
 		// Check if a value has changed
-		for (var r in result) {
-			if (r == 'data') {
-				for (var c in result.data) {
-					if (result.data[c] != Sensors[id].data[c]) {
-						newdata = true;
-						sendRealtime(Devices[id], c, result.data[c])
-					}
-				}
-			} else {
-				if (result[r] != Sensors[id][r]) {
-					newdata = true;
-					sendRealtime(Devices[id], r, result[r]);
+		let newdata = false;
+		let newvalue = JSON.parse(JSON.stringify(result));
+		newvalue.data = current.data;
+		for (let c in result.data) {
+			if (result.data[c] !== newvalue.data[c]) {
+				newdata = true;
+				newvalue.data[c] = result.data[c];
+				let cap = capability[c];
+				if (device != null && cap != null) {
+					device.driver.realtime(device.device_data, cap, newvalue.data[c], function(err, success) {
+						signal.debug('Real-time', cap, 'update', (err ? err : 'OK'));
+					});
 				}
 			}
 		}
-		utils.debug('Sensor value has changed:', newdata);
+		signal.debug('Sensor value has changed:', newdata);
 		
 		// Add additional data
-		result.count = (Sensors[id].count || 0) + 1;
-		result.newdata = newdata;
+		newvalue.count = (current.count || 0) + 1;
+		newvalue.newdata = newdata;
 		// Update settings
-		if (Devices[id] != null) {
-			var when = result.lastupdate.toLocaleString(locale);
-			Devices[id].driver.setSettings(Devices[id].device_data, { update: when });
+		let when = newvalue.lastupdate.toLocaleString(locale);
+		if (device != null) {
+			if (!device.available) {
+				device.driver.setAvailable(device.device_data);
+				device.available = true;
+				Devices.set(did, device);
+			}
+			device.driver.setSettings(device.device_data, { update: when });
 		}
 		// Update the sensor log
-		Sensors[id] = result;
-		utils.debug(Sensors);
+		let display = {
+			protocol: signal.getName(),
+			type: genericType[newvalue.type][locale] || genericType[newvalue.type].en,
+			name: newvalue.name,
+			channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
+			id: newvalue.id,
+			update: when,
+			data: newvalue.data,
+			paired: device != null
+		}
+		Sensors.set(did, { raw: newvalue, display: display });
+		//signal.debug(Sensors);
 		// Send an event to the front-end as well for the app settings page
-		Homey.manager('api').realtime('new_sensor', getSensors() );
+		Homey.manager('api').realtime('sensor_update', Array.from(Sensors.values()).map(x => x.display));
 	} else {
-		utils.debug('Error:', result);
+		signal.debug('Error:', result);
 	}
-	
-	return newdata;
 }
 
 // getSensors: return a list of sensors of type <x>
-// if type is null, all sensors are returned
 function getSensors(type) {
 	var list = [];
-	for (var i in Sensors) {
-		if (type == null || Sensors[i].type == type) {
-			if (type == null) {
-				var hid = Sensors[i].protocol + ':' + Sensors[i].id + ':' + Sensors[i].channel;
-				list.push({
-					protocol: Sensors[i].protocol,
-					type: genericName[Sensors[i].type][locale] || genericName[Sensors[i].type].en,
-					name: Sensors[i].name,
-					channel: Sensors[i].channel.toString(),
-					id: Sensors[i].id,
-					update: Sensors[i].lastupdate.toLocaleString(locale),
-					data: Sensors[i].data,
-					batt: Sensors[i].lowbattery,
-					paired: Devices[hid] != null
-				});
-			} else {
-				list.push({ 
-					name: Sensors[i].name || (type + ' ' + Sensors[i].id),
-					data: {	id: i, type: type },
-					settings: {
-						protocol: Sensors[i].protocol,
-						type: Sensors[i].name || genericName[type][locale] || genericName[type].en,
-						channel: Sensors[i].channel.toString(),
-						id: Sensors[i].id,
-						update: Sensors[i].lastupdate.toLocaleString(locale)
-					}
-				});
-			}
+	for (let i of Sensors.keys()) {
+		let val = Sensors.get(i);
+		if (type != null && val.raw.type == type) {
+			list.push({ 
+				name: val.raw.name || (type + ' ' + val.raw.id),
+				data: {	id: i, type: type },
+				settings: {
+					protocol: val.display.protocol,
+					type: val.raw.name || val.display.type,
+					channel: val.display.channel,
+					id: val.raw.id,
+					update: val.raw.lastupdate.toLocaleString(locale)
+				}
+			});
 		}
 	}
 	return list;
@@ -134,28 +125,43 @@ function getSensors(type) {
 
 // addSensorDevice
 function addSensorDevice(driver, device_data, name) {
-	Devices[device_data.id] = {
+	let sensor = Sensors.get(device_data.id);
+	Devices.set(device_data.id, {
 		driver: driver,
 		device_data: device_data,
-		name: name
+		name: name,
+		available: sensor != null
+	})
+	if (sensor != null) {
+		sensor.display.paired = true;
+		Sensors.set(device_data.id, sensor);
+	} else {
+		driver.setUnavailable(device_data, __('error.no_data'));
 	}
 }
 
 // deleteSensorDevice
 function deleteSensorDevice(device_data) {
-	delete Devices[device_data.id];
+	Devices.delete(device_data.id);
+	let sensor = Sensors.get(device_data.id);
+	if (sensor != null) {
+		sensor.display.paired = false;
+		Sensors.set(device_data.id, sensor);
+	}	
 }
 
 // updateDeviceName
 function updateDeviceName(device_data, new_name) {
-	Devices[device_data.id].name = new_name;
+	let dev = Devices.get(device_data.id);
+	dev.name = new_name;
+	Devices.set(device_data.id, dev);
 }
 
 // getSensorValue
 function getSensorValue(what, id) {
-	var val;
-	if (Sensors[id] != null && Sensors[id].data != null) {
-		val = Sensors[id].data[what] || Sensors[id][what];
+	let val = Sensors.get(id);
+	if (val != null) {
+		val = val.raw.data[what];
 	}
 	return val;
 }
@@ -169,10 +175,9 @@ function createDriver(driver) {
 				// Get the Homey name of the device
 				self.getName(device_data, function(err, name) {
 					addSensorDevice(self, device_data, name);
+					// we're ready
 				});
 			});
-			
-			// we're ready
 			callback();
 		},
 		
@@ -189,6 +194,14 @@ function createDriver(driver) {
 				get: function(device_data, callback) {
 						if (typeof callback == 'function') {
 							var val = getSensorValue('humidity', device_data.id);
+							callback(null, val);
+						}
+				}
+			},
+			measure_pressure: {
+				get: function(device_data, callback) {
+						if (typeof callback == 'function') {
+							var val = getSensorValue('pressure', device_data.id);
 							callback(null, val);
 						}
 				}
@@ -279,6 +292,6 @@ function createDriver(driver) {
 
 module.exports = { 
 	createDriver: createDriver,
-	getSensors: getSensors,
+	getSensors: () => Array.from(Sensors.values()).map(x => x.display),
 	update: update
 };

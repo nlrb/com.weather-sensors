@@ -16,5 +16,16 @@ module.exports = [
         fn: function(callback, args) {
 			callback(null, Homey.app.api.getProtocols());
         }
+    },
+    {
+        description: 'Get a heap dump',
+        method: 'GET',
+        path: '/heapdump/',
+        requires_authorizaton: false,
+        fn: function(callback, args) {
+			Homey.app.api.heapdump((filename, data) => {
+				callback({ filename: filename, result: data });
+			});
+        }
     }
 ];

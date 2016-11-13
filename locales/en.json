@@ -22,6 +22,15 @@
 				"lowbattery": "Low battery",
 				"paired": "Homey device"
 			}
+		},
+		"debug": {
+			"title": "Debug",
+			"description": "Only use the below functions when requested by the de app developer.",
+			"header": "Debug functions",
+			"heapdump": "Heap dump"
 		}
+	},
+	"error": {
+		"no_data": "No sensor data received"
 	}
 }

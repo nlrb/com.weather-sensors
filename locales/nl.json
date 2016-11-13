@@ -22,6 +22,15 @@
 				"lowbattery": "Lage batterijspanning",
 				"paired": "Homey apparaat"
 			}
+		},
+		"debug": {
+			"title": "Debug",
+			"description": "Gebruik de functies hieronder alleen als dit wordt aangegeven door de app ontwikkelaar.",
+			"header": "Debug functies",
+			"heapdump": "Heap dump"
 		}
+	},
+	"error": {
+		"no_data": "Geen data ontvangen van sensor"
 	}
 }

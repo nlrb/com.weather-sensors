@@ -63,7 +63,7 @@
 				},
 				"value": ""
 			}, {
-				"id": "name",
+				"id": "type",
 				"type": "label",
 				"label": {
 					"en": "Type"
@@ -97,8 +97,8 @@
 	}, {
 		"id": "temphumbar",
 		"name": {
-			"en": "Temperature/Humidity/Pressure",
-			"nl": "Temperatuur/Vochtigheid/Druk"
+			"en": "Pressure/Temperature/Humidity",
+			"nl": "Druk/Temperatuur/Vochtigheid"
 		},
 		"class": "sensor",
 		"capabilities": ["measure_temperature", "measure_humidity", "measure_pressure", "alarm_battery"],
@@ -130,7 +130,7 @@
 				},
 				"value": ""
 			}, {
-				"id": "name",
+				"id": "type",
 				"type": "label",
 				"label": {
 					"en": "Type"
@@ -197,7 +197,7 @@
 				},
 				"value": ""
 			}, {
-				"id": "name",
+				"id": "type",
 				"type": "label",
 				"label": {
 					"en": "Type"
@@ -263,7 +263,7 @@
 				},
 				"value": ""
 			}, {
-				"id": "name",
+				"id": "type",
 				"type": "label",
 				"label": {
 					"en": "Type"
@@ -294,7 +294,72 @@
 				"value": ""
 			}]
 		}]
-
+	}, {
+		"id": "uv",
+		"name": {
+			"en": "Ultra Violet"
+		},
+		"class": "sensor",
+		"capabilities": ["measure_ultraviolet", "alarm_battery"],
+		"images": {
+			"large": "drivers/uv/assets/images/large.jpg",
+			"small": "drivers/uv/assets/images/small.jpg"
+		},
+		"pair": [{
+			"id": "list_sensors",
+			"template": "list_devices",
+			"navigation": {
+				"next": "add_sensors"
+			}
+		}, {
+			"id": "add_sensors",
+			"template": "add_devices"
+		}],
+		"settings": [{
+			"type": "group",
+			"label": {
+				"en": "Sensor information",
+				"nl": "Sensor informatie"
+			},
+			"children": [{
+				"id": "protocol",
+				"type": "label",
+				"label": {
+					"en": "Protocol"
+				},
+				"value": ""
+			}, {
+				"id": "type",
+				"type": "label",
+				"label": {
+					"en": "Type"
+				},
+				"value": ""
+			}, {
+				"id": "channel",
+				"type": "label",
+				"label": {
+					"en": "Channel",
+					"nl": "Kanaal"
+				},
+				"value": ""
+			}, {
+				"id": "id",
+				"type": "label",
+				"label": {
+					"en": "ID"
+				},
+				"value": ""
+			}, {
+				"id": "update",
+				"type": "label",
+				"label": {
+					"en": "Last update",
+					"nl": "Laaste data van"
+				},
+				"value": ""
+			}]
+		}]
 	}],
 	"signals": {
 		"433": {
@@ -364,6 +429,30 @@
 				"maximalLength": 37
 			},
 			"AlectoV3": {
+				"sof": [],
+				"eof": [],
+				"words": [
+					[1500, 1000],
+					[500, 1000]
+				],
+				"sensitivity": 0.7,
+				"minimalLength": 47,
+				"maximalLength": 63
+			},
+			"LaCrosseTX3": {
+				"sof": [],
+				"eof": [],
+				"words": [
+					[1300, 1000],
+					[500, 1100]
+				],
+				"sensitivity": 0.7,
+				"minimalLength": 44,
+				"maximalLength": 44
+			}
+		},
+		"868": {
+			"Conrad": {
 				"sof": [],
 				"eof": [],
 				"words": [

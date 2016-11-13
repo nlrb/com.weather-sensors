@@ -1,9 +1,11 @@
 
 ### Homey app to read information from wireless weather sensors in Athom Homey.
 
-Currently the following protocols are supported.
+Currently the following protocols are supported on 433 MHz.
 
+* Alecto v3 (WS-1100/WS-1200)
 * Cresta: used in numerous brands 433 MHz sensors, like TFA
+* La Crosse: only TX3 decoding fully implemented, WS7000 partially (untested)
 * Oregon Scientific: version 2 and 3 of the protocol are supported
 
 These types of devices are supported:
@@ -11,8 +13,8 @@ These types of devices are supported:
 * Temperature/humidity sensors
 * Anemometers
 * Rain gauges
-* UV sensors (*TODO*) 
-* Barometer (BTHR968)
+* UV sensors 
+* Barometers
 
 
 Notes:

@@ -49,7 +49,7 @@
 				}
 
 				// Update the list when a new sensor is found
-				Homey.on('new_sensor', function(value) {
+				Homey.on('sensor_update', function(value) {
 					if (value) {
 						$scope.sensors = value;
 						$scope.$apply();
@@ -87,6 +87,25 @@
 						}
 					});
 				};
+				
+				// debugging: Heap dump
+				$scope.heapdump = function() {
+					$('#heapdump').prop('disabled', true);
+					Homey.api('GET', '/heapdump/', {}, function(data) {
+						var filename = data.filename;
+						var result = data.result;
+						var a = document.createElement("a");
+						document.body.appendChild(a);
+						a.style = "display:none";
+						blob = new Blob([result], {type: "octet/stream"}),
+						url = window.URL.createObjectURL(blob);
+						a.href = url;
+						a.download = filename;
+						a.click();
+						window.URL.revokeObjectURL(url);
+						$('#heapdump').prop('disabled', false);
+					});
+				};
 			}]);
 			
 			function onHomeyReady(){
@@ -113,15 +132,32 @@
 			<p data-i18n="settings.protocols.description"></p>
 			<fieldset>
 				<legend data-i18n="settings.protocols.header"></legend>
-				<form name="protoclForm" ng-submit="protocolSave()">
-					<div ng-repeat="item in protocols | orderBy: 'id'">
-						<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
-						<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
-							<i class="hint-icon fa fa-info-circle ng-scope"></i>
+				<form name="protocolForm" ng-submit="protocolSave()">
+					<fieldset style="float: left; margin-right:25px;">
+						<legend>433 MHz</legend>
+						<div ng-repeat="item in protocols | orderBy: 'id'">
+							<div ng-if="item.freq==433">
+								<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
+								<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
+									<i class="hint-icon fa fa-info-circle ng-scope"></i>
+								</div>
+							</div>
 						</div>
+					</fieldset>
+					<fieldset style="float: left">
+						<legend>868 MHz</legend>
+						<div ng-repeat="item in protocols | orderBy: 'id'">
+							<div ng-if="item.freq==868">
+								<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
+								<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
+									<i class="hint-icon fa fa-info-circle ng-scope"></i>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+					<div style="clear:left">
+						<button type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.protocols.submit"></button>
 					</div>
-					<p></p>
-					<button type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.protocols.submit"></button>
 				</form>
 			</fieldset>
 		</div>
@@ -138,7 +174,6 @@
 						<th data-i18n="settings.sensors.details.id"></th>
 						<th data-i18n="settings.sensors.details.update"></th>
 						<th data-i18n="settings.sensors.details.data"></th>
-						<th data-i18n="settings.sensors.details.lowbattery"></th>
 						<th data-i18n="settings.sensors.details.paired"></th>
 					</tr>
 					<tr ng-repeat="item in sensors">
@@ -148,10 +183,17 @@
 						<td>{{item.id}}</td>
 						<td>{{item.update}}</td>
 						<td>{{item.data}}</td>
-						<td><input type="checkbox" ng-disabled="true" ng-model="item.batt"></td>
 						<td><input type="checkbox" ng-disabled="true" ng-model="item.paired"></td>
 					</tr>
 				</table>
+			</fieldset>
+			<h1 data-i18n="settings.debug.title"></h1>
+			<p data-i18n="settings.debug.description"></p>
+			<fieldset>
+				<legend data-i18n="settings.debug.header"></legend>
+				<form name="heapForm" ng-submit="heapdump()">
+					<button id="heapdump" type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.debug.heapdump"></button>
+				</form>
 			</fieldset>
 		</div>
 	</body>

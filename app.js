@@ -8,33 +8,31 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-const libs = [ 'alecto', 'cresta', 'oregon' ];
+const libs = [ 'alecto', 'cresta', 'lacrosse', 'oregon' ];
 const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
+
+var heapdump = require('heapdump');
+var fs = require('fs');
 
 var signals = {};
 var protocols = {};
 
 // Register all needed signals with Homey
 function registerSignals(setting) {
-	var HomeySignal = Homey.wireless('433').Signal;
-	for (let l in libs) {
-		let lib = require(libs[l]);
-		// Initialize library
-		lib.init();
-	}
-	var ws = utils.WeatherSignal.get();
-	Homey.log(ws);
+	let ws = utils.WeatherSignal.get();
 	for (let sig in ws) {
 		let s = ws[sig];
 		let signal = utils.WeatherSignal.get(s);
-		protocols[s] = { id: s, name: signal.getName(), hint: signal.getHint(locale) };
+		protocols[s] = { id: s, freq: signal.getSignal().freq, name: signal.getName(), hint: signal.getHint(locale) };
 		if (setting && setting[s]) {
 			if (setting[s].watching && signals[s] == null) {
 				// Register signal defitinion with Homey
-				signals[s] = new HomeySignal(signal.getSignal());
-				signals[s].register(function (err, success) {
+				let gs = signal.getSignal();
+				let HomeySignal = Homey.wireless(gs.freq.toString()).Signal;
+				signals[s] = new HomeySignal(gs.def);
+				signals[s].register(function(err, success) {
 					if (err != null) {
 						utils.debug('Signal', s, '; err', err, 'success', success);
 					} else { 
@@ -42,8 +40,8 @@ function registerSignals(setting) {
 						// Register data receive event
 						signals[s].on('payload', function (payload, first) {
 							utils.debug('Received payload for', signal.getName());
-							let result = signal.parse(payload);
-							sensor.update(result);
+							signal.parse(payload);
+							sensor.update(signal);
 						});
 					}
 				});
@@ -58,11 +56,27 @@ function registerSignals(setting) {
 
 module.exports = {
     init: function () {
-		// Uncomment to turn on debugging
-		utils.setDebug(true);
+		// Uncomment below line to turn on debugging
+		//utils.setDebug(true);
+		
+		// Initialize all libraries
+		for (let l in libs) {
+			let lib = require(libs[l]);
+			lib.init();
+		}
 		
 		// Read app settings for protocol selection
 		let setting = Homey.manager('settings').get('protocols');
+		if (setting == null) {
+			// No setting? Register all signals
+			setting = {};
+			let ws = utils.WeatherSignal.get();
+			for (let sig in ws) {
+				let s = ws[sig];
+				setting[s] = { watching: true };
+			}
+			Homey.manager('settings').set('protocols', setting);
+		}
 		registerSignals(setting);
 		
 		// Catch update of settings
@@ -81,6 +95,22 @@ module.exports = {
     },
 	api: {
 		getSensors: sensor.getSensors,
-		getProtocols: () => protocols
+		getProtocols: () => protocols,
+		heapdump: (callback) => { 
+			heapdump.writeSnapshot((err, filename) => {
+				utils.debug('>>> Dump written to', filename);
+				fs.readFile(filename, 'utf8', (err, data) => {
+					if (err) {
+						return Homey.log('Error reading from file', err);
+					}
+					utils.debug('Data read from file');
+					fs.unlink(filename, (err) => {
+						if (err) throw err;
+						utils.debug('Successfully deleted', filename);
+					});
+					callback(filename, data);
+				});
+			})
+		}
 	}
 }
