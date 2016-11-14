@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.0.4",
+	"version": "0.0.5",
 	"compatibility": ">=0.10",
 	"category": ["climate"],
 	"name": {
