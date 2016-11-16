@@ -424,9 +424,9 @@
 					[500, 2000],
 					[500, 4000]
 				],
-				"sensitivity": 0.9,
+				"sensitivity": 0.8,
 				"minimalLength": 36,
-				"maximalLength": 36
+				"maximalLength": -1
 			},
 			"AlectoV3": {
 				"sof": [],
