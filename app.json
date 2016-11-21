@@ -414,8 +414,8 @@
 				"manchesterUnit": 500,
 				"manchesterMaxUnits": 2,
 				"sensitivity": 2,
-				"minimalLength": 45,
-				"maximalLength": 90
+				"minimalLength": 74,
+				"maximalLength": 119
 			},
 			"AlectoV1": {
 				"sof": [],

@@ -43,7 +43,7 @@ const genericType = {
 function update(signal) {
 	let result = signal.getResult();
 	if (typeof result !== 'string' && result != null) {
-		let did = result.protocol + ':' + result.id + ':' + result.channel;
+		let did = result.protocol + ':' + result.id + ':' + (result.channel || 0);
 		if (Sensors.get(did) == null) {
 			Sensors.set(did, { raw: { data: {} } });
 			signal.debug('Found a new sensor. Total found is now', Sensors.size);
@@ -96,8 +96,6 @@ function update(signal) {
 		//signal.debug(Sensors);
 		// Send an event to the front-end as well for the app settings page
 		Homey.manager('api').realtime('sensor_update', Array.from(Sensors.values()).map(x => x.display));
-	} else {
-		signal.debug('Error:', result);
 	}
 }
 
@@ -113,7 +111,7 @@ function getSensors(type) {
 				settings: {
 					protocol: val.display.protocol,
 					type: val.raw.name || val.display.type,
-					channel: val.display.channel,
+					channel: val.display.channel || 0,
 					id: val.raw.id,
 					update: val.raw.lastupdate.toLocaleString(locale)
 				}

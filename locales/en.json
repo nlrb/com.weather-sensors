@@ -27,6 +27,7 @@
 			"title": "Debug",
 			"description": "Only use the below functions when requested by the de app developer.",
 			"header": "Debug functions",
+			"statistics": "Download statistics",
 			"heapdump": "Heap dump"
 		}
 	},

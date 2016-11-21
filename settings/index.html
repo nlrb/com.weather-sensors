@@ -88,6 +88,25 @@
 					});
 				};
 				
+				// debugging: Statistics
+				$scope.statistics = function() {
+					$('#stats').prop('disabled', true);
+					Homey.api('GET', '/getStatistics/', {}, function(err, data) {
+						var filename = "stats" + (new Date()).valueOf() + ".json";
+						var result = JSON.stringify(data, null, "\t");
+						var a = document.createElement("a");
+						document.body.appendChild(a);
+						a.style = "display:none";
+						blob = new Blob([result], {type: "text/plain"}),
+						url = window.URL.createObjectURL(blob);
+						a.href = url;
+						a.download = filename;
+						a.click();
+						window.URL.revokeObjectURL(url);
+						$('#stats').prop('disabled', false);
+					});
+				};
+
 				// debugging: Heap dump
 				$scope.heapdump = function() {
 					$('#heapdump').prop('disabled', true);
@@ -191,6 +210,9 @@
 			<p data-i18n="settings.debug.description"></p>
 			<fieldset>
 				<legend data-i18n="settings.debug.header"></legend>
+				<form name="statForm" ng-submit="statistics()">
+					<button id="stats" type="submit" class="btn btn-default" style="float: left; margin-right:25px;" ng-click="submitted=true;" data-i18n="settings.debug.statistics"></button>
+				</form>
 				<form name="heapForm" ng-submit="heapdump()">
 					<button id="heapdump" type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.debug.heapdump"></button>
 				</form>

@@ -40,8 +40,10 @@ function registerSignals(setting) {
 						// Register data receive event
 						signals[s].on('payload', function (payload, first) {
 							utils.debug('Received payload for', signal.getName());
-							signal.parse(payload);
-							sensor.update(signal);
+							signal.debug(payload.length, payload);
+							if (signal.parse(payload)) {
+								sensor.update(signal);
+							}
 						});
 					}
 				});
@@ -96,6 +98,19 @@ module.exports = {
 	api: {
 		getSensors: sensor.getSensors,
 		getProtocols: () => protocols,
+		getStatistics: () => {
+			let result = [];
+			let ws = utils.WeatherSignal.get();
+			for (let sig in ws) {
+				let signal = utils.WeatherSignal.get(ws[sig]);
+				result.push({ 
+					signal: signal.getName(),
+					enabled: signals[ws[sig]] != null,
+					stats: signal.getStatistics() 
+				})
+			}
+			return result;
+		},
 		heapdump: (callback) => { 
 			heapdump.writeSnapshot((err, filename) => {
 				utils.debug('>>> Dump written to', filename);

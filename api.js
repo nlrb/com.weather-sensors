@@ -18,6 +18,15 @@ module.exports = [
         }
     },
     {
+        description: 'Get a list signal statistics',
+        method: 'GET',
+        path: '/getStatistics/',
+        requires_authorizaton: false,
+        fn: function(callback, args) {
+			callback(null, Homey.app.api.getStatistics());
+        }
+    },
+    {
         description: 'Get a heap dump',
         method: 'GET',
         path: '/heapdump/',
