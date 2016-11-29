@@ -72,14 +72,16 @@ function update(signal) {
 		newvalue.count = (current.count || 0) + 1;
 		newvalue.newdata = newdata;
 		// Update settings
-		let when = newvalue.lastupdate.toLocaleString(locale);
+		let when = result.lastupdate.toLocaleString(locale);
 		if (device != null) {
 			if (!device.available) {
 				device.driver.setAvailable(device.device_data);
 				device.available = true;
 				Devices.set(did, device);
 			}
-			device.driver.setSettings(device.device_data, { update: when });
+			device.driver.setSettings(device.device_data, { update: when }, function(err, result){
+				if (err) { signal.debug('setSettings error:', err); }
+			});
 		}
 		// Update the sensor log
 		let display = {
