@@ -3,7 +3,7 @@
 
 Currently the following protocols are supported on 433 MHz.
 
-* Alecto v3 (WS-1100/WS-1200)
+* Alecto v1 & v3 (WS-1100/WS-1200)
 * Cresta: used in numerous brands 433 MHz sensors, like TFA
 * La Crosse: only TX3 decoding fully implemented, WS7000 partially (untested)
 * Oregon Scientific: version 2 and 3 of the protocol are supported
@@ -20,7 +20,7 @@ These types of devices are supported:
 Notes:
 
 * This app is not supported.
-* Signal reception/Machester pattern recognition in Homey is flakey. Hence a lot of signal transmissions are not received by Homey.
+* Signal reception/Machester pattern recognition in Homey is flaky. Hence a lot of signal transmissions are not received by Homey.
 * There is no plan to submit this app in the Athom App Store.
 
 

@@ -8,7 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-const libs = [ 'alecto', 'cresta', 'lacrosse', 'oregon' ];
+const libs = [ 'alecto', 'cresta', 'lacrosse', 'oregon', 'upm' ];
 const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
@@ -59,7 +59,7 @@ function registerSignals(setting) {
 module.exports = {
     init: function () {
 		// Uncomment below line to turn on debugging
-		//utils.setDebug(true);
+		utils.setDebug(true);
 		
 		// Initialize all libraries
 		for (let l in libs) {

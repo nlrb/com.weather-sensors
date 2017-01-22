@@ -1,7 +1,7 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.0.5",
-	"compatibility": ">=0.10",
+	"version": "0.0.6",
+	"compatibility": ">=1.0.2",
 	"category": ["climate"],
 	"name": {
 		"en": "Wireless Weather Sensors",
@@ -460,6 +460,18 @@
 				"sensitivity": 0.7,
 				"minimalLength": 46,
 				"maximalLength": 81
+			},
+			"UPM": {
+				"sof": [],
+				"words": [
+					[0, 1],
+					[1, 0]
+				],
+				"manchesterUnit": 1000,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 2,
+				"minimalLength": 36,
+				"maximalLength": 36
 			}
 		},
 		"868": {

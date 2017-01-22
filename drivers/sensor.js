@@ -43,6 +43,7 @@ const genericType = {
 function update(signal) {
 	let result = signal.getResult();
 	if (typeof result !== 'string' && result != null) {
+		let when = result.lastupdate.toString();
 		let did = result.protocol + ':' + result.id + ':' + (result.channel || 0);
 		if (Sensors.get(did) == null) {
 			Sensors.set(did, { raw: { data: {} } });
@@ -72,7 +73,6 @@ function update(signal) {
 		newvalue.count = (current.count || 0) + 1;
 		newvalue.newdata = newdata;
 		// Update settings
-		let when = result.lastupdate.toLocaleString(locale);
 		if (device != null) {
 			if (!device.available) {
 				device.driver.setAvailable(device.device_data);
