@@ -10,6 +10,10 @@
 				font-style: italic;
 				font-weight: bolder;
 			}
+			.oneline {
+				display: inline-flex;
+				align-items: center;
+			}
 			.table {
 				padding-left: 5px;
 				padding-right: 5px;
@@ -28,10 +32,33 @@
 			angular.module('WeatherSettings', [])
 			.controller('SettingsCtrl', ['$scope', '$timeout', function($scope, $timeout) {
 				$scope.sensors = {};
-				$scope.protocols = {};
 				$scope.message = '';
 				$scope.timeout;
 				$scope.msgPromise;
+				$scope.inactiveOptions = [
+				   { text: __('settings.app.inactive.option.1min'), value: 60 },
+				   { text: __('settings.app.inactive.option.2min'), value: 120 },
+				   { text: __('settings.app.inactive.option.5min'), value: 300 },
+				   { text: __('settings.app.inactive.option.10min'), value: 6000 },
+				   { text: __('settings.app.inactive.option.30min'), value: 18000 },
+				   { text: __('settings.app.inactive.option.1hr'), value: 36000 },
+				   { text: __('settings.app.inactive.option.2hr'), value: 72000 },
+				   { text: __('settings.app.inactive.option.5hr'), value: 180000 },
+				   { text: __('settings.app.inactive.option.10hr'), value: 360000 },
+				   { text: __('settings.app.inactive.option.1day'), value: 864000 },
+				];
+				$scope.notifyOptions = [
+				   { text: __('settings.app.notify.option.none'), value: 0 },
+				   { text: __('settings.app.notify.option.active'), value: 1 },
+				   { text: __('settings.app.notify.option.inactive'), value: 2 },
+				   { text: __('settings.app.notify.option.both'), value: 3 }
+				];
+				// Set default values
+				$scope.app = {
+					protocols: {},
+					inactive: $scope.inactiveOptions[7],
+					notify: $scope.notifyOptions[2]
+				};
 				
 				// Display message to the user
 				$scope.displayMessage = function(text) {
@@ -66,11 +93,11 @@
 					// Get list of supported protocols
 					Homey.api('GET', '/getProtocols/', {}, function(err, protocols) {
 						if (protocols) {
-							$scope.protocols = protocols;
+							$scope.app.protocols = protocols;
 							if (value) {
 								for (var v in value) {
-									if (value[v].watching != null && $scope.protocols[v] != null) {
-										$scope.protocols[v].watching = value[v].watching;
+									if (value[v].watching != null && $scope.app.protocols[v] != null) {
+										$scope.app.protocols[v].watching = value[v].watching;
 									}
 								}
 							}
@@ -78,13 +105,34 @@
 						}
 					});
 				});
-				// Save the protocols
-				$scope.protocolSave = function() {
+				Homey.get('app', function(err, value) {
+					if (value) {
+						for (v in $scope.inactiveOptions) {
+						   if ($scope.inactiveOptions[v].value === value.inactive) {
+						      $scope.app.inactive = $scope.inactiveOptions[v];
+						   }
+					    }
+						for (v in $scope.notifyOptions) {
+						   if ($scope.notifyOptions[v].value === value.notify) {
+						      $scope.app.notify = $scope.notifyOptions[v];
+						   }
+						}
+					}
+					$scope.$apply();
+				});
+				// Save the application settings (e.g. protocols)
+				$scope.appSettingSave = function() {
 					// Store the protocol settings
-					Homey.set('protocols', $scope.protocols, function(err, value) {
+					Homey.set('protocols', $scope.app.protocols, function(err, value) {
 						if (!err) {
 							$scope.displayMessage(__('settings.protocols.success'));
 						}
+					});
+					var appSetting = { 
+						inactive: $scope.app.inactive.value, 
+						notify: $scope.app.notify.value
+					};
+					Homey.set('app', appSetting, function(err, value) {
 					});
 				};
 				
@@ -148,24 +196,24 @@
 		</fieldset>
 		<div id="protocols">
 			<h1 data-i18n="settings.protocols.title"></h1>
-			<p data-i18n="settings.protocols.description"></p>
-			<fieldset>
-				<legend data-i18n="settings.protocols.header"></legend>
-				<form name="protocolForm" ng-submit="protocolSave()">
+			<form name="protocolForm" ng-submit="appSettingSave()">
+				<fieldset>
+					<legend data-i18n="settings.protocols.header"></legend>
+					<p data-i18n="settings.protocols.description"></p>
 					<fieldset style="float: left; margin-right:25px;">
-						<legend>433 MHz</legend>
-						<div ng-repeat="item in protocols | orderBy: 'id'">
-							<div ng-if="item.freq==433">
-								<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
-								<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
-									<i class="hint-icon fa fa-info-circle ng-scope"></i>
+							<legend>433 MHz</legend>
+							<div ng-repeat="item in app.protocols | orderBy: 'id'">
+								<div ng-if="item.freq==433">
+									<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
+									<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
+										<i class="hint-icon fa fa-info-circle ng-scope"></i>
+									</div>
 								</div>
 							</div>
-						</div>
-					</fieldset>
+						</fieldset>
 					<fieldset style="float: left">
 						<legend>868 MHz</legend>
-						<div ng-repeat="item in protocols | orderBy: 'id'">
+						<div ng-repeat="item in app.protocols | orderBy: 'id'">
 							<div ng-if="item.freq==868">
 								<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
 								<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
@@ -174,12 +222,27 @@
 							</div>
 						</div>
 					</fieldset>
-					<div style="clear:left">
-						<button type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.protocols.submit"></button>
+				</fieldset>
+				<fieldset style="clear: left">
+					<legend data-i18n="settings.app.header"></legend>
+					<div class="oneline">
+						<label data-i18n="settings.app.inactive.pre" style="margin-right:5px"></label>
+						<select ng-model="app.inactive" ng-options="x.text for x in inactiveOptions"></select>
+						<label data-i18n="settings.app.inactive.post" style="margin-left:5px"></label>
 					</div>
-				</form>
-			</fieldset>
+					<p></p>
+					<div class="oneline">
+						<label data-i18n="settings.app.notify.pre" style="margin-right:5px"></label>
+						<select ng-model="app.notify" ng-options="x.text for x in notifyOptions"></select>
+						<label data-i18n="settings.app.notify.post" style="margin-left:5px"></label>
+					</div>
+				</fieldset>
+				<div style="clear:left">
+					<button type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.protocols.submit"></button>
+				</div>
+			</form>
 		</div>
+		<p></p>
 		<div id="sensors">
 			<h1 data-i18n="settings.sensors.title"></h1>
 			<p data-i18n="settings.sensors.description"></p>
@@ -202,7 +265,7 @@
 						<td>{{item.id}}</td>
 						<td>{{item.update}}</td>
 						<td>{{item.data}}</td>
-						<td><input type="checkbox" ng-disabled="true" ng-model="item.paired"></td>
+						<td><input type="checkbox" ng-disabled="true" ng-model="item.paired"> {{item.name}}</td>
 					</tr>
 				</table>
 			</fieldset>

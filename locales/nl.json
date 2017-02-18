@@ -2,11 +2,40 @@
 	"settings": {
 		"message": "Mededeling",
 		"protocols": {
-			"title": "Protocol selectie",
+			"title": "Applicatie instellingen",
 			"description": "Selecteer de draadloze weersensor protocollen die Homey moet ontvangen. Het wordt aanbevolen om alleen de protocollen te selecteren die echt nodig zijn voor de beste prestaties van Homey.",
 			"header": "Protocollen",
 			"submit": "Instellingen opslaan",
 			"success": "Instellingen zijn opgeslagen."
+		},
+		"app": {
+			"header": "Activiteit",
+			"inactive": {
+				"pre": "Markeer een sensor als inactief als er",
+				"post": "geen data ontvangen is.",
+				"option": {
+					"1min": "1 minuut",
+					"2min": "2 minuten",
+					"5min": "5 minuten",
+					"10min": "10 minuten",
+					"30min": "30 minuten",
+					"1hr": "1 uur",
+					"2hr": "2 uur",
+					"5hr": "5 uur",
+					"10hr": "10 uur",
+					"1day": "1 dag"
+				}
+			},
+			"notify": {
+				"pre": "Wanneer moet een notificatie verstuurd worden?",
+				"post": ".",
+				"option": {
+					"none": "Nooit",
+					"active": "Als een sensor actief wordt",
+					"inactive": "Als een sensor inactief wordt",
+					"both": "Als een sensor actief of inactief wordt"
+				}
+			}
 		},
 		"sensors": {
 			"title": "Beschikbare sensoren",
@@ -32,6 +61,10 @@
 		}
 	},
 	"error": {
-		"no_data": "Geen data ontvangen van sensor"
+		"no_data": "Geen data ontvangen van sensor sinds __since__"
+	},
+	"notification": {
+		"active": "Sensor <b>__name__</b> is weer actief",
+		"inactive": "Sensor <b>__name__</b> is inactief"
 	}
 }

@@ -8,6 +8,35 @@
 			"submit": "Save settings",
 			"success": "Settings have been saved."
 		},
+		"app": {
+			"header": "Activity",
+			"inactive": {
+				"pre": "Mark a sensor as inctive when no data has been received for",
+				"post": ".",
+				"option": {
+					"1min": "1 minute",
+					"2min": "2 minutes",
+					"5min": "5 minutes",
+					"10min": "10 minutes",
+					"30min": "30 minutes",
+					"1hr": "1 hour",
+					"2hr": "2 hours",
+					"5hr": "5 hours",
+					"10hr": "10 hours",
+					"1day": "1 day"
+				}
+			},
+			"notify": {
+				"pre": "When should an acivity notification be sent?",
+				"post": ".",
+				"option": {
+					"none": "Never",
+					"active": "When a sensor becomes active",
+					"inactive": "When a sensor becomes inactive",
+					"both": "When a sensor becomes active or inactive"
+				}
+			}
+		},
 		"sensors": {
 			"title": "Available sensors",
 			"description": "Below the sensors are listed that have been found by Homey until now. Once a sensor is in the list, it can be added to Homey under 'Devices' ('+') 'Wireless Weather Sensors' if desired.",
@@ -32,6 +61,10 @@
 		}
 	},
 	"error": {
-		"no_data": "No sensor data received"
+		"no_data": "No sensor data received since __since__"
+	},
+	"notification": {
+		"active": "Sensor <b>__name__</b> is active again",
+		"inactive": "Sensor <b>__name__</b> is inactive"
 	}
 }

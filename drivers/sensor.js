@@ -19,6 +19,26 @@ const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // onl
 var Sensors = new Map(); // all sensors we've found
 var Devices = new Map(); // all devices that have been added
 
+const ACTIVE = 1;
+const INACTIVE = 2;
+var inactiveTime = 60000;
+var activityNotifications = 2;
+
+function updateAppSettings() {
+	let appSettings = Homey.manager('settings').get('app');
+	if (appSettings) {
+		inactiveTime = appSettings.inactive * 1000; 
+		activityNotifications = appSettings.notify;
+	}
+}
+updateAppSettings();
+
+Homey.manager('settings').on('set', function(name) {
+	if (name === 'app') {
+		updateAppSettings();
+	}
+});
+
 const capability = {
 	temperature: 'measure_temperature',
 	humidity: 'measure_humidity',
@@ -45,7 +65,7 @@ function update(signal) {
 	if (typeof result !== 'string' && result != null) {
 		let when = result.lastupdate.toString();
 		let did = result.protocol + ':' + result.id + ':' + (result.channel || 0);
-		if (Sensors.get(did) == null) {
+		if (Sensors.get(did) === undefined) {
 			Sensors.set(did, { raw: { data: {} } });
 			signal.debug('Found a new sensor. Total found is now', Sensors.size);
 		}
@@ -76,9 +96,15 @@ function update(signal) {
 		if (device != null) {
 			if (!device.available) {
 				device.driver.setAvailable(device.device_data);
+				if (activityNotifications & ACTIVE) {
+					Homey.manager('notifications').createNotification({
+						excerpt: __('notification.active', { name: device.name })
+					});
+				}
 				device.available = true;
-				Devices.set(did, device);
 			}
+			device.update = when;
+			Devices.set(did, device);
 			device.driver.setSettings(device.device_data, { update: when }, function(err, result){
 				if (err) { signal.debug('setSettings error:', err); }
 			});
@@ -92,7 +118,8 @@ function update(signal) {
 			id: newvalue.id,
 			update: when,
 			data: newvalue.data,
-			paired: device != null
+			paired: device !== undefined,
+			name: device !== undefined ? device.name : ''
 		}
 		Sensors.set(did, { raw: newvalue, display: display });
 		//signal.debug(Sensors);
@@ -125,18 +152,21 @@ function getSensors(type) {
 
 // addSensorDevice
 function addSensorDevice(driver, device_data, name) {
-	let sensor = Sensors.get(device_data.id);
-	Devices.set(device_data.id, {
+	let device = {
 		driver: driver,
 		device_data: device_data,
 		name: name,
-		available: sensor != null
-	})
-	if (sensor != null) {
+		available: true
+	}
+	driver.getSettings(device_data, function(err, result){
+		if (!err) { device.update = result.update };
+		Devices.set(device_data.id, device);
+	});
+	let sensor = Sensors.get(device_data.id);
+	if (sensor !== undefined) {
 		sensor.display.paired = true;
+		sensor.display.name = name;
 		Sensors.set(device_data.id, sensor);
-	} else {
-		driver.setUnavailable(device_data, __('error.no_data'));
 	}
 }
 
@@ -146,6 +176,7 @@ function deleteSensorDevice(device_data) {
 	let sensor = Sensors.get(device_data.id);
 	if (sensor != null) {
 		sensor.display.paired = false;
+		sensor.display.name = '';
 		Sensors.set(device_data.id, sensor);
 	}	
 }
@@ -166,6 +197,34 @@ function getSensorValue(what, id) {
 	return val;
 }
 
+// heathCheck: check if sensor values keep being updated
+function healthCheck() {
+	let now = new Date();
+	// Iterate over sensors
+	Sensors.forEach((sensor, key) => {
+		// Only remove if there is no Homey device associated
+		if (!sensor.display.paired && now - Date.parse(sensor.raw.lastupdate) > inactiveTime) {
+			Sensors.delete(key);
+		}
+	});
+	// Iterate over devices
+	Devices.forEach((device, key) => {
+		// Check if the device needs to be set unavailable
+		if (device.available && now - Date.parse(device.update) > inactiveTime) {
+			device.driver.setUnavailable(device.device_data, __('error.no_data', { since: now }));
+			device.available = false;
+			if (activityNotifications & INACTIVE) {
+				Homey.manager('notifications').createNotification({
+					excerpt: __('notification.inactive', { name: device.name })
+				});
+			}
+		}
+	});
+}
+
+// Set up check to mark devices inactive, remove sensors
+setInterval(healthCheck, 1000);
+
 // Create a driver for a specific sensor type
 function createDriver(driver) {
 	var self = {
@@ -175,9 +234,9 @@ function createDriver(driver) {
 				// Get the Homey name of the device
 				self.getName(device_data, function(err, name) {
 					addSensorDevice(self, device_data, name);
-					// we're ready
 				});
 			});
+			// we're ready
 			callback();
 		},
 		
