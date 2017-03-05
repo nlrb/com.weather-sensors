@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.0.8",
+	"version": "0.1.0",
 	"compatibility": ">=1.0.2",
 	"category": ["climate"],
 	"name": {
@@ -172,6 +172,73 @@
 		"images": {
 			"large": "drivers/temphum/assets/images/large.jpg",
 			"small": "drivers/temphum/assets/images/small.jpg"
+		},
+		"pair": [{
+			"id": "list_sensors",
+			"template": "list_devices",
+			"navigation": {
+				"next": "add_sensors"
+			}
+		}, {
+			"id": "add_sensors",
+			"template": "add_devices"
+		}],
+		"settings": [{
+			"type": "group",
+			"label": {
+				"en": "Sensor information",
+				"nl": "Sensor informatie"
+			},
+			"children": [{
+				"id": "protocol",
+				"type": "label",
+				"label": {
+					"en": "Protocol"
+				},
+				"value": ""
+			}, {
+				"id": "type",
+				"type": "label",
+				"label": {
+					"en": "Type"
+				},
+				"value": ""
+			}, {
+				"id": "channel",
+				"type": "label",
+				"label": {
+					"en": "Channel",
+					"nl": "Kanaal"
+				},
+				"value": ""
+			}, {
+				"id": "id",
+				"type": "label",
+				"label": {
+					"en": "ID"
+				},
+				"value": ""
+			}, {
+				"id": "update",
+				"type": "label",
+				"label": {
+					"en": "Last update",
+					"nl": "Laaste data van"
+				},
+				"value": ""
+			}]
+		}]
+	}, {
+		"id": "temp",
+		"name": {
+			"en": "Temperature",
+			"nl": "Temperatuur"
+		},
+		"class": "sensor",
+		"capabilities": ["measure_temperature", "alarm_battery"],
+		"images": {
+			"large": "drivers/temp/assets/images/large.jpg",
+			"small": "drivers/temp/assets/images/small.jpg"
 		},
 		"pair": [{
 			"id": "list_sensors",
