@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"compatibility": ">=1.0.2",
 	"category": ["climate"],
 	"name": {
@@ -426,7 +426,7 @@
 				],
 				"sensitivity": 0.8,
 				"minimalLength": 36,
-				"maximalLength": -1
+				"maximalLength": 38
 			},
 			"AlectoV3": {
 				"sof": [],

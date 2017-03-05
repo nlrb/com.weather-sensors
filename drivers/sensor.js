@@ -53,6 +53,7 @@ const capability = {
 
 const genericType = {
 	R: { en: 'Rain gauge', nl: 'Regenmeter' },
+	T: { en: 'Temperature', nl: 'Temperatuur' },
 	TH: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' },
 	THB: { en: 'Weather station', nl: 'Weerstation' },
 	UV: { en: 'Ultra Violet' },
