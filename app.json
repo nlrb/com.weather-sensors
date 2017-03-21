@@ -1,7 +1,7 @@
 {
 	"id": "com.weather-sensors",
 	"version": "0.1.0",
-	"compatibility": ">=1.0.2",
+	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
 		"en": "Wireless Weather Sensors",
@@ -471,7 +471,7 @@
 			},
 			"Cresta": {
 				"sof": [
-					1, 0, 1, 0, 1, 1, 1, 0, 0
+					1,0, 0,1, 1,0, 0,1, 1,0, 1,0, 1,0, 0,1, 0,1
 				],
 				"eof": [],
 				"words": [
