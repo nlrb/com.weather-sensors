@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -485,73 +485,110 @@
 				"maximalLength": 119
 			},
 			"AlectoV1": {
-				"sof": [],
+				"sof": [500],
 				"eof": [],
 				"words": [
-					[500, 2000],
-					[500, 4000]
+					[2000, 500],
+					[4000, 500]
 				],
-				"sensitivity": 0.8,
-				"minimalLength": 36,
-				"maximalLength": 38
+				"sensitivity": 0.3,
+				"minimalLength": 35,
+				"maximalLength": 37
 			},
 			"AlectoV3": {
-				"sof": [],
+				"sof": [ 
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					1500
+				],
 				"eof": [],
 				"words": [
-					[1500, 1000],
-					[500, 1000]
+					[1000, 1500],
+					[1000, 500]
 				],
-				"sensitivity": 0.7,
-				"minimalLength": 47,
-				"maximalLength": 63
+				"sensitivity": 0.3,
+				"minimalLength": 40,
+				"maximalLength": 56
 			},
 			"LaCrosseTX3": {
-				"sof": [],
+				"sof": [ 
+					1300, 1000,
+					1300, 1000,
+					1300, 1000,
+					1300, 1000,
+					 500, 1000,
+					1300, 1000,
+					 500, 1000,
+					1300
+				],
 				"eof": [],
 				"words": [
-					[1300, 1000],
-					[500, 1100]
+					[1000, 1300],
+					[1000, 500]
 				],
-				"sensitivity": 0.7,
-				"minimalLength": 44,
-				"maximalLength": 44
+				"sensitivity": 0.3,
+				"minimalLength": 36,
+				"maximalLength": 36
 			},
 			"LaCrosseWS": {
-				"sof": [],
+				"sof": [
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					800, 400,
+					400
+				],
 				"eof": [],
 				"words": [
-					[800, 400],
-					[400, 800]
+					[400, 800],
+					[800, 400]
 				],
-				"sensitivity": 0.7,
-				"minimalLength": 46,
-				"maximalLength": 81
+				"sensitivity": 0.3,
+				"minimalLength": 36,
+				"maximalLength": 71
 			},
 			"UPM": {
-				"sof": [],
+				"sof": [500, 500, 500, 500, 1000],
 				"words": [
 					[1000, 500],
 					[500, 500],
 					[1000, 1000],
 					[500, 1000]
 				],
-				"sensitivity": 0.9,
-				"minimalLength": 18,
-				"maximalLength": 36
+				"sensitivity": 0.6,
+				"minimalLength": 15,
+				"maximalLength": 32
 			}
 		},
 		"868": {
 			"Conrad": {
-				"sof": [],
+				"sof": [ 
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					500, 1000,
+					1500
+				],
 				"eof": [],
 				"words": [
-					[1500, 1000],
-					[500, 1000]
+					[1000, 1500],
+					[1000, 500]
 				],
-				"sensitivity": 0.9,
-				"minimalLength": 47,
-				"maximalLength": 63
+				"sensitivity": 0.3,
+				"minimalLength": 40,
+				"maximalLength": 56
 			}
 		}
 	}

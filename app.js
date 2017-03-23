@@ -50,6 +50,7 @@ function registerSignals(setting) {
 			} else if (!setting[s].watching && signals[s] != null) {
 				// Un-register signal with Homey
 				signals[s].unregister();
+				delete signals[s];
 				utils.debug('Signal', s, 'unregistered.')
 			}
 		}
