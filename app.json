@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "0.1.1",
+	"version": "1.0.0",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -16,7 +16,8 @@
 	},
 	"contributors": {
 		"developers": [{
-			"name": "Jilles Miedema"
+			"name": "Jilles Miedema",
+			"email": "athom.jilles.miedema@gmail.com"
 		}]
 	},
 	"images": {
@@ -558,15 +559,19 @@
 				"maximalLength": 71
 			},
 			"UPM": {
-				"sof": [500, 500, 500, 500, 1000],
-				"words": [
-					[1000, 500],
-					[500, 500],
-					[1000, 1000],
-					[500, 1000]
+				"sof": [
+					1000, 1000,
+					1000, 1000,
+					2000, 2000
 				],
-				"sensitivity": 0.6,
-				"minimalLength": 15,
+				"words": [
+					[2000, 1000],
+					[1000, 1000],
+					[2000, 2000],
+					[1000, 2000]
+				],
+				"sensitivity": 0.3,
+				"minimalLength": 16,
 				"maximalLength": 32
 			}
 		},

@@ -48,16 +48,17 @@ const capability = {
 	direction: 'measure_wind_angle',
 	currentspeed: 'measure_gust_strength',
 	averagespeed: 'measure_wind_strength',
+	uvindex: 'measure_ultraviolet',
 	lowbattery: 'alarm_battery'
 }
 
 const genericType = {
-	R: { en: 'Rain gauge', nl: 'Regenmeter' },
-	T: { en: 'Temperature', nl: 'Temperatuur' },
-	TH: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' },
-	THB: { en: 'Weather station', nl: 'Weerstation' },
-	UV: { en: 'Ultra Violet' },
-	W: { en: 'Anemometer', nl: 'Windmeter' }
+	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' }, cap: ['measure_rain', 'meter_rain'] },
+	T: { txt: { en: 'Temperature', nl: 'Temperatuur' }, cap: ['measure_temperature'] },
+	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' }, cap: ['measure_temperature', 'measure_humidity'] },
+	THB: { txt: { en: 'Weather station', nl: 'Weerstation' }, cap: ['measure_temperature', 'measure_humidity', 'measure_pressure'] },
+	UV: { txt: { en: 'Ultra Violet' }, cap: ['measure_ultraviolet'] },
+	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, cap: ['measure_wind_angle', 'measure_wind_strength', 'measure_gust_strength'] }
 }
 
 // Update the sensor data
@@ -113,7 +114,7 @@ function update(signal) {
 		// Update the sensor log
 		let display = {
 			protocol: signal.getName(),
-			type: genericType[newvalue.type][locale] || genericType[newvalue.type].en,
+			type: genericType[newvalue.type].txt[locale] || genericType[newvalue.type].txt.en,
 			name: newvalue.name,
 			channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
 			id: newvalue.id,
@@ -135,15 +136,22 @@ function getSensors(type) {
 	for (let i of Sensors.keys()) {
 		let val = Sensors.get(i);
 		if (type != null && val.raw.type == type) {
+			let capabilities = genericType[type].cap.slice(); // copy default array
+			// Only show battery alarm if the sensor supports it
+			if (val.raw.data.lowbattery !== undefined) {
+				capabilities.push('alarm_battery');
+			}
+			utils.debug(capabilities, val.raw.data);
 			list.push({ 
 				name: val.raw.name || (type + ' ' + val.raw.id),
 				data: {	id: i, type: type },
+				capabilities: capabilities,
 				settings: {
 					protocol: val.display.protocol,
 					type: val.raw.name || val.display.type,
 					channel: val.display.channel || 0,
 					id: val.raw.id,
-					update: val.raw.lastupdate.toLocaleString(locale)
+					update: val.display.update
 				}
 			});
 		}

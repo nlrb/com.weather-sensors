@@ -11,7 +11,7 @@
 		"app": {
 			"header": "Activity",
 			"inactive": {
-				"pre": "Mark a sensor as inctive when no data has been received for",
+				"pre": "Mark a sensor as inactive when no data has been received for",
 				"post": ".",
 				"option": {
 					"1min": "1 minute",
@@ -27,7 +27,7 @@
 				}
 			},
 			"notify": {
-				"pre": "When should an acivity notification be sent?",
+				"pre": "When should an activity notification be sent?",
 				"post": ".",
 				"option": {
 					"none": "Never",
