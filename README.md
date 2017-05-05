@@ -64,6 +64,7 @@ If you want, you can get a notification in the Homey notification sensor when a 
 Some debug tools are available for use in special cases. Don't use them unless instructed.
 
 ### Version info
+* 1.0.2 Fix a bug in Oregon v2 decoding
 * 1.0.1 Definition fixes for Homey FW 1.3, implement LaCrosse WS, bugfixes
 * 1.0.0 First Athom App Store release
 

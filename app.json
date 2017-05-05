@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -446,7 +446,6 @@
 				],
 				"manchesterUnit": 488,
 				"manchesterMaxUnits": 2,
-				"interval": 32000,
 				"sensitivity": 0.5,
 				"minimalLength": 150,
 				"maximalLength": 180
