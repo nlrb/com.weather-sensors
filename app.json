@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -571,6 +571,19 @@
 				"sensitivity": 0.3,
 				"minimalLength": 16,
 				"maximalLength": 32
+			},
+			"AURIOL": {
+				"sof": [],
+				"words": [
+					[400, 1000],
+					[400, 2000]
+				],
+				"eof": [
+					400, 4000
+				],
+				"sensitivity": 0.3,
+				"minimalLength": 36,
+				"maximalLength": 36
 			}
 		},
 		"868": {
