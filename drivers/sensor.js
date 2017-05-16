@@ -27,7 +27,7 @@ var activityNotifications = 2;
 function updateAppSettings() {
 	let appSettings = Homey.manager('settings').get('app');
 	if (appSettings) {
-		inactiveTime = appSettings.inactive * 1000; 
+		inactiveTime = appSettings.inactive * 1000;
 		activityNotifications = appSettings.notify;
 	}
 }
@@ -90,7 +90,7 @@ function update(signal) {
 			}
 		}
 		signal.debug('Sensor value has changed:', newdata);
-		
+
 		// Add additional data
 		newvalue.count = (current.count || 0) + 1;
 		newvalue.newdata = newdata;
@@ -142,7 +142,7 @@ function getSensors(type) {
 				capabilities.push('alarm_battery');
 			}
 			utils.debug(capabilities, val.raw.data);
-			list.push({ 
+			list.push({
 				name: val.raw.name || (type + ' ' + val.raw.id),
 				data: {	id: i, type: type },
 				capabilities: capabilities,
@@ -187,7 +187,7 @@ function deleteSensorDevice(device_data) {
 		sensor.display.paired = false;
 		sensor.display.name = '';
 		Sensors.set(device_data.id, sensor);
-	}	
+	}
 }
 
 // updateDeviceName
@@ -212,7 +212,7 @@ function healthCheck() {
 	// Iterate over sensors
 	Sensors.forEach((sensor, key) => {
 		// Only remove if there is no Homey device associated
-		if (!sensor.display.paired && now - Date.parse(sensor.raw.lastupdate) > inactiveTime) {
+		if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > inactiveTime)) {
 			Sensors.delete(key);
 		}
 	});
@@ -248,7 +248,7 @@ function createDriver(driver) {
 			// we're ready
 			callback();
 		},
-		
+
 		capabilities: {
 			measure_temperature: {
 				get: function(device_data, callback) {
@@ -332,16 +332,16 @@ function createDriver(driver) {
 
 			callback();
 		},
-		
+
 		renamed: function(device_data, new_name) {
 			updateDeviceName(device_data, new_name);
 		},
-		
+
 		deleted: function(device_data) {
 			// Run when the user has deleted the device from Homey
 			deleteSensorDevice(device_data);
 		},
-		
+
 		pair: function(socket) {
 			utils.debug('Sensor', driver, 'pairing has started...');
 
@@ -358,7 +358,7 @@ function createDriver(driver) {
 	return self;
 }
 
-module.exports = { 
+module.exports = {
 	createDriver: createDriver,
 	getSensors: () => Array.from(Sensors.values()).map(x => x.display),
 	update: update
