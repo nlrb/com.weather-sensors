@@ -8,7 +8,7 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-const libs = [ 'alecto', 'cresta', 'lacrosse', 'oregon', 'upm', "auriol" ];
+const libs = [ 'alecto', 'auriol', 'cresta', 'lacrosse', 'oregon', 'upm' ];
 const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
@@ -35,7 +35,7 @@ function registerSignals(setting) {
 				signals[s].register(function(err, success) {
 					if (err != null) {
 						utils.debug('Signal', s, '; err', err, 'success', success);
-					} else { 
+					} else {
 						utils.debug('Signal', s, 'registered.')
 						// Register data receive event
 						signals[s].on('payload', function (payload, first) {
@@ -61,13 +61,13 @@ module.exports = {
     init: function () {
 		// Uncomment below line to turn on debugging
 		utils.setDebug(true);
-		
+
 		// Initialize all libraries
 		for (let l in libs) {
 			let lib = require(libs[l]);
 			lib.init();
 		}
-		
+
 		// Read app settings for protocol selection
 		let setting = Homey.manager('settings').get('protocols');
 		if (setting == null) {
@@ -81,7 +81,7 @@ module.exports = {
 			Homey.manager('settings').set('protocols', setting);
 		}
 		registerSignals(setting);
-		
+
 		// Catch update of settings
 		Homey.manager('settings').on('set', function(varName) {
 			if (varName == 'protocols') {
@@ -89,7 +89,7 @@ module.exports = {
 				registerSignals(setting);
 			}
 		});
-		
+
     },
     deleted: function () {
 		for (let s in signals) {
@@ -104,15 +104,15 @@ module.exports = {
 			let ws = utils.WeatherSignal.get();
 			for (let sig in ws) {
 				let signal = utils.WeatherSignal.get(ws[sig]);
-				result.push({ 
+				result.push({
 					signal: signal.getName(),
 					enabled: signals[ws[sig]] != null,
-					stats: signal.getStatistics() 
+					stats: signal.getStatistics()
 				})
 			}
 			return result;
 		},
-		heapdump: (callback) => { 
+		heapdump: (callback) => {
 			heapdump.writeSnapshot((err, filename) => {
 				utils.debug('>>> Dump written to', filename);
 				fs.readFile(filename, 'utf8', (err, data) => {

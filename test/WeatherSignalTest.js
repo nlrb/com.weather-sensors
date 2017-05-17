@@ -1,12 +1,14 @@
 global.Homey = console;
 const utils = require('../node_modules/utils');
 const alecto = require('../node_modules/alecto');
+const auriol = require('../node_modules/auriol');
 const cresta = require('../node_modules/cresta');
 const lacrosse = require('../node_modules/lacrosse');
 const oregon = require('../node_modules/oregon');
 const upm = require('../node_modules/upm');
 
 alecto.init();
+auriol.init();
 cresta.init();
 lacrosse.init();
 oregon.init();
@@ -58,54 +60,71 @@ var encryptCresta = (data) => {
 var testSignals = [
   // Alecto v1
   { data: [1,0,0,1,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,1,1,1,1,1,1,1,0,0,1,1,0,0,0], protocol: "alectov1",
-    result: {id:'82',name:'WS-1050',type:'T',channel:2,data:{lowbattery:false,temperature:22.3,button:false}}
+    result: {id:'82',name:'WS-1050',channel:2,data:{lowbattery:false,temperature:22.3,button:false}}
   },
   // Alecto v3
   { data: [0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0,1,1,1,0,1,1,1], protocol: "alectov3",
-    result: {id:'113',channel:1,type:'TH',name:'WH2A',data:{temperature:22.6,humidity:41}}
+    result: {id:'113',channel:1,name:'WH2A',data:{temperature:22.6,humidity:41}}
   },
   { data: [0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1], protocol: "alectov3",
-    result: {id:'26',channel:1,type:'TH',name:'WS-1100',data:{lowbattery:false,temperature:22.3,humidity:41}}
+    result: {id:'26',channel:1,name:'WS-1100',data:{lowbattery:false,temperature:22.3,humidity:41}}
+  },
+  // Auriol Z31130
+  {
+    data: [0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,0,0,0,1], protocol: "auriol1",
+    result: {id:'127',channel:1,data:{lowbattery:false,temperature:22.5,humidity:49}}
   },
   // Cresta
   { // TH
     data: '45ce5e87c151f3', protocol: "cresta", func: encryptCresta,
-    result: {id:'45',channel:2,type:'TH',data:{lowbattery:false,temperature:18.7,humidity:51}}
+    result: {id:'45',channel:2,data:{lowbattery:false,temperature:18.7,humidity:51}}
   },
   { // W
     data: '8fd68c25c124c1349003a8', protocol: "cresta", func: encryptCresta,
-    result: {id:'8f',channel:0,type:'W',data:{lowbattery:true,temperature:'12.5',windchill:12.4,averagespeed:3.4,currentspeed:3.9,direction:90}}
+    result: {id:'8f',channel:0,data:{lowbattery:true,temperature:'12.5',windchill:12.4,averagespeed:3.4,currentspeed:3.9,direction:90}}
   },
   { // UV
     data: '8fd0cd0722012800', protocol: "cresta", func: encryptCresta,
-    result: {id:'8f',channel:0,type:'UV',data:{lowbattery:true,temperature:20.7,uvvalue:1.2,uvindex: 2.8,uvlevel:0}}
+    result: {id:'8f',channel:0,data:{lowbattery:true,temperature:20.7,uvvalue:1.2,uvindex: 2.8,uvlevel:0}}
   },
   { // R
     data: '80cc8ed00066', protocol: "cresta", func: encryptCresta,
-    result: {id:'80',channel:0,type: 'R',data:{lowbattery:false,raintotal:145.6}}
+    result: {id:'80',channel:0,data:{lowbattery:false,raintotal:145.6}}
   },
   {
     data: [1,0,1,1,0,0,1,1,0,0,1,0,1,1,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0], protocol: "cresta",
-    result: {id:'57',channel:2,type:'TH',data:{lowbattery:false,temperature:23.8,humidity:47}}
+    result: {id:'57',channel:2,data:{lowbattery:false,temperature:23.8,humidity:47}}
+  },
+  // LaCrosse TX2
+  {
+    data: [0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,0,1,1,1,0,0,1,0,0,0,0,0], protocol: "lacrosse1",
+    result: {id:'8',data:{temperature:22.3}}
+  },
+  // LaCrosse TX3
+  {
+    data: [0,0,0,0,0,1,0,1,1,1,0,0,0,1,1,1,0,0,1,0,1,0,0,1,0,1,1,1,0,0,1,0,0,1,1,0], protocol: "lacrosse1"
+  },
+  {
+    data: [1,1,1,0,0,1,0,1,1,1,0,1,0,1,0,1,0,0,1,0,0,0,0,0,0,1,0,1,0,0,1,0,1,0,0,0], protocol: "lacrosse1"
   },
   // LaCrosse WS
   { data: [1,0,0,1,0,1,1,1,1,0,1,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,1,0,1,1,0,0,1,1,0,0,1,0,1,0,0,1,0,1,1,0,0,1,1,1,1,1,0,1,1,0,0,0,1,1,0,0,0,1,1,0,1,0,1], protocol: "lacrosse2",
-    result: {id:'7',type:'THB',data:{temperature:25.5,humidity:49.6,pressure:994}}
+    result: {id:'7',data:{temperature:25.5,humidity:49.6,pressure:994}}
   },
   { data: [1,0,0,1,0,1,1,1,0,0,1,1,0,0,0,1,0,1,1,0,1,0,1,0,0,1,0,0,1,0,1,1,1,0,0,1,1,1,0,0,1,0,0,1,0,1,1,0,0,1,1,1,1,1,0,1,0,0,0,1,1,0,0,1,0,1,1,1,1,1,1], protocol: "lacrosse2",
-    result: {id:'3',type:'THB',data:{temperature:26.1,humidity:33.4,pressure:994}}
+    result: {id:'3',data:{temperature:26.1,humidity:33.4,pressure:994}}
   },
   {
     data: [1,1,1,0,0,1,1,1,1,0,1,1,0,1,0,1,0,0,0,0,1,1,0,0,0,1,1,0,1,0,1,0,0,1,0,1,1,1,1,0,1,0,1,1,0,1,1,1,0,1,1], protocol: "lacrosse2",
-    result: {id:'7',type:'W',data:{currentspeed:10.5,direction:145}}
+    result: {id:'7',data:{currentspeed:10.5,direction:145}}
   },
   {
     data: [1,0,1,0,0,1,1,1,1,1,1,1,1,0,1,1,0,1,0,0,1,1,1,0,1,1,1,1,1,1,1,1,0,1,1,1], protocol: "lacrosse2",
-    result:{"id":"15","type":"R","data":{"raintotal":2859}}
+    result:{id:'15',data:{'raintotal':2859}}
   },
   {
     data: [1,0,1,0,0,1,1,1,1,1,1,1,0,0,0,1,1,0,0,1,1,1,1,0,1,1,0,1,1,1,1,1,0,0,1,1], protocol: "lacrosse2",
-    result:{"id":"15","type":"R","data":{"raintotal":2961}}
+    result:{id:'15',data:{'raintotal':2961}}
   },
   {
     data: [1,1,0,1,0,1,1,1,1,0,1,1,1,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,1,0,1,0,1,0,0,0,1,1,0,1,1,0,1,1,1,0,1,1], protocol: "lacrosse2"
@@ -113,16 +132,16 @@ var testSignals = [
   // Oregon v2
   {
     data: [0,1,0,0,1,0,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,1,0], protocol: "oregonv2",
-    result: {type:'TH',name:'THGN123N/THGR122NX',layout:'TH1',id:'1d20',channel:1,rolling: '3',data:{lowbattery:false,temperature:18.8,humidity:25,unknown:'08'}}
+    result: {name:'THGN123N/THGR122NX',layout:'TH1',id:'1d20',channel:1,rolling: '3',data:{lowbattery:false,temperature:18.8,humidity:25,unknown:'08'}}
   },
   // Oregon v3
   {
     data: [1,1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,1,1,0,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,1,1,0,1,1,0,0,1,0,1,0,0,1,0,1,0,0], protocol: "oregonv3",
-    result: {type:'TH',name:'THGN800/THGN801/THGR810',layout:'TH1',id:'f824',channel:1,rolling:'6f',data:{lowbattery:false,temperature:21.8,humidity:34,unknown:'08'}}
+    result: {name:'THGN800/THGN801/THGR810',layout:'TH1',id:'f824',channel:1,rolling:'6f',data:{lowbattery:false,temperature:21.8,humidity:34,unknown:'08'}}
   },
   // UPM/Esic
   { data: [1,0,3,2,1,1,2,2,1,1,1,2,1,2,1,2,2,0,3,1,0,3], protocol: "upm",
-    result: {id:10,type:"TH",channel:1,data:{lowbattery:false,humidity:14,temperature:22.1}}
+    result: {id:10,channel:1,data:{lowbattery:false,humidity:14,temperature:22.1}}
   }
 ]
 

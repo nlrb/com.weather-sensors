@@ -18,6 +18,9 @@
 		"developers": [{
 			"name": "Jilles Miedema",
 			"email": "athom.jilles.miedema@gmail.com"
+		}, {
+			"name": "Marcel Mol",
+			"email": "mirakels@openpli.org"
 		}]
 	},
 	"images": {
@@ -431,58 +434,6 @@
 	}],
 	"signals": {
 		"433": {
-			"OregonV2": {
-				"sof": [
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
-				],
-				"eof": [],
-				"words": [
-					[0, 1],
-					[1, 0]
-				],
-				"manchesterUnit": 488,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
-				"minimalLength": 150,
-				"maximalLength": 180
-			},
-			"OregonV3": {
-				"sof": [
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0
-				],
-				"eof": [],
-				"words": [
-					[0, 1],
-					[1, 0]
-				],
-				"manchesterUnit": 488.28125,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
-				"minimalLength": 60,
-				"maximalLength": 120
-			},
-			"Cresta": {
-				"sof": [
-					1,0, 0,1, 1,0, 0,1, 1,0, 1,0, 1,0, 0,1, 0,1
-				],
-				"eof": [],
-				"words": [
-					[0, 1],
-					[1, 0]
-				],
-				"manchesterUnit": 500,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
-				"minimalLength": 74,
-				"maximalLength": 119
-			},
 			"AlectoV1": {
 				"sof": [500],
 				"eof": [],
@@ -512,6 +463,32 @@
 				"sensitivity": 0.3,
 				"minimalLength": 40,
 				"maximalLength": 56
+			},
+			"AuriolZ31130": {
+				"sof": [],
+				"words": [
+					[400, 1000],
+					[400, 2000]
+				],
+				"eof": [400, 4000],
+				"sensitivity": 0.3,
+				"minimalLength": 36,
+				"maximalLength": 36
+			},
+			"Cresta": {
+				"sof": [
+					1,0, 0,1, 1,0, 0,1, 1,0, 1,0, 1,0, 0,1, 0,1
+				],
+				"eof": [],
+				"words": [
+					[0, 1],
+					[1, 0]
+				],
+				"manchesterUnit": 500,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 0.5,
+				"minimalLength": 74,
+				"maximalLength": 119
 			},
 			"LaCrosseTX3": {
 				"sof": [
@@ -556,6 +533,43 @@
 				"minimalLength": 36,
 				"maximalLength": 71
 			},
+			"OregonV2": {
+				"sof": [
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
+				],
+				"eof": [],
+				"words": [
+					[0, 1],
+					[1, 0]
+				],
+				"manchesterUnit": 488,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 0.5,
+				"minimalLength": 150,
+				"maximalLength": 180
+			},
+			"OregonV3": {
+				"sof": [
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0
+				],
+				"eof": [],
+				"words": [
+					[0, 1],
+					[1, 0]
+				],
+				"manchesterUnit": 488.28125,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 0.5,
+				"minimalLength": 60,
+				"maximalLength": 120
+			},
 			"UPM": {
 				"sof": [
 					1000, 1000,
@@ -571,19 +585,6 @@
 				"sensitivity": 0.3,
 				"minimalLength": 16,
 				"maximalLength": 32
-			},
-			"AURIOL": {
-				"sof": [],
-				"words": [
-					[400, 1000],
-					[400, 2000]
-				],
-				"eof": [
-					400, 4000
-				],
-				"sensitivity": 0.3,
-				"minimalLength": 36,
-				"maximalLength": 36
 			}
 		},
 		"868": {

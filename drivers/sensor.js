@@ -61,6 +61,18 @@ const genericType = {
 	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, cap: ['measure_wind_angle', 'measure_wind_strength', 'measure_gust_strength'] }
 }
 
+// determineType: determine which sensor type fits best
+function determineType(data) {
+	if (data.pressure !== undefined) { return 'THB' }
+	if (data.currentspeed !== undefined || data.averagespeed !== undefined) { return 'W' }
+	if (data.raintotal !== undefined || data.rainrate !== undefined) { return 'R' }
+	if (data.humidity !== undefined) { return 'TH' }
+	if (data.uvindex !== undefined) { return 'UV' }
+	if (data.temperature !== undefined) { return 'T' }
+	if (data.luminance !== undefined) { return 'L' }
+	return undefined
+}
+
 // Update the sensor data
 function update(signal) {
 	let result = signal.getResult();
@@ -89,44 +101,50 @@ function update(signal) {
 				}
 			}
 		}
-		signal.debug('Sensor value has changed:', newdata);
+		// Determine the sensor type based on its values
+		newvalue.type = determineType(newvalue.data);
+		if (newvalue.type !== undefined) {
+			signal.debug('Sensor value has changed:', newdata);
 
-		// Add additional data
-		newvalue.count = (current.count || 0) + 1;
-		newvalue.newdata = newdata;
-		// Update settings
-		if (device != null) {
-			if (!device.available) {
-				device.driver.setAvailable(device.device_data);
-				if (activityNotifications & ACTIVE) {
-					Homey.manager('notifications').createNotification({
-						excerpt: __('notification.active', { name: device.name })
-					});
+			// Add additional data
+			newvalue.count = (current.count || 0) + 1;
+			newvalue.newdata = newdata;
+			// Update settings
+			if (device != null) {
+				if (!device.available) {
+					device.driver.setAvailable(device.device_data);
+					if (activityNotifications & ACTIVE) {
+						Homey.manager('notifications').createNotification({
+							excerpt: __('notification.active', { name: device.name })
+						});
+					}
+					device.available = true;
 				}
-				device.available = true;
+				device.update = when;
+				Devices.set(did, device);
+				device.driver.setSettings(device.device_data, { update: when }, function(err, result){
+					if (err) { signal.debug('setSettings error:', err); }
+				});
 			}
-			device.update = when;
-			Devices.set(did, device);
-			device.driver.setSettings(device.device_data, { update: when }, function(err, result){
-				if (err) { signal.debug('setSettings error:', err); }
-			});
+			// Update the sensor log
+			let display = {
+				protocol: signal.getName(),
+				type: genericType[newvalue.type].txt[locale] || genericType[newvalue.type].txt.en,
+				name: newvalue.name,
+				channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
+				id: newvalue.id,
+				update: when,
+				data: newvalue.data,
+				paired: device !== undefined,
+				name: device !== undefined ? device.name : ''
+			}
+			Sensors.set(did, { raw: newvalue, display: display });
+			//signal.debug(Sensors);
+			// Send an event to the front-end as well for the app settings page
+			Homey.manager('api').realtime('sensor_update', Array.from(Sensors.values()).map(x => x.display));
+		} else {
+			signal.debug('ERROR: cannot determine sensor type for data', newvalue);
 		}
-		// Update the sensor log
-		let display = {
-			protocol: signal.getName(),
-			type: genericType[newvalue.type].txt[locale] || genericType[newvalue.type].txt.en,
-			name: newvalue.name,
-			channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
-			id: newvalue.id,
-			update: when,
-			data: newvalue.data,
-			paired: device !== undefined,
-			name: device !== undefined ? device.name : ''
-		}
-		Sensors.set(did, { raw: newvalue, display: display });
-		//signal.debug(Sensors);
-		// Send an event to the front-end as well for the app settings page
-		Homey.manager('api').realtime('sensor_update', Array.from(Sensors.values()).map(x => x.display));
 	}
 }
 
