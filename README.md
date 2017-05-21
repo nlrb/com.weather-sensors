@@ -5,6 +5,7 @@ Homey app to read information from wireless weather sensors on 433/868 MHz.
 Currently the following protocols are supported on 433 MHz.
 
 * Alecto v1 & v3 (WS-1050/WS-1100/WS-1200)
+* Auriol Z31130
 * Cresta: used in numerous brands 433 MHz sensors, like Cresta & TFA
 * La Crosse: only TX3 decoding fully implemented, WS7000 partially (untested)
 * Oregon Scientific: version 2 and 3 of the protocol are supported
