@@ -19,6 +19,7 @@ These types of devices are supported:
 * Rain gauges
 * UV sensors
 * Barometers
+* Brightness sensor
 
 ### Installation
 Install the app and go to the app Settings page in Homey. As soon as a sensor signal is picked up, it will show in the list of 'Available sensors'.
