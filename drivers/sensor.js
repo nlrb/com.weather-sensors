@@ -49,28 +49,39 @@ const capability = {
 	currentspeed: 'measure_gust_strength',
 	averagespeed: 'measure_wind_strength',
 	uvindex: 'measure_ultraviolet',
+	brightness: 'measure_luminance',
 	lowbattery: 'alarm_battery'
 }
 
 const genericType = {
-	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' }, cap: ['measure_rain', 'meter_rain'] },
-	T: { txt: { en: 'Temperature', nl: 'Temperatuur' }, cap: ['measure_temperature'] },
-	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' }, cap: ['measure_temperature', 'measure_humidity'] },
-	THB: { txt: { en: 'Weather station', nl: 'Weerstation' }, cap: ['measure_temperature', 'measure_humidity', 'measure_pressure'] },
-	UV: { txt: { en: 'Ultra Violet' }, cap: ['measure_ultraviolet'] },
-	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, cap: ['measure_wind_angle', 'measure_wind_strength', 'measure_gust_strength'] }
+	L: { txt: { en: 'Brightness', nl: 'Lichtsterkte' } },
+	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' } },
+	T: { txt: { en: 'Temperature', nl: 'Temperatuur' } },
+	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' } },
+	THB: { txt: { en: 'Weather station', nl: 'Weerstation' } },
+	UV: { txt: { en: 'Ultra Violet' } },
+	W: { txt: { en: 'Anemometer', nl: 'Windmeter' } }
 }
 
 // determineType: determine which sensor type fits best
 function determineType(data) {
-	if (data.pressure !== undefined) { return 'THB' }
-	if (data.currentspeed !== undefined || data.averagespeed !== undefined) { return 'W' }
-	if (data.raintotal !== undefined || data.rainrate !== undefined) { return 'R' }
-	if (data.humidity !== undefined) { return 'TH' }
-	if (data.uvindex !== undefined) { return 'UV' }
-	if (data.temperature !== undefined) { return 'T' }
-	if (data.luminance !== undefined) { return 'L' }
-	return undefined
+	let type;
+	if (data.pressure !== undefined) {
+		type = 'THB';
+	} else if (data.humidity !== undefined) {
+		type = 'TH';
+	} else if (data.currentspeed !== undefined || data.averagespeed !== undefined) {
+		type = 'W';
+	} else if (data.raintotal !== undefined || data.rainrate !== undefined) {
+		type = 'R';
+	} else if (data.uvindex !== undefined) {
+		type = 'UV';
+	} else if (data.brightness !== undefined) {
+		type = 'L';
+	} else if (data.temperature !== undefined) {
+		type = 'T';
+	}
+	return type;
 }
 
 // Update the sensor data
@@ -154,10 +165,13 @@ function getSensors(type) {
 	for (let i of Sensors.keys()) {
 		let val = Sensors.get(i);
 		if (type != null && val.raw.type == type) {
-			let capabilities = genericType[type].cap.slice(); // copy default array
-			// Only show battery alarm if the sensor supports it
-			if (val.raw.data.lowbattery !== undefined) {
-				capabilities.push('alarm_battery');
+			let capabilities = [];
+			// Add sensor capabilities based on sensor values
+			for (let v in val.raw.data) {
+				utils.debug(v, capability[v]);
+				if (capability[v] !== undefined) {
+					capabilities.push(capability[v]);
+				}
 			}
 			utils.debug(capabilities, val.raw.data);
 			list.push({

@@ -1,5 +1,5 @@
 
-### Wireless Weather Sensors 
+### Wireless Weather Sensors
 Homey app to read information from wireless weather sensors on 433/868 MHz.
 
 Currently the following protocols are supported on 433 MHz.
@@ -16,7 +16,7 @@ These types of devices are supported:
 * Temperature/humidity sensors
 * Anemometers
 * Rain gauges
-* UV sensors 
+* UV sensors
 * Barometers
 
 ### Installation
@@ -45,7 +45,7 @@ Each sensor also has a static setting page. This will show some (read-only) info
 
 ### Settings
 
-On the application settings page a number of selections can be made. 
+On the application settings page a number of selections can be made.
 
 #### Protocols
 The first setting determines which protocols need to be enabled. By default they are all enabled, but when some are not needed they can be disabled by the user. Hover over the information button next to the protocol to get some more information on it.
@@ -64,8 +64,9 @@ If you want, you can get a notification in the Homey notification sensor when a 
 Some debug tools are available for use in special cases. Don't use them unless instructed.
 
 ### Version info
+* 1.1.0 Adds support for Auriol Z31130, adds Brightness device, sensor capabilities based on received values
 * 1.0.2 Fix a bug in Oregon v2 decoding
-* 1.0.1 Definition fixes for Homey FW 1.3, implement LaCrosse WS, bugfixes
+* 1.0.1 Definition fixes for Homey FW 1.3, implement LaCrosse WS, bug fixes
 * 1.0.0 First Athom App Store release
 
 ----------
@@ -78,4 +79,3 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-

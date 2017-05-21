@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -20,7 +20,7 @@
 			"email": "athom.jilles.miedema@gmail.com"
 		}, {
 			"name": "Marcel Mol",
-			"email": "mirakels@openpli.org"
+			"email": "marcel@mesa.nl"
 		}]
 	},
 	"images": {
@@ -38,7 +38,7 @@
 			"nl": "Regen"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_rain", "meter_rain", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/rain/assets/images/large.jpg",
 			"small": "drivers/rain/assets/images/small.jpg"
@@ -105,7 +105,7 @@
 			"nl": "Druk/Temperatuur/Vochtigheid"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_temperature", "measure_humidity", "measure_pressure", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/temphumbar/assets/images/large.jpg",
 			"small": "drivers/temphumbar/assets/images/small.jpg"
@@ -172,7 +172,7 @@
 			"nl": "Temperatuur/Vochtigheid"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_temperature", "measure_humidity", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/temphum/assets/images/large.jpg",
 			"small": "drivers/temphum/assets/images/small.jpg"
@@ -239,7 +239,7 @@
 			"nl": "Temperatuur"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_temperature", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/temp/assets/images/large.jpg",
 			"small": "drivers/temp/assets/images/small.jpg"
@@ -305,7 +305,7 @@
 			"en": "Wind"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_wind_angle", "measure_wind_strength", "measure_gust_strength", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/wind/assets/images/large.jpg",
 			"small": "drivers/wind/assets/images/small.jpg"
@@ -371,10 +371,77 @@
 			"en": "Ultra Violet"
 		},
 		"class": "sensor",
-		"capabilities": ["measure_ultraviolet", "alarm_battery"],
+		"capabilities": [],
 		"images": {
 			"large": "drivers/uv/assets/images/large.jpg",
 			"small": "drivers/uv/assets/images/small.jpg"
+		},
+		"pair": [{
+			"id": "list_sensors",
+			"template": "list_devices",
+			"navigation": {
+				"next": "add_sensors"
+			}
+		}, {
+			"id": "add_sensors",
+			"template": "add_devices"
+		}],
+		"settings": [{
+			"type": "group",
+			"label": {
+				"en": "Sensor information",
+				"nl": "Sensor informatie"
+			},
+			"children": [{
+				"id": "protocol",
+				"type": "label",
+				"label": {
+					"en": "Protocol"
+				},
+				"value": ""
+			}, {
+				"id": "type",
+				"type": "label",
+				"label": {
+					"en": "Type"
+				},
+				"value": ""
+			}, {
+				"id": "channel",
+				"type": "label",
+				"label": {
+					"en": "Channel",
+					"nl": "Kanaal"
+				},
+				"value": ""
+			}, {
+				"id": "id",
+				"type": "label",
+				"label": {
+					"en": "ID"
+				},
+				"value": ""
+			}, {
+				"id": "update",
+				"type": "label",
+				"label": {
+					"en": "Last update",
+					"nl": "Laaste data van"
+				},
+				"value": ""
+			}]
+		}]
+	}, {
+		"id": "luminance",
+		"name": {
+			"en": "Brightness",
+			"nl": "Lichtsterkte"
+		},
+		"class": "sensor",
+		"capabilities": [],
+		"images": {
+			"large": "drivers/luminance/assets/images/large.jpg",
+			"small": "drivers/luminance/assets/images/small.jpg"
 		},
 		"pair": [{
 			"id": "list_sensors",
