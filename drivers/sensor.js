@@ -346,6 +346,22 @@ function createDriver(driver) {
 						}
 				}
 			},
+			measure_ultraviolet: {
+				get: function(device_data, callback) {
+						if (typeof callback == 'function') {
+							var val = getSensorValue('uvindex', device_data.id);
+							callback(null, val);
+						}
+				}
+			},
+			measure_luminance: {
+				get: function(device_data, callback) {
+						if (typeof callback == 'function') {
+							var val = getSensorValue('brightness', device_data.id);
+							callback(null, val);
+						}
+				}
+			},
 			alarm_battery: {
 				get: function(device_data, callback) {
 						if (typeof callback == 'function') {
