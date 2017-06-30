@@ -69,6 +69,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 1.1.2 Fix Oregon Scientific BTHR918N & add support for BTHR918
 * 1.1.1 Fix UV/brightness value not being displayed
 * 1.1.0 Adds support for Auriol Z31130, adds Brightness device, sensor capabilities based on received values
 * 1.0.2 Fix a bug in Oregon v2 decoding
