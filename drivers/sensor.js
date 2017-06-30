@@ -244,8 +244,10 @@ function healthCheck() {
 	// Iterate over sensors
 	Sensors.forEach((sensor, key) => {
 		// Only remove if there is no Homey device associated
-		if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > inactiveTime)) {
-			Sensors.delete(key);
+		if (sensor.display !== undefined && sensor.raw !== undefined) {
+			if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > inactiveTime)) {
+				Sensors.delete(key);
+			}
 		}
 	});
 	// Iterate over devices
