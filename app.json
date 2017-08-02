@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -8,9 +8,10 @@
 		"nl": "Draadloze Weersensoren"
 	},
 	"description": {
-		"en": "Reads data from several types of wireless weather sensors.",
-		"nl": "Leest data van verschillende soorten draadloze weersensoren."
+		"en": "Reads data from several brands of wireless weather sensors.",
+		"nl": "Leest data van verschillende merken draadloze weersensoren."
 	},
+	"keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "LaCrosse", "TFA", "Orgeon Scientific", "UPM"],
 	"author": {
 		"name": "Ramón Baas"
 	},
@@ -31,6 +32,17 @@
 		"homey:wireless:433",
 		"homey:wireless:868"
 	],
+	"capabilities": {
+		"measure_forecast": {
+			"type": "string",
+			"title": {
+					"en": "Forecast",
+					"nl": "Voorspelling"
+			},
+			"getable": true,
+			"setable": false
+		}
+	},
 	"drivers": [{
 		"id": "rain",
 		"name": {
@@ -164,7 +176,36 @@
 				},
 				"value": ""
 			}]
-		}]
+		}, {
+				"type": "group",
+				"label": {
+					"en": "Sensor offset",
+					"nl": "Sensor compensatie"
+				},
+				"children": [{
+					"id": "offset_temperature",
+					"type": "number",
+					"label": {
+						"en": "Temperature", "nl": "Temperatuur"
+					},
+					"value": 0
+				}, {
+					"id": "offset_humidity",
+					"type": "number",
+					"label": {
+						"en": "Humidity", "nl": "Vochtigheid"
+					},
+					"value": 0
+				}, {
+					"id": "offset_pressure",
+					"type": "number",
+					"label": {
+						"en": "Pressure", "nl": "Druk"
+					},
+					"value": 0
+				}]
+			}
+		]
 	}, {
 		"id": "temphum",
 		"name": {
@@ -231,7 +272,29 @@
 				},
 				"value": ""
 			}]
-		}]
+		}, {
+				"type": "group",
+				"label": {
+					"en": "Sensor offset",
+					"nl": "Sensor compensatie"
+				},
+				"children": [{
+					"id": "offset_temperature",
+					"type": "number",
+					"label": {
+						"en": "Temperature", "nl": "Temperatuur"
+					},
+					"value": 0
+				}, {
+					"id": "offset_humidity",
+					"type": "number",
+					"label": {
+						"en": "Humidity", "nl": "Vochtigheid"
+					},
+					"value": 0
+				}]
+			}
+		]
 	}, {
 		"id": "temp",
 		"name": {
@@ -298,7 +361,22 @@
 				},
 				"value": ""
 			}]
-		}]
+		}, {
+				"type": "group",
+				"label": {
+					"en": "Sensor offset",
+					"nl": "Sensor compensatie"
+				},
+				"children": [{
+					"id": "offset_temperature",
+					"type": "number",
+					"label": {
+						"en": "Temperature", "nl": "Temperatuur"
+					},
+					"value": 0
+				}]
+			}
+		]
 	}, {
 		"id": "wind",
 		"name": {
@@ -497,7 +575,22 @@
 				},
 				"value": ""
 			}]
-		}]
+		}, {
+				"type": "group",
+				"label": {
+					"en": "Sensor offset",
+					"nl": "Sensor compensatie"
+				},
+				"children": [{
+					"id": "offset_brightness",
+					"type": "number",
+					"label": {
+						"en": "Brightness", "nl": "Lichtsterkte"
+					},
+					"value": 0
+				}]
+			}
+		]
 	}],
 	"signals": {
 		"433": {
@@ -619,6 +712,25 @@
 				"minimalLength": 150,
 				"maximalLength": 180
 			},
+			"OregonV2.2": {
+				"sof": [
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
+				],
+				"eof": [],
+				"words": [
+					[0, 1],
+					[1, 0]
+				],
+				"manchesterUnit": 500,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 0.5,
+				"minimalLength": 150,
+				"maximalLength": 180
+			},
 			"OregonV3": {
 				"sof": [
 					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
@@ -631,7 +743,7 @@
 					[0, 1],
 					[1, 0]
 				],
-				"manchesterUnit": 488.28125,
+				"manchesterUnit": 488,
 				"manchesterMaxUnits": 2,
 				"sensitivity": 0.5,
 				"minimalLength": 60,

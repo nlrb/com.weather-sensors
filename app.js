@@ -13,9 +13,6 @@ const utils = require('utils');
 const sensor = require('./drivers/sensor.js');
 const locale = Homey.manager('i18n').getLanguage() == 'nl' ? 'nl' : 'en'; // only Dutch & English supported
 
-var heapdump = require('heapdump');
-var fs = require('fs');
-
 var signals = {};
 var protocols = {};
 
@@ -32,6 +29,7 @@ function registerSignals(setting) {
 				let gs = signal.getSignal();
 				let HomeySignal = Homey.wireless(gs.freq.toString()).Signal;
 				signals[s] = new HomeySignal(gs.def);
+				utils.debug(gs.def);
 				signals[s].register(function(err, success) {
 					if (err != null) {
 						utils.debug('Signal', s, '; err', err, 'success', success);
@@ -111,22 +109,6 @@ module.exports = {
 				})
 			}
 			return result;
-		},
-		heapdump: (callback) => {
-			heapdump.writeSnapshot((err, filename) => {
-				utils.debug('>>> Dump written to', filename);
-				fs.readFile(filename, 'utf8', (err, data) => {
-					if (err) {
-						return Homey.log('Error reading from file', err);
-					}
-					utils.debug('Data read from file');
-					fs.unlink(filename, (err) => {
-						if (err) throw err;
-						utils.debug('Successfully deleted', filename);
-					});
-					callback(filename, data);
-				});
-			})
 		}
 	}
 }

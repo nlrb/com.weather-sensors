@@ -40,10 +40,11 @@ Below are some examples of different weather sensor devices in Homey.
 
 A battery alarm will only be shown when the sensor and the protocol support this.
 
-Each sensor also has a static setting page. This will show some (read-only) information about the sensor and e.g. the last date/time data was received from the sensor.
+Each sensor also has a settings page. This will show some (read-only) information about the sensor and e.g. the last date/time data was received from the sensor.
 
 ![](http://homey.ramonbaas.nl/weather/device_settings.png)
 
+For a number of types (temperature, humidity, pressure and luminance) you can also define an 'offset' for a sensor value. If e.g. a sensor a reports a value that is always too high, you can define an offset that is added to the read value. Use e.g. and offset of '-1.4' to reduce the sensor value on the mobile card by 1.4. Or use '0.3' to increase the value.
 
 ### Settings
 
@@ -69,6 +70,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 1.2.0 Adds support for Oregon Scientific v2.2 (BTHGN129), adds offset support, adds forecast, removes 868, removes heapdump
 * 1.1.2 Fix Oregon Scientific BTHR918N & add support for BTHR918
 * 1.1.1 Fix UV/brightness value not being displayed
 * 1.1.0 Adds support for Auriol Z31130, adds Brightness device, sensor capabilities based on received values

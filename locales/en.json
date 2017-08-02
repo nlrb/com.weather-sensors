@@ -66,5 +66,13 @@
 	"notification": {
 		"active": "Sensor <b>__name__</b> is active again",
 		"inactive": "Sensor <b>__name__</b> is inactive"
+	},
+	"mobile": {
+		"forecast": {
+			"Partly cloudy": "Partly Cloudy",
+			"Cloudy": "Cloudy",
+			"Rainy": "Rainy",
+			"Sunny": "Sunny"
+		}
 	}
 }

@@ -50,6 +50,7 @@ const capability = {
 	averagespeed: 'measure_wind_strength',
 	uvindex: 'measure_ultraviolet',
 	brightness: 'measure_luminance',
+	forecast: 'measure_forecast',
 	lowbattery: 'alarm_battery'
 }
 
@@ -62,6 +63,12 @@ const genericType = {
 	UV: { txt: { en: 'Ultra Violet' } },
 	W: { txt: { en: 'Anemometer', nl: 'Windmeter' } }
 }
+
+const thbMobile = {
+		components: [
+			{	id: "icon",	capabilities: [] },
+		  { id: "sensor", options: { icons: {	measure_forecast: "./drivers/temphumbar/assets/forecast.svg" } } }
+		]}
 
 // determineType: determine which sensor type fits best
 function determineType(data) {
@@ -82,6 +89,20 @@ function determineType(data) {
 		type = 'T';
 	}
 	return type;
+}
+
+function mapValue(device, cap, val) {
+	// language mapping for string type values
+	if (typeof val === 'string') {
+		val = __('mobile.' + cap + '.' + val);
+	}
+	// add offset if defined
+	let cap_offset = 'offset_' + cap;
+	if (device.settings !== undefined && device.settings[cap_offset] !== undefined) {
+		val += device.settings[cap_offset];
+	}
+
+	return val;
 }
 
 // Update the sensor data
@@ -105,8 +126,9 @@ function update(signal) {
 				newdata = true;
 				newvalue.data[c] = result.data[c];
 				let cap = capability[c];
-				if (device != null && cap != null) {
-					device.driver.realtime(device.device_data, cap, newvalue.data[c], function(err, success) {
+				if (device !== undefined && cap !== undefined) {
+					let val = mapValue(device, c, newvalue.data[c]);
+					device.driver.realtime(device.device_data, cap, val, function(err, success) {
 						signal.debug('Real-time', cap, 'update', (err ? err : 'OK'));
 					});
 				}
@@ -174,7 +196,7 @@ function getSensors(type) {
 				}
 			}
 			utils.debug(capabilities, val.raw.data);
-			list.push({
+			let device = {
 				name: val.raw.name || (type + ' ' + val.raw.id),
 				data: {	id: i, type: type },
 				capabilities: capabilities,
@@ -185,7 +207,12 @@ function getSensors(type) {
 					id: val.raw.id,
 					update: val.display.update
 				}
-			});
+			}
+			if (type === 'THB') {
+				device.mobile = thbMobile;
+				device.mobile.components[1].capabilities = capabilities;
+			}
+		  list.push(device);
 		}
 	}
 	return list;
@@ -200,7 +227,10 @@ function addSensorDevice(driver, device_data, name) {
 		available: true
 	}
 	driver.getSettings(device_data, function(err, result){
-		if (!err) { device.update = result.update };
+		if (!err) {
+			device.settings = result;
+			device.update = result.update
+		};
 		Devices.set(device_data.id, device);
 	});
 	let sensor = Sensors.get(device_data.id);
@@ -232,8 +262,9 @@ function updateDeviceName(device_data, new_name) {
 // getSensorValue
 function getSensorValue(what, id) {
 	let val = Sensors.get(id);
-	if (val != null) {
-		val = val.raw.data[what];
+	if (val !== undefined) {
+		let device = Devices.get(id);
+		val = mapValue(device, what, val.raw.data[what]);
 	}
 	return val;
 }
@@ -281,6 +312,27 @@ function createDriver(driver) {
 			});
 			// we're ready
 			callback();
+		},
+
+		settings: function(device_data, newSettingsObj, oldSettingsObj, changedKeysArr, callback) {
+			utils.debug('Settings updated');
+			let device = Devices.get(device_data.id);
+			if (device !== undefined) {
+				device.settings = newSettingsObj;
+				Devices.set(device_data.id, device);
+				// Update display values (send realtime event) if offset has changed
+				for (let k in changedKeysArr) {
+					let key = changedKeysArr[k];
+					if (key.slice(0, 7) === 'offset_') {
+						let cap = key.slice(7);
+						let val = getSensorValue(cap, device_data.id);
+						self.realtime(device_data, capability[cap], val, function(err, success) {
+							utils.debug('Real-time', cap, 'update after setting change', (err ? err : 'OK'));
+						});
+					}
+				}
+			}
+			callback(null, true);
 		},
 
 		capabilities: {
@@ -364,7 +416,15 @@ function createDriver(driver) {
 						}
 				}
 			},
-			alarm_battery: {
+			measure_forecast: {
+				get: function(device_data, callback) {
+						if (typeof callback == 'function') {
+							var val = getSensorValue('forecast', device_data.id);
+							callback(null, val);
+						}
+				}
+			},
+		alarm_battery: {
 				get: function(device_data, callback) {
 						if (typeof callback == 'function') {
 							var val = getSensorValue('lowbattery', device_data.id);

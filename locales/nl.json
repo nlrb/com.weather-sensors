@@ -66,5 +66,13 @@
 	"notification": {
 		"active": "Sensor <b>__name__</b> is weer actief",
 		"inactive": "Sensor <b>__name__</b> is inactief"
+	},
+	"mobile": {
+		"forecast": {
+			"Partly cloudy": "Half Bewolkt",
+			"Cloudy": "Bewolkt",
+			"Rainy": "Regenachtig",
+			"Sunny": "Zonnig"
+		}
 	}
 }

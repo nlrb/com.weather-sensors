@@ -59,7 +59,7 @@
 					inactive: $scope.inactiveOptions[7],
 					notify: $scope.notifyOptions[2]
 				};
-				
+
 				// Display message to the user
 				$scope.displayMessage = function(text) {
 					if ($scope.msgPromise != null) {
@@ -128,14 +128,14 @@
 							$scope.displayMessage(__('settings.protocols.success'));
 						}
 					});
-					var appSetting = { 
-						inactive: $scope.app.inactive.value, 
+					var appSetting = {
+						inactive: $scope.app.inactive.value,
 						notify: $scope.app.notify.value
 					};
 					Homey.set('app', appSetting, function(err, value) {
 					});
 				};
-				
+
 				// debugging: Statistics
 				$scope.statistics = function() {
 					$('#stats').prop('disabled', true);
@@ -154,27 +154,8 @@
 						$('#stats').prop('disabled', false);
 					});
 				};
-
-				// debugging: Heap dump
-				$scope.heapdump = function() {
-					$('#heapdump').prop('disabled', true);
-					Homey.api('GET', '/heapdump/', {}, function(data) {
-						var filename = data.filename;
-						var result = data.result;
-						var a = document.createElement("a");
-						document.body.appendChild(a);
-						a.style = "display:none";
-						blob = new Blob([result], {type: "octet/stream"}),
-						url = window.URL.createObjectURL(blob);
-						a.href = url;
-						a.download = filename;
-						a.click();
-						window.URL.revokeObjectURL(url);
-						$('#heapdump').prop('disabled', false);
-					});
-				};
 			}]);
-			
+
 			function onHomeyReady(){
 				angular.bootstrap(document, ['WeatherSettings']);
 				Homey.ready();
@@ -211,6 +192,7 @@
 								</div>
 							</div>
 						</fieldset>
+					<!-- Hide 868 for now, no supported sensors
 					<fieldset style="float: left">
 						<legend>868 MHz</legend>
 						<div ng-repeat="item in app.protocols | orderBy: 'id'">
@@ -222,6 +204,7 @@
 							</div>
 						</div>
 					</fieldset>
+				  -->
 				</fieldset>
 				<fieldset style="clear: left">
 					<legend data-i18n="settings.app.header"></legend>
@@ -275,9 +258,6 @@
 				<legend data-i18n="settings.debug.header"></legend>
 				<form name="statForm" ng-submit="statistics()">
 					<button id="stats" type="submit" class="btn btn-default" style="float: left; margin-right:25px;" ng-click="submitted=true;" data-i18n="settings.debug.statistics"></button>
-				</form>
-				<form name="heapForm" ng-submit="heapdump()">
-					<button id="heapdump" type="submit" class="btn btn-default" ng-click="submitted=true;" data-i18n="settings.debug.heapdump"></button>
 				</form>
 			</fieldset>
 		</div>
