@@ -1,7 +1,7 @@
 "use strict";
 
 /*
-Copyright (c) 2016 Ramón Baas
+Copyright (c) 2017 Ramón Baas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -262,9 +262,9 @@ function updateDeviceName(device_data, new_name) {
 // getSensorValue
 function getSensorValue(what, id) {
 	let val = Sensors.get(id);
-	if (val !== undefined) {
-		let device = Devices.get(id);
-		val = mapValue(device, what, val.raw.data[what]);
+	let dev = Devices.get(id);
+	if (val !== undefined && dev !== undefined) {
+		val = mapValue(dev, what, val.raw.data[what]);
 	}
 	return val;
 }
@@ -277,6 +277,7 @@ function healthCheck() {
 		// Only remove if there is no Homey device associated
 		if (sensor.display !== undefined && sensor.raw !== undefined) {
 			if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > inactiveTime)) {
+				utils.debug('Removing', key, 'from display list');
 				Sensors.delete(key);
 			}
 		}
@@ -285,6 +286,7 @@ function healthCheck() {
 	Devices.forEach((device, key) => {
 		// Check if the device needs to be set unavailable
 		if (device.available && now - Date.parse(device.update) > inactiveTime) {
+			utils.debug('Marking', key, 'as inactive');
 			device.driver.setUnavailable(device.device_data, __('error.no_data', { since: now }));
 			device.available = false;
 			if (activityNotifications & INACTIVE) {

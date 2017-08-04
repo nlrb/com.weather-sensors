@@ -70,6 +70,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 1.2.1 Bug fixes
 * 1.2.0 Adds support for Oregon Scientific v2.2 (BTHGN129), adds offset support, adds forecast, removes 868, removes heapdump
 * 1.1.2 Fix Oregon Scientific BTHR918N & add support for BTHR918
 * 1.1.1 Fix UV/brightness value not being displayed
