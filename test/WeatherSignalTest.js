@@ -65,9 +65,13 @@ var testSignals = [
   // Alecto v3
   { data: [0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0,1,1,1,0,1,1,1], protocol: "alectov3",
     result: {id:'113',name:'WH2A',data:{temperature:22.6,humidity:41}}
-  },
+  }, // WS-1100
   { data: [0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1], protocol: "alectov3",
     result: {id:'26',channel:1,name:'WS-1100',data:{temperature:22.3,humidity:41,lowbattery:false}}
+  },
+  { // Viking Art Nr: 02035
+    data: [1,0,1,0,0,1,0,1,0,1,1,1,0,1,0,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1], protocol: "alectov3",
+    result: {id:'174',channel:3,name:'WH2', data:{temperature:-23.1}}
   },
   { // Fine Offset HW2
     data: [1,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,0,1,0,0,1,0,1,0], protocol: "alectov3",
@@ -76,6 +80,10 @@ var testSignals = [
   { // Fine Offset HW2
     data: [1,1,0,1,0,0,1,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,0,0], protocol: "alectov3",
     result: {id:'248',channel:8,name:'WH2',data:{temperature:14.1}}
+  },
+  { // Telldus FT007TH
+    data: [1,1,0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,0,1,0,0,0,0,1,0,1,1,0,1,1,0,0,0,0,0,1,0], protocol: "alectov3",
+    result: {id:'135',channel:1,name:'WH2',data:{temperature:24.4,humidity:45}}
   },
   /*
   { // Fine Offset HW2
