@@ -3,6 +3,7 @@ const utils = require('../node_modules/utils');
 const alecto = require('../node_modules/alecto');
 const auriol = require('../node_modules/auriol');
 const cresta = require('../node_modules/cresta');
+const labs = require('../node_modules/labs');
 const lacrosse = require('../node_modules/lacrosse');
 const oregon = require('../node_modules/oregon');
 const upm = require('../node_modules/upm');
@@ -10,6 +11,7 @@ const upm = require('../node_modules/upm');
 alecto.init();
 auriol.init();
 cresta.init();
+labs.init();
 lacrosse.init();
 oregon.init();
 upm.init();
@@ -150,6 +152,10 @@ var testSignals = [
   {
     data: [1,0,1,1,0,0,1,1,0,0,1,0,1,1,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0], protocol: "cresta",
     result: {id:'57',channel:2,data:{temperature:23.8,humidity:47,lowbattery:false}}
+  },
+  { // Labs BL999
+    data: [0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0], protocol: "labs",
+    result: {id:'8',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
   },
   // LaCrosse TX2
   {

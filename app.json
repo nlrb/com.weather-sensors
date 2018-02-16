@@ -1,6 +1,6 @@
 {
 	"id": "com.weather-sensors",
-	"version": "1.2.2",
+	"version": "1.2.3",
 	"compatibility": ">=1.2.0",
 	"category": ["climate"],
 	"name": {
@@ -11,7 +11,7 @@
 		"en": "Reads data from several brands of wireless weather sensors.",
 		"nl": "Leest data van verschillende merken draadloze weersensoren."
 	},
-	"keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
+	"keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
 	"author": {
 		"name": "Ramón Baas"
 	},
@@ -649,6 +649,17 @@
 				"sensitivity": 0.5,
 				"minimalLength": 74,
 				"maximalLength": 119
+			},
+			"Labs": {
+				"sof": [ 550, 9000, 550 ],
+				"words": [
+					[ 1850, 550 ],
+					[ 3900, 550 ]
+				],
+				"eof": [],
+				"sensitivity": 0.3,
+				"minimalLength": 36,
+				"maximalLength": 36
 			},
 			"LaCrosseTX3": {
 				"sof": [
