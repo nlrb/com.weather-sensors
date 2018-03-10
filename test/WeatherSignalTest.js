@@ -155,7 +155,7 @@ var testSignals = [
   },
   { // Labs BL999
     data: [0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0], protocol: "labs",
-    result: {id:'8',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
+    result: {name:'BL999',id:'8',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
   },
   // LaCrosse TX2
   {
