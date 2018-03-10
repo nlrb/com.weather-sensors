@@ -64,6 +64,11 @@ var testSignals = [
   { data: [1,0,0,1,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,1,1,1,1,1,1,1,0,0,1,1,0,0,0], protocol: "alectov1",
     result: {id:'82',name:'WS-1050',channel:2,data:{temperature:22.3,button:false,lowbattery:false}}
   },
+  // Alecto v1 rain gauge
+  {
+    data:[0,1,0,1,0,1,1,1 ,0,1,1,0, 1,1,0,0, 0,0,1,1,0,1,1,0,1,1,0,0,0,0,0,0, 1,0,1,1], protocol: "alectov1",
+    result: {id:'234',data:{raintotal:219,lowbattery:false}}
+  },
   // Alecto v3
   { data: [0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0,1,1,1,0,1,1,1], protocol: "alectov3",
     result: {id:'113',name:'WH2A',data:{temperature:22.6,humidity:41}}
