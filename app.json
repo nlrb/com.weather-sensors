@@ -1,7 +1,7 @@
 {
 	"id": "com.weather-sensors",
 	"version": "1.2.4",
-	"compatibility": ">=1.2.0",
+	"compatibility": ">=1.5.13",
 	"category": ["climate"],
 	"name": {
 		"en": "Wireless Weather Sensors",
@@ -637,7 +637,7 @@
 			},
 			"Cresta": {
 				"sof": [
-					1,0, 0,1, 1,0, 0,1, 1,0, 1,0, 1,0, 0,1, 0,1
+					1,1,0,0,1,1,0,1,0,1,0,0,1,0,1
 				],
 				"eof": [],
 				"words": [
@@ -645,8 +645,8 @@
 					[1, 0]
 				],
 				"manchesterUnit": 500,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
+				"manchesterMaxUnits": 3,
+				"sensitivity": 0.3,
 				"minimalLength": 74,
 				"maximalLength": 119
 			},
@@ -705,49 +705,54 @@
 				"maximalLength": 71
 			},
 			"OregonV2": {
+				"agc": [
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 
+					0
+				],
 				"sof": [
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
+					1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0
 				],
 				"eof": [],
 				"words": [
-					[0, 1],
-					[1, 0]
+					[1,0,0,1],
+					[0,1,1,0]
 				],
 				"manchesterUnit": 488,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
-				"minimalLength": 150,
-				"maximalLength": 180
+				"manchesterMaxUnits": 3,
+				"sensitivity": 0.13,
+				"minimalLength": 60,
+				"maximalLength": 140
 			},
 			"OregonV2_2": {
+				"agc": [
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 
+					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 
+					0
+				],
 				"sof": [
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					1, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 1, 0, 1, 1, 0
+					1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0
 				],
 				"eof": [],
 				"words": [
-					[0, 1],
-					[1, 0]
+					[1,0,0,1],
+					[0,1,1,0]
 				],
 				"manchesterUnit": 500,
-				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
-				"minimalLength": 150,
-				"maximalLength": 180
+				"manchesterMaxUnits": 3,
+				"sensitivity": 0.13,
+				"minimalLength": 60,
+				"maximalLength": 140
 			},
 			"OregonV3": {
+				"agc": [
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0
+				],
 				"sof": [
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0
+					1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0
 				],
 				"eof": [],
 				"words": [
@@ -756,9 +761,9 @@
 				],
 				"manchesterUnit": 488,
 				"manchesterMaxUnits": 2,
-				"sensitivity": 0.5,
+				"sensitivity": 0.1,
 				"minimalLength": 60,
-				"maximalLength": 120
+				"maximalLength": 140
 			},
 			"UPM": {
 				"sof": [

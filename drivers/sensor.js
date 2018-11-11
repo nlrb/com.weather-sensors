@@ -21,7 +21,7 @@ var Devices = new Map(); // all devices that have been added
 
 const ACTIVE = 1;
 const INACTIVE = 2;
-var inactiveTime = 60000;
+var inactiveTime = 300000;
 var activityNotifications = 2;
 
 function updateAppSettings() {
