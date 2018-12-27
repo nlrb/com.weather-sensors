@@ -28,139 +28,7 @@
 		</style>
 		<script type="text/javascript" src="/manager/webserver/assets/js/jquery.js"></script>
 		<script type="text/javascript" src="/manager/webserver/assets/js/angular.js"></script>
-		<script>
-			angular.module('WeatherSettings', [])
-			.controller('SettingsCtrl', ['$scope', '$timeout', function($scope, $timeout) {
-				$scope.sensors = {};
-				$scope.message = '';
-				$scope.timeout;
-				$scope.msgPromise;
-				$scope.inactiveOptions = [
-				   { text: __('settings.app.inactive.option.1min'), value: 60 },
-				   { text: __('settings.app.inactive.option.2min'), value: 120 },
-				   { text: __('settings.app.inactive.option.5min'), value: 300 },
-				   { text: __('settings.app.inactive.option.10min'), value: 600 },
-				   { text: __('settings.app.inactive.option.30min'), value: 1800 },
-				   { text: __('settings.app.inactive.option.1hr'), value: 3600 },
-				   { text: __('settings.app.inactive.option.2hr'), value: 7200 },
-				   { text: __('settings.app.inactive.option.5hr'), value: 18000 },
-				   { text: __('settings.app.inactive.option.10hr'), value: 36000 },
-				   { text: __('settings.app.inactive.option.1day'), value: 86400 },
-				];
-				$scope.notifyOptions = [
-				   { text: __('settings.app.notify.option.none'), value: 0 },
-				   { text: __('settings.app.notify.option.active'), value: 1 },
-				   { text: __('settings.app.notify.option.inactive'), value: 2 },
-				   { text: __('settings.app.notify.option.both'), value: 3 }
-				];
-				// Set default values
-				$scope.app = {
-					protocols: {},
-					inactive: $scope.inactiveOptions[7],
-					notify: $scope.notifyOptions[2]
-				};
-
-				// Display message to the user
-				$scope.displayMessage = function(text) {
-					if ($scope.msgPromise != null) {
-						$timeout.cancel($scope.msgPromise);
-					}
-					$scope.$apply(function() {
-						$scope.message = text;
-					});
-					$(".message").slideDown();
-					$scope.msgPromise = $timeout(function() {
-						$scope.message = '';
-						$(".message").slideUp();
-					}, 5000);
-				}
-
-				// Update the list when a new sensor is found
-				Homey.on('sensor_update', function(value) {
-					if (value) {
-						$scope.sensors = value;
-						$scope.$apply();
-					}
-				});
-				// Get sensors already found
-				Homey.api('GET', '/getSensors/', {}, function(err, sensors) {
-					if (sensors) {
-						$scope.sensors = sensors;
-						$scope.$apply();
-					}
-				});
-				Homey.get('protocols', function(err, value) {
-					// Get list of supported protocols
-					Homey.api('GET', '/getProtocols/', {}, function(err, protocols) {
-						if (protocols) {
-							$scope.app.protocols = protocols;
-							if (value) {
-								for (var v in value) {
-									if (value[v].watching != null && $scope.app.protocols[v] != null) {
-										$scope.app.protocols[v].watching = value[v].watching;
-									}
-								}
-							}
-							$scope.$apply();
-						}
-					});
-				});
-				Homey.get('app', function(err, value) {
-					if (value) {
-						for (v in $scope.inactiveOptions) {
-						   if ($scope.inactiveOptions[v].value === value.inactive) {
-						      $scope.app.inactive = $scope.inactiveOptions[v];
-						   }
-					    }
-						for (v in $scope.notifyOptions) {
-						   if ($scope.notifyOptions[v].value === value.notify) {
-						      $scope.app.notify = $scope.notifyOptions[v];
-						   }
-						}
-					}
-					$scope.$apply();
-				});
-				// Save the application settings (e.g. protocols)
-				$scope.appSettingSave = function() {
-					// Store the protocol settings
-					Homey.set('protocols', $scope.app.protocols, function(err, value) {
-						if (!err) {
-							$scope.displayMessage(__('settings.protocols.success'));
-						}
-					});
-					var appSetting = {
-						inactive: $scope.app.inactive.value,
-						notify: $scope.app.notify.value
-					};
-					Homey.set('app', appSetting, function(err, value) {
-					});
-				};
-
-				// debugging: Statistics
-				$scope.statistics = function() {
-					$('#stats').prop('disabled', true);
-					Homey.api('GET', '/getStatistics/', {}, function(err, data) {
-						var filename = "stats" + (new Date()).valueOf() + ".json";
-						var result = JSON.stringify(data, null, "\t");
-						var a = document.createElement("a");
-						document.body.appendChild(a);
-						a.style = "display:none";
-						blob = new Blob([result], {type: "text/plain"}),
-						url = window.URL.createObjectURL(blob);
-						a.href = url;
-						a.download = filename;
-						a.click();
-						window.URL.revokeObjectURL(url);
-						$('#stats').prop('disabled', false);
-					});
-				};
-			}]);
-
-			function onHomeyReady(){
-				angular.bootstrap(document, ['WeatherSettings']);
-				Homey.ready();
-			}
-		</script>
+		<script type="text/javascript" src="/homey.js" data-origin="settings"></script>
 		<script id="hintTmpl" type="text/ng-template"><i class="hint-icon fa fa-info-circle"></i>
 			<div class="hint-popup-wrap">
 				<div class="hint-popup">{{hint}}</div>
@@ -261,5 +129,149 @@
 				</form>
 			</fieldset>
 		</div>
+		<script>
+			angular.module('WeatherSettings', [])
+			.controller('SettingsCtrl', ['$scope', '$timeout', function($scope, $timeout) {
+				var Homey
+				$scope.sensors = {};
+				$scope.message = '';
+				$scope.timeout;
+				$scope.msgPromise;
+				$scope.inactiveOptions = [
+				   { text: __('settings.app.inactive.option.1min'), value: 60 },
+				   { text: __('settings.app.inactive.option.2min'), value: 120 },
+				   { text: __('settings.app.inactive.option.5min'), value: 300 },
+				   { text: __('settings.app.inactive.option.10min'), value: 600 },
+				   { text: __('settings.app.inactive.option.30min'), value: 1800 },
+				   { text: __('settings.app.inactive.option.1hr'), value: 3600 },
+				   { text: __('settings.app.inactive.option.2hr'), value: 7200 },
+				   { text: __('settings.app.inactive.option.5hr'), value: 18000 },
+				   { text: __('settings.app.inactive.option.10hr'), value: 36000 },
+				   { text: __('settings.app.inactive.option.1day'), value: 86400 },
+				];
+				$scope.notifyOptions = [
+				   { text: __('settings.app.notify.option.none'), value: 0 },
+				   { text: __('settings.app.notify.option.active'), value: 1 },
+				   { text: __('settings.app.notify.option.inactive'), value: 2 },
+				   { text: __('settings.app.notify.option.both'), value: 3 }
+				];
+				// Set default values
+				$scope.app = {
+					protocols: {},
+					inactive: $scope.inactiveOptions[7],
+					notify: $scope.notifyOptions[2]
+				};
+
+				$scope.$on('ready', function($e, Homey_) {
+					Homey = Homey_;
+					$scope.__ = Homey.__;
+
+					// Update the list when a new sensor is found
+					Homey.on('sensor_update', function(value) {
+						if (value) {
+							$scope.sensors = value;
+							$scope.$apply();
+						}
+					});
+					// Get sensors already found
+					Homey.api('GET', '/getSensors/', {}, function(err, sensors) {
+						if (sensors) {
+							$scope.sensors = sensors;
+							$scope.$apply();
+						}
+					});
+					Homey.get('protocols', function(err, value) {
+						// Get list of supported protocols
+						Homey.api('GET', '/getProtocols/', {}, function(err, protocols) {
+							if (protocols) {
+								$scope.app.protocols = protocols;
+								if (value) {
+									for (var v in value) {
+										if (value[v].watching != null && $scope.app.protocols[v] != null) {
+											$scope.app.protocols[v].watching = value[v].watching;
+										}
+									}
+								}
+								$scope.$apply();
+							}
+						});
+					});
+					Homey.get('app', function(err, value) {
+						if (value) {
+							for (v in $scope.inactiveOptions) {
+							   if ($scope.inactiveOptions[v].value === value.inactive) {
+							      $scope.app.inactive = $scope.inactiveOptions[v];
+							   }
+						    }
+							for (v in $scope.notifyOptions) {
+							   if ($scope.notifyOptions[v].value === value.notify) {
+							      $scope.app.notify = $scope.notifyOptions[v];
+							   }
+							}
+						}
+						$scope.$apply();
+					});
+
+					Homey.ready();
+				});
+
+				// Display message to the user
+				$scope.displayMessage = function(text) {
+					if ($scope.msgPromise != null) {
+						$timeout.cancel($scope.msgPromise);
+					}
+					$scope.$apply(function() {
+						$scope.message = text;
+					});
+					$(".message").slideDown();
+					$scope.msgPromise = $timeout(function() {
+						$scope.message = '';
+						$(".message").slideUp();
+					}, 5000);
+				}
+
+				// Save the application settings (e.g. protocols)
+				$scope.appSettingSave = function() {
+					// Store the protocol settings
+					Homey.set('protocols', $scope.app.protocols, function(err, value) {
+						if (!err) {
+							$scope.displayMessage(__('settings.protocols.success'));
+						}
+					});
+					var appSetting = {
+						inactive: $scope.app.inactive.value,
+						notify: $scope.app.notify.value
+					};
+					Homey.set('app', appSetting, function(err, value) {
+					});
+				};
+
+				// debugging: Statistics
+				$scope.statistics = function() {
+					$('#stats').prop('disabled', true);
+					Homey.api('GET', '/getStatistics/', {}, function(err, data) {
+						var filename = "stats" + (new Date()).valueOf() + ".json";
+						var result = JSON.stringify(data, null, "\t");
+						var a = document.createElement("a");
+						document.body.appendChild(a);
+						a.style = "display:none";
+						blob = new Blob([result], {type: "text/plain"}),
+						url = window.URL.createObjectURL(blob);
+						a.href = url;
+						a.download = filename;
+						a.click();
+						window.URL.revokeObjectURL(url);
+						$('#stats').prop('disabled', false);
+					});
+				};
+			}]);
+
+			function onHomeyReady(Homey) {
+				angular.bootstrap(document, ['WeatherSettings']);
+				var scope = angular.element(document.body).scope();
+				scope.$emit('ready', Homey);
+				//Homey.ready();
+			}
+		</script>
 	</body>
 </html>

@@ -1,598 +1,656 @@
 {
-	"id": "com.weather-sensors",
-	"version": "1.2.4",
-	"compatibility": ">=1.2.0",
-	"category": ["climate"],
-	"name": {
-		"en": "Wireless Weather Sensors",
-		"nl": "Draadloze Weersensoren"
-	},
-	"description": {
-		"en": "Reads data from several brands of wireless weather sensors.",
-		"nl": "Leest data van verschillende merken draadloze weersensoren."
-	},
-	"keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
-	"author": {
-		"name": "Ramón Baas"
-	},
-	"contributors": {
-		"developers": [{
-			"name": "Jilles Miedema",
-			"email": "athom.jilles.miedema@gmail.com"
-		}, {
-			"name": "Marcel Mol",
-			"email": "marcel@mesa.nl"
-		}]
-	},
-	"images": {
-		"large": "./assets/images/large.jpg",
-		"small": "./assets/images/small.jpg"
-	},
-	"permissions": [
-		"homey:wireless:433",
-		"homey:wireless:868"
-	],
-	"capabilities": {
-		"measure_forecast": {
-			"type": "string",
-			"title": {
-					"en": "Forecast",
-					"nl": "Voorspelling"
-			},
-			"getable": true,
-			"setable": false
-		}
-	},
-	"drivers": [{
-		"id": "rain",
-		"name": {
-			"en": "Rain",
-			"nl": "Regen"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/rain/assets/images/large.jpg",
-			"small": "drivers/rain/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}]
-	}, {
-		"id": "temphumbar",
-		"name": {
-			"en": "Pressure/Temperature/Humidity",
-			"nl": "Druk/Temperatuur/Vochtigheid"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/temphumbar/assets/images/large.jpg",
-			"small": "drivers/temphumbar/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}, {
-				"type": "group",
-				"label": {
-					"en": "Sensor offset",
-					"nl": "Sensor compensatie"
-				},
-				"children": [{
-					"id": "offset_temperature",
-					"type": "number",
-					"label": {
-						"en": "Temperature", "nl": "Temperatuur"
-					},
-					"value": 0
-				}, {
-					"id": "offset_humidity",
-					"type": "number",
-					"label": {
-						"en": "Humidity", "nl": "Vochtigheid"
-					},
-					"value": 0
-				}, {
-					"id": "offset_pressure",
-					"type": "number",
-					"label": {
-						"en": "Pressure", "nl": "Druk"
-					},
-					"value": 0
-				}]
-			}
-		]
-	}, {
-		"id": "temphum",
-		"name": {
-			"en": "Temperature/Humidity",
-			"nl": "Temperatuur/Vochtigheid"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/temphum/assets/images/large.jpg",
-			"small": "drivers/temphum/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}, {
-				"type": "group",
-				"label": {
-					"en": "Sensor offset",
-					"nl": "Sensor compensatie"
-				},
-				"children": [{
-					"id": "offset_temperature",
-					"type": "number",
-					"label": {
-						"en": "Temperature", "nl": "Temperatuur"
-					},
-					"value": 0
-				}, {
-					"id": "offset_humidity",
-					"type": "number",
-					"label": {
-						"en": "Humidity", "nl": "Vochtigheid"
-					},
-					"value": 0
-				}]
-			}
-		]
-	}, {
-		"id": "temp",
-		"name": {
-			"en": "Temperature",
-			"nl": "Temperatuur"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/temp/assets/images/large.jpg",
-			"small": "drivers/temp/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}, {
-				"type": "group",
-				"label": {
-					"en": "Sensor offset",
-					"nl": "Sensor compensatie"
-				},
-				"children": [{
-					"id": "offset_temperature",
-					"type": "number",
-					"label": {
-						"en": "Temperature", "nl": "Temperatuur"
-					},
-					"value": 0
-				}]
-			}
-		]
-	}, {
-		"id": "wind",
-		"name": {
-			"en": "Wind"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/wind/assets/images/large.jpg",
-			"small": "drivers/wind/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}]
-	}, {
-		"id": "uv",
-		"name": {
-			"en": "Ultra Violet"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/uv/assets/images/large.jpg",
-			"small": "drivers/uv/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}]
-	}, {
-		"id": "luminance",
-		"name": {
-			"en": "Brightness",
-			"nl": "Lichtsterkte"
-		},
-		"class": "sensor",
-		"capabilities": [],
-		"images": {
-			"large": "drivers/luminance/assets/images/large.jpg",
-			"small": "drivers/luminance/assets/images/small.jpg"
-		},
-		"pair": [{
-			"id": "list_sensors",
-			"template": "list_devices",
-			"navigation": {
-				"next": "add_sensors"
-			}
-		}, {
-			"id": "add_sensors",
-			"template": "add_devices"
-		}],
-		"settings": [{
-			"type": "group",
-			"label": {
-				"en": "Sensor information",
-				"nl": "Sensor informatie"
-			},
-			"children": [{
-				"id": "protocol",
-				"type": "label",
-				"label": {
-					"en": "Protocol"
-				},
-				"value": ""
-			}, {
-				"id": "type",
-				"type": "label",
-				"label": {
-					"en": "Type"
-				},
-				"value": ""
-			}, {
-				"id": "channel",
-				"type": "label",
-				"label": {
-					"en": "Channel",
-					"nl": "Kanaal"
-				},
-				"value": ""
-			}, {
-				"id": "id",
-				"type": "label",
-				"label": {
-					"en": "ID"
-				},
-				"value": ""
-			}, {
-				"id": "update",
-				"type": "label",
-				"label": {
-					"en": "Last update",
-					"nl": "Laaste data van"
-				},
-				"value": ""
-			}]
-		}, {
-				"type": "group",
-				"label": {
-					"en": "Sensor offset",
-					"nl": "Sensor compensatie"
-				},
-				"children": [{
-					"id": "offset_brightness",
-					"type": "number",
-					"label": {
-						"en": "Brightness", "nl": "Lichtsterkte"
-					},
-					"value": 0
-				}]
-			}
-		]
-	}],
-	"signals": {
+    "id": "com.weather-sensors",
+    "sdk": 2,
+    "name": {
+        "en": "Wireless Weather Sensors",
+        "nl": "Draadloze Weersensoren"
+    },
+    "description": {
+  		"en": "Reads data from several brands of wireless weather sensors.",
+  		"nl": "Leest data van verschillende merken draadloze weersensoren."
+  	},
+    "keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
+    "category": "climate",
+    "version": "2.0.0",
+    "compatibility": ">=1.5.0",
+    "author": {
+        "name": "Ramón Baas"
+    },
+    "contributors": {
+  		"developers": [{
+  			"name": "Jilles Miedema",
+  			"email": "athom.jilles.miedema@gmail.com"
+  		}, {
+  			"name": "Marcel Mol",
+  			"email": "marcel@mesa.nl"
+  		}]
+  	},
+  	"images": {
+  		"large": "./assets/images/large.jpg",
+  		"small": "./assets/images/small.jpg"
+  	},
+  	"permissions": [
+  		"homey:wireless:433"
+  	],
+    "capabilities": {
+  		"measure_forecast": {
+  			"type": "string",
+  			"title": {
+  					"en": "Forecast",
+  					"nl": "Voorspelling"
+  			},
+  			"getable": true,
+  			"setable": false
+  		}
+  	},
+    "drivers": [{
+  		"id": "sensor",
+  		"name": {
+  			"en": "Weather sensor",
+  			"nl": "Weer sensor"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/sensor/assets/images/large.jpg",
+  			"small": "drivers/sensor/assets/images/small.jpg"
+  		},
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}]
+  	}, {
+  		"id": "rain",
+  		"name": {
+  			"en": "Rain",
+  			"nl": "Regen"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/rain/assets/images/large.jpg",
+  			"small": "drivers/rain/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}]
+  	}, {
+  		"id": "temphumbar",
+  		"name": {
+  			"en": "Pressure/Temperature/Humidity",
+  			"nl": "Druk/Temperatuur/Vochtigheid"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/temphumbar/assets/images/large.jpg",
+  			"small": "drivers/temphumbar/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}, {
+  				"type": "group",
+  				"label": {
+  					"en": "Sensor offset",
+  					"nl": "Sensor compensatie"
+  				},
+  				"children": [{
+  					"id": "offset_temperature",
+  					"type": "number",
+  					"label": {
+  						"en": "Temperature", "nl": "Temperatuur"
+  					},
+  					"value": 0
+  				}, {
+  					"id": "offset_humidity",
+  					"type": "number",
+  					"label": {
+  						"en": "Humidity", "nl": "Vochtigheid"
+  					},
+  					"value": 0
+  				}, {
+  					"id": "offset_pressure",
+  					"type": "number",
+  					"label": {
+  						"en": "Pressure", "nl": "Druk"
+  					},
+  					"value": 0
+  				}]
+  			}
+  		]
+  	}, {
+  		"id": "temphum",
+  		"name": {
+  			"en": "Temperature/Humidity",
+  			"nl": "Temperatuur/Vochtigheid"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/temphum/assets/images/large.jpg",
+  			"small": "drivers/temphum/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}, {
+  				"type": "group",
+  				"label": {
+  					"en": "Sensor offset",
+  					"nl": "Sensor compensatie"
+  				},
+  				"children": [{
+  					"id": "offset_temperature",
+  					"type": "number",
+  					"label": {
+  						"en": "Temperature", "nl": "Temperatuur"
+  					},
+  					"value": 0
+  				}, {
+  					"id": "offset_humidity",
+  					"type": "number",
+  					"label": {
+  						"en": "Humidity", "nl": "Vochtigheid"
+  					},
+  					"value": 0
+  				}]
+  			}
+  		]
+  	}, {
+  		"id": "temp",
+  		"name": {
+  			"en": "Temperature",
+  			"nl": "Temperatuur"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/temp/assets/images/large.jpg",
+  			"small": "drivers/temp/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}, {
+  				"type": "group",
+  				"label": {
+  					"en": "Sensor offset",
+  					"nl": "Sensor compensatie"
+  				},
+  				"children": [{
+  					"id": "offset_temperature",
+  					"type": "number",
+  					"label": {
+  						"en": "Temperature", "nl": "Temperatuur"
+  					},
+  					"value": 0
+  				}]
+  			}
+  		]
+  	}, {
+  		"id": "wind",
+  		"name": {
+  			"en": "Wind"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/wind/assets/images/large.jpg",
+  			"small": "drivers/wind/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}]
+  	}, {
+  		"id": "uv",
+  		"name": {
+  			"en": "Ultra Violet"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/uv/assets/images/large.jpg",
+  			"small": "drivers/uv/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}]
+  	}, {
+  		"id": "luminance",
+  		"name": {
+  			"en": "Brightness",
+  			"nl": "Lichtsterkte"
+  		},
+  		"class": "sensor",
+  		"capabilities": [],
+  		"images": {
+  			"large": "drivers/luminance/assets/images/large.jpg",
+  			"small": "drivers/luminance/assets/images/small.jpg"
+  		},
+  		"pair": [{
+  			"id": "list_sensors",
+  			"template": "list_devices",
+  			"navigation": {
+  				"next": "add_sensors"
+  			}
+  		}, {
+  			"id": "add_sensors",
+  			"template": "add_devices"
+  		}],
+  		"settings": [{
+  			"type": "group",
+  			"label": {
+  				"en": "Sensor information",
+  				"nl": "Sensor informatie"
+  			},
+  			"children": [{
+  				"id": "protocol",
+  				"type": "label",
+  				"label": {
+  					"en": "Protocol"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "type",
+  				"type": "label",
+  				"label": {
+  					"en": "Type"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "channel",
+  				"type": "label",
+  				"label": {
+  					"en": "Channel",
+  					"nl": "Kanaal"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "id",
+  				"type": "label",
+  				"label": {
+  					"en": "ID"
+  				},
+  				"value": ""
+  			}, {
+  				"id": "update",
+  				"type": "label",
+  				"label": {
+  					"en": "Last update",
+  					"nl": "Laaste data van"
+  				},
+  				"value": ""
+  			}]
+  		}, {
+  				"type": "group",
+  				"label": {
+  					"en": "Sensor offset",
+  					"nl": "Sensor compensatie"
+  				},
+  				"children": [{
+  					"id": "offset_brightness",
+  					"type": "number",
+  					"label": {
+  						"en": "Brightness", "nl": "Lichtsterkte"
+  					},
+  					"value": 0
+  				}]
+  			}
+  		]
+	  }
+  ],
+  "signals": {
 		"433": {
 			"AlectoV1": {
 				"sof": [500],

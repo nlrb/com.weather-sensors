@@ -274,9 +274,9 @@ for (var i = 0; i < testSignals.length; i++) {
   var ts = testSignals[i];
   var payload;
   if (ts.func !== undefined) {
-    payload = new Buffer(ts.func(ts.data));
+    payload = new Buffer.from(ts.func(ts.data));
   } else {
-    payload = new Buffer(ts.data);
+    payload = new Buffer.from(ts.data);
   }
   utils.debug('Payload', ts.protocol, payload.length, payload);
   var parsed = signals[ts.protocol].parse(payload);

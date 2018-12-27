@@ -1,29 +1,30 @@
+'use strict'
+
+const Homey = require('homey')
+
 module.exports = [
     {
-        description: 'Get a list of all sensors',
         method: 'GET',
         path: '/getSensors/',
-        requires_authorizaton: false,
-        fn: function(callback, args) {
-          callback(null, Homey.app.api.getSensors());
+        public: true,
+        fn: function(args, callback) {
+          callback(null, Homey.app.getSensors());
         }
     },
     {
-        description: 'Get a list of all protocols',
         method: 'GET',
         path: '/getProtocols/',
-        requires_authorizaton: false,
-        fn: function(callback, args) {
-          callback(null, Homey.app.api.getProtocols());
+        public: true,
+        fn: function(args, callback) {
+          callback(null, Homey.app.getProtocols());
         }
     },
     {
-        description: 'Get a list signal statistics',
         method: 'GET',
         path: '/getStatistics/',
-        requires_authorizaton: false,
-        fn: function(callback, args) {
-          callback(null, Homey.app.api.getStatistics());
+        public: true,
+        fn: function(args, callback) {
+          callback(null, Homey.app.getStatistics());
         }
     }
 ];
