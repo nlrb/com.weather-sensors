@@ -52,8 +52,8 @@
   		"class": "sensor",
   		"capabilities": [],
   		"images": {
-  			"large": "drivers/sensor/assets/images/large.jpg",
-  			"small": "drivers/sensor/assets/images/small.jpg"
+  			"large": "drivers/temp/assets/images/large.jpg",
+  			"small": "drivers/temp/assets/images/small.jpg"
   		},
   		"settings": [{
   			"type": "group",
@@ -800,7 +800,7 @@
 				],
 				"manchesterUnit": 500,
 				"manchesterMaxUnits": 3,
-				"sensitivity": 0.13,
+				"sensitivity": 0.2,
 				"minimalLength": 60,
 				"maximalLength": 140
 			},
@@ -819,7 +819,7 @@
 				],
 				"manchesterUnit": 488,
 				"manchesterMaxUnits": 2,
-				"sensitivity": 0.1,
+				"sensitivity": 0.2,
 				"minimalLength": 60,
 				"maximalLength": 140
 			},
