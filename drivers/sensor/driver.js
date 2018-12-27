@@ -62,7 +62,7 @@ const genericType = {
 const thbMobile = {
 		components: [
 			{	id: "icon",	capabilities: [] },
-		  { id: "sensor", options: { icons: {	measure_forecast: "./drivers/sensor/assets/mobile/forecast.svg" } } }
+		  { id: "sensor", options: { icons: {	measure_forecast: "./drivers/temphumbar/assets/forecast.svg" } } }
 		]}
 
 
