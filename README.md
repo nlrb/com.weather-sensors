@@ -1,6 +1,6 @@
 
 ### Wireless Weather Sensors
-Homey app to read information from wireless weather sensors on 433/868 MHz.
+Homey app to read information from wireless weather sensors on 433 MHz.
 
 Currently the following protocols are supported on 433 MHz.
 
@@ -70,6 +70,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 2.0.0 Rewritten app for Homey SDK v2
 * 1.2.3 Add support for Labs BL999
 * 1.2.2 Add Fine Offset support, fixes
 * 1.2.1 Bug fixes
@@ -84,7 +85,7 @@ Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/is
 ----------
 
 
-Copyright (c) 2017 Ramón Baas
+Copyright (c) 2018 Ramón Baas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
