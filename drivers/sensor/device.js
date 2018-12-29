@@ -30,7 +30,7 @@ class SensorDevice extends Homey.Device {
     this.driver.Events.addListener('update:' + this.id, when => {
       // Send notification that the device is available again (when applicable)
       if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
-					Homey.ManagerNotifications.regsiterNotification({
+					Homey.ManagerNotifications.registerNotification({
 						excerpt: Homey.__('notification.active', { name: this.getName() })
 					})
 			}
