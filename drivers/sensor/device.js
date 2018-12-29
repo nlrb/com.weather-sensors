@@ -37,7 +37,7 @@ class SensorDevice extends Homey.Device {
       this.setAvailable()
       // Update the date/time that the value was last read in the device settings
       this.setSettings({ update: when })
-        .catch(err => this.log(e))
+        .catch(err => this.log(err))
     })
 
     // Set all capability values

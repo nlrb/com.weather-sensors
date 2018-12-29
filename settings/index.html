@@ -158,7 +158,7 @@
 				// Set default values
 				$scope.app = {
 					protocols: {},
-					inactive: $scope.inactiveOptions[7],
+					inactive: $scope.inactiveOptions[4],
 					notify: $scope.notifyOptions[2]
 				};
 
@@ -270,7 +270,6 @@
 				angular.bootstrap(document, ['WeatherSettings']);
 				var scope = angular.element(document.body).scope();
 				scope.$emit('ready', Homey);
-				//Homey.ready();
 			}
 		</script>
 	</body>
