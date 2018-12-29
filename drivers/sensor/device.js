@@ -37,7 +37,7 @@ class SensorDevice extends Homey.Device {
       this.setAvailable()
       // Update the date/time that the value was last read in the device settings
       this.setSettings({ update: when })
-        .catch(err => this.log(err))
+        .catch(err => this.error(err))
     })
 
     // Set all capability values
@@ -65,7 +65,7 @@ class SensorDevice extends Homey.Device {
         let delta = newSettings[key] - oldSettings[key]
         this.log('Updating value of', cap, 'from', value, 'to', value + delta)
         this.setCapabilityValue(cap, value + delta)
-          .catch(err => this.log(e))
+          .catch(err => this.error(e))
       }
     }
     callback(null, true);
@@ -81,7 +81,7 @@ class SensorDevice extends Homey.Device {
       value += offset
     }
     this.setCapabilityValue(cap, value)
-      .catch(err => this.log(e))
+      .catch(err => this.error(e))
   }
 }
 
