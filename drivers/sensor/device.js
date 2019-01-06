@@ -49,6 +49,7 @@ class SensorDevice extends Homey.Device {
 
   // Called on removal
   onDeleted() {
+    this.log('Deleting sensor device', this.id)
     this.driver.Events.removeAllListeners(this.id)
     this.driver.Devices.delete(this.id)
   }

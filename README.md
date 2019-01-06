@@ -70,6 +70,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 2.0.2 Fix issue with UPM/Esic pairing in mobile app
 * 2.0.1 Bug fixes
 * 2.0.0 Rewritten app for Homey SDK v2
 * 1.2.3 Add support for Labs BL999
