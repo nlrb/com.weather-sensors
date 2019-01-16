@@ -61,7 +61,8 @@
 		}
 	},
 	"error": {
-		"no_data": "No sensor data received since __since__"
+		"no_data": "No sensor data received since __since__",
+		"corrupt": "This Homey device is corrupt. Please delete it and add it again."
 	},
 	"notification": {
 		"active": "Sensor <b>__name__</b> is active again",

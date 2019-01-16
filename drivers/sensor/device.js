@@ -24,26 +24,37 @@ class SensorDevice extends Homey.Device {
     this.id = data.id
     this.driver = Homey.ManagerDrivers.getDriver('sensor')
     this.driver.Devices.set(this.id, this)
-    this.driver.Events.addListener('value:' + this.id, (cap, value) => {
-      this.updateValue(cap, value)
-    })
-    this.driver.Events.addListener('update:' + this.id, when => {
-      // Send notification that the device is available again (when applicable)
-      if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
-					Homey.ManagerNotifications.registerNotification({
-						excerpt: Homey.__('notification.active', { name: this.getName() })
-					})
-			}
-      this.setAvailable()
-      // Update the date/time that the value was last read in the device settings
-      this.setSettings({ update: when })
-        .catch(err => this.error(err))
-    })
 
-    // Set all capability values
-    let values = this.driver.getSensorValues(this.id)
-    for (let c in values) {
-      this.updateValue(values[c].cap, values[c].value)
+    // Check if settings type is correct - update if needed
+    // Type could be wrong due to an earlier bug
+    let id = this.getSetting('id')
+    if (typeof id !== 'string') {
+      this.log('Sensor', this.id, 'has invalid ID in settings! Marking it unavailable.')
+      this.setUnavailable(Homey.__('error.corrupt'))
+        .catch(err => this.error('Error displaying error for', this.id, '-', err.message))
+    } else {
+      this.driver.Events.addListener('value:' + this.id, (cap, value) => {
+        this.updateValue(cap, value)
+      })
+      this.driver.Events.addListener('update:' + this.id, when => {
+        // Send notification that the device is available again (when applicable)
+        if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
+  					Homey.ManagerNotifications.registerNotification({
+  						excerpt: Homey.__('notification.active', { name: this.getName() })
+  					})
+  			}
+        this.setAvailable()
+          .catch(err => this.error('Error marking', this.id, 'as available', err.message))
+        // Update the date/time that the value was last read in the device settings
+        this.setSettings({ update: when })
+          .catch(err => this.error('Error updating settings for', this.id, '-', err.message))
+      })
+
+      // Set all capability values
+      let values = this.driver.getSensorValues(this.id)
+      for (let c in values) {
+        this.updateValue(values[c].cap, values[c].value)
+      }
     }
   }
 

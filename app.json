@@ -11,7 +11,7 @@
   	},
     "keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
     "category": "climate",
-    "version": "2.0.2",
+    "version": "2.0.3",
     "compatibility": ">=1.5.0",
     "author": {
         "name": "Ramón Baas"
@@ -845,27 +845,6 @@
 				"sensitivity": 0.3,
 				"minimalLength": 16,
 				"maximalLength": 32
-			}
-		},
-		"868": {
-			"Conrad": {
-				"sof": [
-					500, 1000,
-					500, 1000,
-					500, 1000,
-					500, 1000,
-					500, 1000,
-					500, 1000,
-					1500
-				],
-				"eof": [],
-				"words": [
-					[1000, 1500],
-					[1000, 500]
-				],
-				"sensitivity": 0.3,
-				"minimalLength": 40,
-				"maximalLength": 56
 			}
 		}
 	}

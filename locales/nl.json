@@ -61,7 +61,8 @@
 		}
 	},
 	"error": {
-		"no_data": "Geen data ontvangen van sensor sinds __since__"
+		"no_data": "Geen data ontvangen van sensor sinds __since__",
+		"corrupt": "Dit Homey device is corrupt. Verwijder deze en voeg het daarna weer toe."
 	},
 	"notification": {
 		"active": "Sensor <b>__name__</b> is weer actief",

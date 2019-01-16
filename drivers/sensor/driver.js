@@ -110,6 +110,7 @@ class SensorDriver extends Homey.Driver {
   		if (device.getAvailable() && now - Date.parse(last) > inactiveTime) {
   			this.log('Marking', key, 'as inactive')
   			device.setUnavailable(Homey.__('error.no_data', { since: last }))
+					.catch(err => this.error('Cannot mark device as unavailable', err.message))
   			if (activityNotifications & INACTIVE) {
   				Homey.ManagerNotifications.registerNotification({
   					excerpt: Homey.__('notification.inactive', { name: device.getName() })
