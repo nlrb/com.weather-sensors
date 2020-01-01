@@ -70,6 +70,7 @@ Some debug tools are available for use in special cases. Don't use them unless i
 Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/issues). For other remarks and/or questions visit the topic on the [Athom Forum](https://forum.athom.com/discussion/3090).
 
 ### Version info
+* 2.5.0 Changed driver model, updated app settings UI\; Added support for Auriol HG05124A-DCF-TX (Auriol v2); Stricter timing to improve reception; Removed Oregon Scientific v2.2 (sensors need re-pairing); Removed Labs, moved into Alecto v1
 * 2.0.3 Further fixes for UPM/Esic - old devices will need to be removed
 * 2.0.2 Fix issue with UPM/Esic pairing in mobile app
 * 2.0.1 Bug fixes
@@ -88,7 +89,7 @@ Please report issues via [GitHub](https://github.com/nlrb/com.weather-sensors/is
 ----------
 
 
-Copyright (c) 2018 Ramón Baas
+Copyright (c) 2020 Ramón Baas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

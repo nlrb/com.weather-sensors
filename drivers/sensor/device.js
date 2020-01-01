@@ -33,10 +33,10 @@ class SensorDevice extends Homey.Device {
       this.setUnavailable(Homey.__('error.corrupt'))
         .catch(err => this.error('Error displaying error for', this.id, '-', err.message))
     } else {
-      this.driver.Events.addListener('value:' + this.id, (cap, value) => {
+      this.driver.addListener('value:' + this.id, (cap, value) => {
         this.updateValue(cap, value)
       })
-      this.driver.Events.addListener('update:' + this.id, when => {
+      this.driver.addListener('update:' + this.id, when => {
         // Send notification that the device is available again (when applicable)
         if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
   					Homey.ManagerNotifications.registerNotification({
@@ -61,7 +61,7 @@ class SensorDevice extends Homey.Device {
   // Called on removal
   onDeleted() {
     this.log('Deleting sensor device', this.id)
-    this.driver.Events.removeAllListeners(this.id)
+    this.driver.removeAllListeners(this.id)
     this.driver.Devices.delete(this.id)
   }
 
@@ -77,7 +77,7 @@ class SensorDevice extends Homey.Device {
         let delta = newSettings[key] - oldSettings[key]
         this.log('Updating value of', cap, 'from', value, 'to', value + delta)
         this.setCapabilityValue(cap, value + delta)
-          .catch(err => this.error(e))
+          .catch(err => this.error(err))
       }
     }
     callback(null, true);
@@ -93,7 +93,7 @@ class SensorDevice extends Homey.Device {
       value += offset
     }
     this.setCapabilityValue(cap, value)
-      .catch(err => this.error(e))
+      .catch(err => this.error(err))
   }
 }
 

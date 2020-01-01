@@ -14,9 +14,10 @@
 				display: inline-flex;
 				align-items: center;
 			}
-			.table {
-				padding-left: 5px;
-				padding-right: 5px;
+			.table td,th {
+				padding-left: 3px;
+				padding-right: 3px;
+				font-size: 11px;
 			}
 			.hint{order:2;flex:1 0 auto;width:20px;height:20px;position:relative;display:inline-flex;flex-direction:column;justify-content:center}
 			.hint-icon{align-self:flex-end;color:#ccc;transition:all .3s;display:block;padding:5px}
@@ -49,16 +50,21 @@
 				<fieldset>
 					<legend data-i18n="settings.protocols.header"></legend>
 					<p data-i18n="settings.protocols.description"></p>
-					<fieldset style="float: left; margin-right:25px;">
+					<fieldset style="float: left">
 							<legend>433 MHz</legend>
-							<div ng-repeat="item in app.protocols | orderBy: 'id'">
-								<div ng-if="item.freq==433">
-									<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
-									<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
-										<i class="hint-icon fa fa-info-circle ng-scope"></i>
-									</div>
-								</div>
-							</div>
+							<table class="table">
+							<th>Protocol</th><th>Hits</th><th>Ok</th>
+								<tr ng-repeat="item in app.protocols | orderBy: 'id'">
+									<td class="oneline">
+										<input type="checkbox" value="{{item.id}}" ng-model="item.watching"><label>{{item.name}}</label>
+										<div class="hint ng-scope" ng-if="item.hint" ng-include="'hintTmpl'" ng-init="hint = item.hint">
+											<i class="hint-icon fa fa-info-circle ng-scope"></i>
+										</div>
+									</td>
+									<td align="right">{{item.stats.total}}</td>
+									<td align="right">{{item.stats.ok}}</td>
+								</tr>
+							</table>
 						</fieldset>
 					<!-- Hide 868 for now, no supported sensors
 					<fieldset style="float: left">
@@ -111,9 +117,9 @@
 					</tr>
 					<tr ng-repeat="item in sensors">
 						<td>{{item.protocol}}</td>
-						<td>{{item.type}}</td>
-						<td>{{item.channel}}</td>
-						<td>{{item.id}}</td>
+						<td align="center"><img src="..{{item.icon}}" width="20px"></img></td>
+						<td align="center">{{item.channel}}</td>
+						<td align="center">{{item.id}}</td>
 						<td>{{item.update}}</td>
 						<td>{{item.data}}</td>
 						<td><input type="checkbox" ng-disabled="true" ng-model="item.paired"> {{item.name}}</td>
@@ -159,13 +165,20 @@
 				$scope.app = {
 					protocols: {},
 					inactive: $scope.inactiveOptions[4],
-					notify: $scope.notifyOptions[2]
+					notify: $scope.notifyOptions[0]
 				};
 
 				$scope.$on('ready', function($e, Homey_) {
 					Homey = Homey_;
 					$scope.__ = Homey.__;
 
+					// Update the list when new protocol statistics are available
+					Homey.on('stats_update', function(value) {
+						if (value && value.protocol) {
+							$scope.app.protocols[value.protocol].stats = value.stats;
+							$scope.$apply();
+						}
+					});
 					// Update the list when a new sensor is found
 					Homey.on('sensor_update', function(value) {
 						if (value) {
@@ -193,6 +206,17 @@
 									}
 								}
 								$scope.$apply();
+								// Show statistics for active protocols
+								Homey.api('GET', '/getStatistics/', {}, (err, stats) => {
+									if (stats) {
+										for (let s in stats) {
+											if ($scope.app.protocols[s].watching) {
+												$scope.app.protocols[s].stats = stats[s].stats;
+											}
+										}
+										$scope.$apply();
+									}
+								});
 							}
 						});
 					});
@@ -233,7 +257,11 @@
 				// Save the application settings (e.g. protocols)
 				$scope.appSettingSave = function() {
 					// Store the protocol settings
-					Homey.set('protocols', $scope.app.protocols, function(err, value) {
+					let selected = {};
+					for (let p in $scope.app.protocols) {
+						selected[p] = { watching: $scope.app.protocols[p].watching };
+					}
+					Homey.set('protocols', selected, function(err, value) {
 						if (!err) {
 							$scope.displayMessage(__('settings.protocols.success'));
 						}

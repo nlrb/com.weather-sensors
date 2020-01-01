@@ -1,0 +1,4 @@
+{	"2.5.0": {
+		"en": "• Changed driver model, updated app settings UI\n• Added support for Auriol HG05124A-DCF-TX (Auriol v2)\n• Stricter timing to improve reception\n• Removed Oregon Scientific v2.2 (sensors need re-pairing)\n• Removed Labs, moved into Alecto v1"
+	}
+}

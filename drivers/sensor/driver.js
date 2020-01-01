@@ -11,13 +11,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 const SensorDevice = require('./device.js')
 
 const Homey = require('homey')
-const EventEmitter = require('events')
 const locale = Homey.ManagerI18n.getLanguage() == 'nl' ? 'nl' : 'en' // only Dutch & English supported
 
 const ACTIVE = 1;
 const INACTIVE = 2;
-var inactiveTime = 60000;
-var activityNotifications = 2;
+// Default settings:
+var inactiveTime = 180000; // 30 mins
+var activityNotifications = 0; // no notifications
 
 function updateAppSettings() {
 	let appSettings = Homey.ManagerSettings.get('app');
@@ -50,20 +50,14 @@ const capability = {
 }
 
 const genericType = {
-	L: { txt: { en: 'Brightness', nl: 'Lichtsterkte' } },
-	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' } },
-	T: { txt: { en: 'Temperature', nl: 'Temperatuur' } },
-	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' } },
-	THB: { txt: { en: 'Weather station', nl: 'Weerstation' } },
-	UV: { txt: { en: 'Ultra Violet' } },
-	W: { txt: { en: 'Anemometer', nl: 'Windmeter' } }
+	L: { txt: { en: 'Brightness', nl: 'Lichtsterkte' }, icon: '/drivers/luminance/assets/icon.svg' },
+	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' }, icon: '/drivers/rain/assets/icon.svg' },
+	T: { txt: { en: 'Temperature', nl: 'Temperatuur'}, icon: '/drivers/temp/assets/icon.svg' },
+	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' }, icon: '/drivers/temphum/assets/icon.svg' },
+	THB: { txt: { en: 'Weather station', nl: 'Weerstation' }, icon: '/drivers/temphumbar/assets/icon.svg' },
+	UV: { txt: { en: 'Ultra Violet' }, icon: '/drivers/uv/assets/icon.svg' },
+	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, icon: '/drivers/wind/assets/icon.svg' }
 }
-
-const thbMobile = {
-		components: [
-			{	id: "icon",	capabilities: [] },
-		  { id: "sensor", options: { icons: {	measure_forecast: "./drivers/temphumbar/assets/forecast.svg" } } }
-		]}
 
 
 class SensorDriver extends Homey.Driver {
@@ -72,8 +66,7 @@ class SensorDriver extends Homey.Driver {
     this.log('SensorDriver Init')
     this.Sensors = new Map() // all sensors we've found
     this.Devices = new Map() // all devices that have been added
-    this.Events = new EventEmitter
-    // Set up check to mark devices inactive, remove sensors
+	  // Set up check to mark devices inactive, remove sensors
     setInterval(this.healthCheck.bind(this), 1000)
   }
 
@@ -123,9 +116,10 @@ class SensorDriver extends Homey.Driver {
   // Update the sensor data
   update(signal) {
   	let result = signal.getResult();
-  	if (typeof result !== 'string' && result != null) {
+  	if (this.Sensors !== undefined && typeof result !== 'string' && result != null) {
   		let when = result.lastupdate.toString();
-  		let did = result.protocol + ':' + result.id + ':' + (result.channel || 0);
+			let pid = result.pid || result.protocol;
+  		let did = pid + ':' + result.id + ':' + (result.channel || 0);
   		if (this.Sensors.get(did) === undefined) {
   			this.Sensors.set(did, { raw: { data: {} } });
   			signal.debug('Found a new sensor. Total found is now', this.Sensors.size);
@@ -142,11 +136,11 @@ class SensorDriver extends Homey.Driver {
   				let cap = capability[c];
   				if (cap !== undefined) {
   					let val = this._mapValue(c, newvalue.data[c]);
-            this.Events.emit('value:' + did, cap, val)
+            this.emit('value:' + did, cap, val)
   				}
   			}
   		}
-      this.Events.emit('update:' + did, when)
+      this.emit('update:' + did, when)
 
   		// Determine the sensor type based on its values
   		newvalue.type = this._determineType(newvalue.data);
@@ -167,6 +161,7 @@ class SensorDriver extends Homey.Driver {
   			let display = {
   				protocol: signal.getName(),
   				type: genericType[newvalue.type].txt[locale] || genericType[newvalue.type].txt.en,
+					icon: genericType[newvalue.type].icon,
   				name: name,
   				channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
   				id: newvalue.id,
@@ -248,7 +243,7 @@ class SensorDriver extends Homey.Driver {
   			}
   			this.log(capabilities, val.raw.data);
   			let device = {
-  				name: val.raw.name || (type + ' ' + val.raw.id),
+  				name: val.raw.name || (val.display.protocol + ': ' + type + ' ' + val.raw.id),
   				data: {	id: i, type: type },
   				capabilities: capabilities,
   				settings: {
@@ -258,10 +253,6 @@ class SensorDriver extends Homey.Driver {
   					id: val.raw.id,
   					update: val.display.update
   				}
-  			}
-  			if (type === 'THB') {
-  				device.mobile = thbMobile;
-  				device.mobile.components[1].capabilities = capabilities;
   			}
   		  list.push(device);
   		}

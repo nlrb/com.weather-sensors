@@ -65,8 +65,8 @@
 		"corrupt": "This Homey device is corrupt. Please delete it and add it again."
 	},
 	"notification": {
-		"active": "Sensor <b>__name__</b> is active again",
-		"inactive": "Sensor <b>__name__</b> is inactive"
+		"active": "Sensor __name__ is active again",
+		"inactive": "Sensor __name__ is inactive"
 	},
 	"mobile": {
 		"forecast": {

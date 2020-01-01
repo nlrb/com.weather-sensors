@@ -1,21 +1,8 @@
 global.Homey = console;
 const utils = require('../node_modules/utils');
-const alecto = require('../node_modules/alecto');
-const auriol = require('../node_modules/auriol');
-const cresta = require('../node_modules/cresta');
-const labs = require('../node_modules/labs');
-const lacrosse = require('../node_modules/lacrosse');
-const oregon = require('../node_modules/oregon');
-const upm = require('../node_modules/upm');
+const protocols = require('../node_modules/protocols');
 
-alecto.init();
-auriol.init();
-cresta.init();
-labs.init();
-lacrosse.init();
-oregon.init();
-upm.init();
-utils.setDebug(false);
+utils.setDebug(true);
 
 var encryptCresta = (data) => {
   let calcCRC = (b) => {
@@ -60,6 +47,9 @@ var encryptCresta = (data) => {
 }
 
 var testSignals = [
+/**************/
+/*** Alecto ***/
+/**************/
   // Alecto v1
   { data: [1,0,0,1,0,1,0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,1,0,1,1,1,1,1,1,1,0,0,1,1,0,0,0], protocol: "alectov1",
     result: {id:'82',name:'WS-1050',channel:2,data:{temperature:22.3,button:false,lowbattery:false}}
@@ -72,9 +62,14 @@ var testSignals = [
   // Alecto v3
   { data: [0,1,0,0,0,1,1,1,0,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,0,1,0,1,0,0,1,0,1,1,1,0,1,1,1], protocol: "alectov3",
     result: {id:'113',name:'WH2A',data:{temperature:22.6,humidity:41}}
-  }, // WS-1100
+  },
+  // WS-1100
   { data: [0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1], protocol: "alectov3",
     result: {id:'26',channel:1,name:'WS-1100',data:{temperature:22.3,humidity:41,lowbattery:false}}
+  },
+  { // WS-1100
+    data: [0,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,1], protocol: "alectov3",
+    result: {id:'181',channel:1,name:'WS-1100',data:{temperature:24.8,humidity:64,lowbattery:false}}
   },
   { // Viking Art Nr: 02035
     data: [1,0,1,0,0,1,0,1,0,1,1,1,0,1,0,0,0,1,1,1,0,0,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1], protocol: "alectov3",
@@ -129,15 +124,20 @@ var testSignals = [
     data: [1,1,0,1,0,0,1,1,0,0,0,1,1,1,0,0,0,0,1,0,1,1,1,1,0,1,0,0,1,1,1,1,0,1,1,0,0,0,0,1,0,1], protocol: "alectov3",
     result: {id:'199',channel:5,name:'WH2',data:{temperature:18.9,humidity: 61}}
   },
-  { // WS-1100
-    data: [0,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,1], protocol: "alectov3",
-    result: {id:'181',channel:1,name:'WS-1100',data:{temperature:24.8,humidity:64,lowbattery:false}}
-  },
+/**************/
+/*** Autiol ***/
+/**************/
   { // Auriol Z31130
     data: [0,1,1,1,1,1,1,1,1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,0,0,0,1], protocol: "auriol1",
     result: {id:'127',channel:1,data:{temperature:22.5,humidity:49,lowbattery:false}}
   },
-  // Cresta
+  {
+    data: [1,1,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0], protocol: "auriol2",
+    result: {id:'200',channel:1,data:{temperature:22.3,humidity:34,lowbattery:false}}
+  },
+/**************/
+/*** Cresta ***/
+/**************/
   { // TH
     data: '45ce5e87c151f3', protocol: "cresta", func: encryptCresta,
     result: {id:'45',channel:2,data:{temperature:18.7,humidity:51,lowbattery:false}}
@@ -158,10 +158,20 @@ var testSignals = [
     data: [1,0,1,1,0,0,1,1,0,0,1,0,1,1,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,1,1,1,0,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,0,0,0,1,0,1,0,1,0,1,0,0,1,1,0,0,0,0,1,1,0,1,0,1,0,1,1,0,0,0], protocol: "cresta",
     result: {id:'57',channel:2,data:{temperature:23.8,humidity:47,lowbattery:false}}
   },
-  { // Labs BL999
-    data: [0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0], protocol: "labs",
-    result: {name:'BL999',id:'8',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
+/***********/
+/*** TFA ***/
+/***********/
+  {
+    data: [0,0,0,0,1,0,1,1,1,1,0,1,0,0,0,0,1,1,0,0,0,0,1,1,1,0,1,0], protocol: "tfa",
+    result: {id:'189',channel:2,"data":{temperature:19.5,lowbattery:false}}
   },
+  { // Labs BL999
+    data: [0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0], protocol: "alectov1",
+    result: {name:'BL999',id:'8',pid:'labs',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
+  },
+/****************/
+/*** LaCrosse ***/
+/****************/
   // LaCrosse TX2
   {
     data: [0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,0,0,1,0,0,0,1,1,0,1,1,1,0,0,1,0,0,0,0,0], protocol: "lacrosse1",
@@ -199,6 +209,10 @@ var testSignals = [
     data: [1,1,0,1,0,1,1,1,1,0,1,1,1,1,0,1,1,0,0,1,1,0,0,0,1,1,0,0,0,0,1,1,1,1,1,1,1,0,1,0,1,0,0,0,1,1,0,1,1,0,1,1,1,0,1,1], protocol: "lacrosse2",
     result: {id:'7',data:{brightness:897,duration:2143}}
   },
+/**************/
+/*** Oregon ***/
+/**************/
+/* TODO: check errors (these worked before the changes of Jeroen) */
   // Oregon v2
   {
     data: [0,1,0,0,1,0,1,0,1,1,0,0,1,1,0,1,0,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,1,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,1,0], protocol: "oregonv2",
@@ -212,22 +226,31 @@ var testSignals = [
     data: [0,1,0,0,1,1,0,0,1,1,0,0,1,1,0,1,0,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,1,0,1,1,0,0,1,0,1,0,1,1,0,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,1,0,1,0,0], protocol: "oregonv2",
     result: {name:'BTHR918N/BTHR968',layout:'THB2',id:'5d60',channel:0,rolling:'b9',data:{temperature:22.6,humidity:49,comfort:'Comfortable',pressure:1006,unknown:'01',forecast:'Sunny',lowbattery:false}}
   },
-  /*
-  { // 3d00 - WGR918N?
-    data: [0,1,0,1,0,0,1,0,1,1,0,0,1,1,0,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,0,1,1,0,1,0], protocol: "oregonv2"
+/* End TODO */
+  { // THN132N
+    data: [1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,1,1,0,0,1,1,0,0,1,0,0,0,0,0,0,1,0,0,0,1,1,1,0,1,0,1,0,0,0,0,0,1,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,1,1,1,1,0,0,0,0,0,0,0], protocol: "oregonv2",
+    result: {name:"THN132N/THR238NF",layout:"T1",id:"ec40",channel:2,rolling:"ea",data:{temperature:21.2,lowbattery:false}}
   },
-  { // ???
-    data: [1,1,0,1,0,1,0,0,1,1,0,0,1,0,1,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,0,1,1,0,1,0,1,0,1,0,1,0,0,1,1,0,1,0,0,1,0,1,1,0,0,1,1,0,0,1,0,1,0,1,1,0,1,0,1,0,0,1,1,0,0,1,1,0,1,0,0,1,0,1], protocol: "oregonv2"
+  {
+    data: [1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,0,1,1,1,0,1,0,1,1,0,0,0,1,0,0,1,1,0,0,1,1,0,1,0,0,0,0,1,0,1,0,1,0,0,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,0,0,0,0,0,1,1,0,0,1,1,0,1,1,1,0,0,0,1,1,0,0,0,1,1,1,1,0,1,0,0,1,0,0,0,0,0], protocol: "oregonv2",
+    result: {name:"BTHGN129",layout:"THB3",id:"5d53",channel:2,rolling:"3b",data:{temperature:21.5,humidity:37,comfort:"Dry",pressure:1030,forecast:"Sunny",unknown:"031d98",lowbattery:false}}
   },
-  */
   // Oregon v3
   {
     data: [1,1,1,1,0,0,0,1,0,1,0,0,0,0,1,0,1,0,0,0,0,1,1,0,1,1,1,1,0,0,0,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0,0,0,1,1,0,1,1,0,0,1,0,1,0,0,1,0,1,0,0], protocol: "oregonv3",
     result: {name:'THGN800/THGN801/THGR810',layout:'TH1',id:'f824',channel:1,rolling:'6f',data:{temperature:21.8,humidity:34,unknown:'08',lowbattery:false}}
   },
+  { // Wind
+    data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,1,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,1,1,1,0], protocol: "oregonv3",
+    result: {name:'WGR800',layout:'W1',id:'1984',channel:0,rolling:'6d',data:{direction:67.5,unknown:'0c0',currentspeed:1.2,averagespeed:1,lowbattery:true}}
+  },
   { // UV
     data: [1,0,1,1,0,0,0,1,1,1,1,0,0,0,1,0,1,0,0,0,0,0,1,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,1,0,0,0,0,0,0,1,1,1,1,1,0,0,1,1,0,1,1,1,1,1], protocol: "oregonv3",
     result: {name:'UVN800',layout:'UV2',id:'d874',channel:1,rolling:'47',data:{uvindex:0,uvraw:0,lowbattery:false}}
+  },
+  { // Rain
+    data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,0,1,0,0,1,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,0,0,0,1,1,0,0,0,1], protocol: "oregonv3",
+    result: {name:"PCR800",layout:"R1",id:"2914",channel:0,rolling:"99",data:{rainrate:0,raintotal:0,lowbattery:false}}
   },
   /*
   { // UVN800: value: 08201 / UV: 1 / risk: low () 82 = 130 + 90 = 22,0
@@ -247,13 +270,15 @@ var testSignals = [
     data: [1,0,1,1,0,0,0,1,1,1,1,0,0,0,1,0,1,0,0,0,1,1,0,1,1,0,1,1,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,1,0,0,0,0,1,1,0,0,0,0,1,0,0,0,0,1,0,0,1,0], protocol: "oregonv3",
     result: {name:'UVN800',layout:'UV2',id:'d874',channel:1,rolling:'bd',data:{uvindex:1,uvraw:1.3125,lowbattery:false}}
   },
+/************/
+/* UPM/Esic */
+/************/
   // UPM/Esic
   { data: [1,0,3,2,1,1,2,2,1,1,1,2,1,2,1,2,2,0,3,1,0,3], protocol: "upm",
-    result: {id:10,channel:1,data:{temperature:22.1,humidity:14,lowbattery:false}}
+    result: {id:"10",channel:1,data:{temperature:22.1,humidity:14,lowbattery:false}}
   }
 ]
 
-var ws = utils.WeatherSignal.get();
 var signals = {};
 var testResults = {
   passed: 0,
@@ -262,11 +287,10 @@ var testResults = {
   error: 0
 };
 
-// List all the signals we have
-for (var sig in ws) {
-   console.log(sig, ws[sig]);
-   var s = ws[sig];
-   signals[s] = utils.WeatherSignal.get(s);
+// Create all the signals we have
+for (let p in protocols) {
+   console.log('Creating signal decoder for', p);
+   signals[p] = new protocols[p];
 }
 
 // Loop through the test vectors
@@ -279,7 +303,7 @@ for (var i = 0; i < testSignals.length; i++) {
     payload = new Buffer.from(ts.data);
   }
   utils.debug('Payload', ts.protocol, payload.length, payload);
-  var parsed = signals[ts.protocol].parse(payload);
+  var parsed = signals[ts.protocol].parser(payload);
   var result = signals[ts.protocol].getResult();
   if (parsed) {
     delete result.protocol;

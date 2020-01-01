@@ -9,10 +9,11 @@
   		"en": "Reads data from several brands of wireless weather sensors.",
   		"nl": "Leest data van verschillende merken draadloze weersensoren."
   	},
+    "brandColor": "#3E8EFE",
     "keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
     "category": "climate",
-    "version": "2.0.3",
-    "compatibility": ">=1.5.0",
+    "version": "2.5.0",
+    "compatibility": ">=2.0.0",
     "author": {
         "name": "Ramón Baas"
     },
@@ -28,10 +29,15 @@
     "contributing": {
       "donate": {
         "paypal": {
-          "username": "rjwbaas"
+          "username": "rjwbaas1"
         }
       }
     },
+    "bugs": {
+      "url": "https://github.com/nlrb/com.weather-sensors/issues"
+    },
+    "source": "https://github.com/nlrb/com.weather-sensors",
+    "homeyCommunityTopicId": 23532,
   	"images": {
   		"large": "./assets/images/large.jpg",
   		"small": "./assets/images/small.jpg"
@@ -46,6 +52,7 @@
   					"en": "Forecast",
   					"nl": "Voorspelling"
   			},
+        "icon": "./drivers/temphumbar/assets/forecast.svg",
   			"getable": true,
   			"setable": false
   		}
@@ -660,15 +667,15 @@
   "signals": {
 		"433": {
 			"AlectoV1": {
-				"sof": [500],
+				"sof": [500, 9000],
 				"eof": [],
 				"words": [
-					[2000, 500],
-					[4000, 500]
+					[500, 2000],
+					[500, 4000]
 				],
-				"sensitivity": 0.3,
-				"minimalLength": 35,
-				"maximalLength": 37
+				"sensitivity": 0.2,
+				"minimalLength": 36,
+				"maximalLength": 36
 			},
 			"AlectoV3": {
 				"sof": [
@@ -685,7 +692,7 @@
 					[1000, 1500],
 					[1000, 500]
 				],
-				"sensitivity": 0.3,
+				"sensitivity": 0.2,
 				"minimalLength": 40,
 				"maximalLength": 56
 			},
@@ -696,10 +703,25 @@
 					[400, 2000]
 				],
 				"eof": [400, 4000],
-				"sensitivity": 0.3,
+				"sensitivity": 0.2,
 				"minimalLength": 36,
 				"maximalLength": 36
 			},
+      "AuriolHG": {
+        "sof": [
+          325, 875,
+          875, 875,
+          875, 875,
+          875, 875
+        ],
+        "words": [
+          [250, 625],
+          [625, 250]
+        ],
+        "sensitivity": 0.2,
+        "minimalLength": 39,
+        "maximalLength": 40
+      },
 			"Cresta": {
 				"sof": [
 					1,1,0,0,1,1,0,1,0,1,0,0,1,0,1
@@ -711,20 +733,9 @@
 				],
 				"manchesterUnit": 500,
 				"manchesterMaxUnits": 3,
-				"sensitivity": 0.3,
+				"sensitivity": 0,
 				"minimalLength": 74,
 				"maximalLength": 119
-			},
-			"Labs": {
-				"sof": [ 550, 9000, 550 ],
-				"words": [
-					[ 1850, 550 ],
-					[ 3900, 550 ]
-				],
-				"eof": [],
-				"sensitivity": 0.3,
-				"minimalLength": 36,
-				"maximalLength": 36
 			},
 			"LaCrosseTX3": {
 				"sof": [
@@ -742,7 +753,7 @@
 					[1000, 1300],
 					[1000, 500]
 				],
-				"sensitivity": 0.3,
+				"sensitivity": 0.1,
 				"minimalLength": 36,
 				"maximalLength": 36
 			},
@@ -765,7 +776,7 @@
 					[400, 800],
 					[800, 400]
 				],
-				"sensitivity": 0.3,
+				"sensitivity": 0.2,
 				"minimalLength": 36,
 				"maximalLength": 71
 			},
@@ -784,30 +795,9 @@
 					[1,0,0,1],
 					[0,1,1,0]
 				],
-				"manchesterUnit": 488,
+				"manchesterUnit": 490,
 				"manchesterMaxUnits": 3,
-				"sensitivity": 0.13,
-				"minimalLength": 60,
-				"maximalLength": 140
-			},
-			"OregonV2_2": {
-				"agc": [
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0,
-					0
-				],
-				"sof": [
-					1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0
-				],
-				"eof": [],
-				"words": [
-					[1,0,0,1],
-					[0,1,1,0]
-				],
-				"manchesterUnit": 500,
-				"manchesterMaxUnits": 3,
-				"sensitivity": 0.2,
+				"sensitivity": 0,
 				"minimalLength": 60,
 				"maximalLength": 140
 			},
@@ -826,7 +816,7 @@
 				],
 				"manchesterUnit": 488,
 				"manchesterMaxUnits": 2,
-				"sensitivity": 0.2,
+				"sensitivity": 0,
 				"minimalLength": 60,
 				"maximalLength": 140
 			},
@@ -842,10 +832,22 @@
 					[2000, 2000],
 					[1000, 2000]
 				],
-				"sensitivity": 0.3,
+				"sensitivity": 0.1,
 				"minimalLength": 16,
 				"maximalLength": 32
-			}
+			},
+      "TFA": {
+        "sof": [
+          500, 9750
+        ],
+        "words": [
+          [500, 2000],
+          [500, 4600]
+        ],
+        "sensitivity": 0.1,
+        "minimalLength": 28,
+        "maximalLength": 28
+      }
 		}
 	}
 }
