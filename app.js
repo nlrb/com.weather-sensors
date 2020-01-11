@@ -12,27 +12,28 @@ class WeatherSensorApp extends Homey.App {
 	registerSignals(setting) {
 		for (let s in protocols) {
 			let signal = new protocols[s];
-			this.protocols[s] = { id: s, name: signal.getName(), hint: signal.getHint(locale) }
+			this.protocols[s] = { id: s, name: signal.getName(), hint: signal.getHint(locale) };
 			if (setting && setting[s]) {
 				if (setting[s].watching && this.signals[s] === undefined) {
 					// Register signal defitinion with Homey
-					let gs = signal.getSignal()
-					this.log('Registering signal', gs.def, '(frequency', gs.freq, 'MHz)')
-					this.signals[s] = new Homey.Signal(gs.def, gs.freq.toString())
+					let gs = signal.getSignal();
+					this.log('Registering signal', gs.def);
+					this.signals[s] = new Homey.Signal433(gs.def);
 					this.signals[s].register((err, success) => {
 						if (err != null) {
-							utils.debug('Signal', s, '; err', err, 'success', success)
+							utils.debug('Signal', s, '; err', err, 'success', success);
 						} else {
-							utils.debug('Signal', s, 'registered.')
+							utils.debug('Signal', s, 'registered.');
 							// Register data receive event
 							this.signals[s].on('payload', (payload, first) => {
-								signal.debug('Received payload for', signal.getName())
-								signal.debug(payload.length, payload)
+								signal.debug('Received payload for', signal.getName());
+								signal.debug(payload.length, payload);
 								if (signal.parser(payload)) {
 									if (typeof this.update === 'function') {
 										this.update(signal);
 										let stats = signal.getStatistics();
-										Homey.ManagerApi.realtime('stats_update', { protocol: s, stats: stats });
+										// Only send needed statistics
+										Homey.ManagerApi.realtime('stats_update', { protocol: s, stats: { total: stats.total, ok: stats.ok } });
 									}
 								}
 							})

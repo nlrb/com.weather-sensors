@@ -1,4 +1,3 @@
-Wireless Weather Sensors
 Homey app to read information from wireless weather sensors on 433 MHz.
 
 Various protocols (e.g. Alecto/Fine Offset, Auriol, Cresta/Hideki, LaCrosse, Oregon Scientific, UPM/Esic, etc.) can be decoded.
