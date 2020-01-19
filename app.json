@@ -12,7 +12,7 @@
     "brandColor": "#3E8EFE",
     "keywords": ["Weather sensor", "Alecto", "Auriol", "Cresta", "Esic", "Labs", "LaCrosse", "TFA", "Orgeon Scientific", "Rubicson", "UPM"],
     "category": "climate",
-    "version": "2.5.1",
+    "version": "2.5.2",
     "compatibility": ">=2.0.0",
     "author": {
         "name": "Ramón Baas"

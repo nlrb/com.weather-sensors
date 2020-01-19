@@ -59,18 +59,17 @@ var testSignals = [
   // Alecto v1 rain gauge
   {
     id: 'Rain gauge',
-    data:[0,1,0,1,0,1,1,1 ,0,1,1,0, 1,1,0,0, 0,0,1,1,0,1,1,0,1,1,0,0,0,0,0,0, 1,0,1,1], protocol: "alectov1",
+    data: [0,1,0,1,0,1,1,1 ,0,1,1,0, 1,1,0,0, 0,0,1,1,0,1,1,0,1,1,0,0,0,0,0,0, 1,0,1,1], protocol: "alectov1",
     result: {id:'234',data:{raintotal:219,lowbattery:false}}
   },
-  { // WS-1100
-    id: 'WS-1100 (1)',
-    data: [0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1], protocol: "alectov3",
-    result: {id:'26',channel:1,name:'WS-1100',data:{temperature:22.3,humidity:41,lowbattery:false}}
+  {
+    id: 'Wind 1',
+    data: [1,1,0,1,0,1,0,0,0,1,1,0,1,1,1,1,1,1,0,0,0,0,1,0,1,1,0,0,0,0,0,0,1,1,0,0], protocol: "alectov1",
+    result: {id:'43',data:{direction:135,currentspeed:2.16,lowbattery: false}}
   },
-  { // WS-1100
-    id: 'WS-1100 (2)',
-    data: [0,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,1], protocol: "alectov3",
-    result: {id:'181',channel:1,name:'WS-1100',data:{temperature:24.8,humidity:64,lowbattery:false}}
+  {
+    data: [1,1,0,1,0,1,0,0,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,1], protocol: "alectov1",
+    result: {id:'43',data:{averagespeed:0.72,lowbattery:false}}
   },
   { // WS-1150
     id: 'WS-1150 (1)',
@@ -91,6 +90,16 @@ var testSignals = [
     id: 'Labs BL999',
     data: [0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,0,0,0,0,1,1,0,1,1,0,1,1,1,0,0,0], protocol: "alectov1",
     result: {name:'BL999',id:'8',pid:'labs',channel:1,data:{temperature:18.4,humidity:64,lowbattery:false}}
+  },
+  { // WS-1100
+    id: 'WS-1100 (1)',
+    data: [0,1,0,0,0,0,0,1,1,0,1,0,0,0,1,0,0,1,1,0,1,1,1,1,0,0,1,0,1,0,0,1,1,0,0,1,1,0,0,1], protocol: "alectov3",
+    result: {id:'26',channel:1,name:'WS-1100',data:{temperature:22.3,humidity:41,lowbattery:false}}
+  },
+  { // WS-1100
+    id: 'WS-1100 (2)',
+    data: [0,1,0,0,1,0,1,1,0,1,0,1,0,0,1,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,0,0,1,0,0,1,0,0,1,1], protocol: "alectov3",
+    result: {id:'181',channel:1,name:'WS-1100',data:{temperature:24.8,humidity:64,lowbattery:false}}
   },
   { // Alecto v3
     id: 'WH2A',
@@ -180,7 +189,7 @@ var testSignals = [
   { // W
     id: 'Wind',
     data: '8fd68c25c124c1349003a8', protocol: "cresta", func: encryptCresta,
-    result: {id:'8f',channel:0,data:{temperature:'12.5',windchill:12.4,averagespeed:3.4,currentspeed:3.9,direction:90,lowbattery:true}}
+    result: {id:'8f',channel:0,data:{temperature:'12.5',windchill:12.4,averagespeed:5.4717696,currentspeed:6.2764416,direction:90,lowbattery:true}}
   },
   { // UV
     id: 'UV',
@@ -293,7 +302,7 @@ var testSignals = [
   { // Wind
     id: 'WGR800',
     data: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,1,0,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0,0,0,0,0,1,1,0,1,0,1,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0,1,1,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,1,1,1,0], protocol: "oregonv3",
-    result: {name:'WGR800',layout:'W1',id:'1984',channel:0,rolling:'6d',data:{direction:67.5,unknown:'0c0',currentspeed:1.2,averagespeed:1,lowbattery:true}}
+    result: {name:'WGR800',layout:'W1',id:'1984',channel:0,rolling:'6d',data:{direction:67.5,unknown:'0c0',currentspeed:4.32,averagespeed:3.6,lowbattery:true}}
   },
   { // Rain
     id: 'PCR800',
@@ -352,6 +361,7 @@ for (let p in protocols) {
 // Loop through the test vectors
 for (var i = 0; i < testSignals.length; i++) {
   var ts = testSignals[i];
+  console.log('\x1b[33m%d\x1b[35m %s: %s\x1b[0m', i, ts.protocol, ts.id || '');
   var payload;
   if (ts.func !== undefined) {
     payload = new Buffer.from(ts.func(ts.data));
@@ -367,11 +377,11 @@ for (var i = 0; i < testSignals.length; i++) {
     if (ts.result !== undefined) {
       if (JSON.stringify(ts.result) === JSON.stringify(result)) {
         testResults.passed++;
-        console.log('\x1b[33m%d\x1b[0m Check \x1b[32mPASSED\x1b[35m %s: %s\x1b[0m', i, ts.protocol, ts.id || '');
+        console.log('\x1b[33m%d\x1b[0m Check \x1b[32mPASSED\x1b[0m', i);
       } else {
         testResults.failed++;
-        console.log('\x1b[33m%d\x1b[0m Check \x1b[31mFAILED\x1b[35m %s: %s\x1b[0m', i, ts.protocol + ts.id || '');
-        console.log(JSON.stringify(ts.result), 'vs', JSON.stringify(result))
+        console.log('\x1b[33m%d\x1b[0m Check \x1b[31mFAILED\x1b[0m', i);
+        console.log('\x1b[32m', JSON.stringify(ts.result), '\x1b[0mvs\x1b[31m', JSON.stringify(result), '\x1b[0m');
       }
     } else {
       testResults.unchecked++;
