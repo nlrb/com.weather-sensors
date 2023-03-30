@@ -22,7 +22,7 @@ class SensorDevice extends Homey.Device {
   onInit() {
     let data = this.getData()
     this.id = data.id
-    this.driver = Homey.ManagerDrivers.getDriver('sensor')
+    this.driver = this.homey.drivers.getDriver('sensor')
     this.driver.Devices.set(this.id, this)
 
     // Check if settings type is correct - update if needed
@@ -39,10 +39,10 @@ class SensorDevice extends Homey.Device {
       this.driver.addListener('update:' + this.id, when => {
         // Send notification that the device is available again (when applicable)
         if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
-  					Homey.ManagerNotifications.registerNotification({
-  						excerpt: Homey.__('notification.active', { name: this.getName() })
-  					})
-  			}
+          Homey.ManagerNotifications.registerNotification({
+            excerpt: Homey.__('notification.active', { name: this.getName() })
+          })
+        }
         this.setAvailable()
           .catch(err => this.error('Error marking', this.id, 'as available', err.message))
         // Update the date/time that the value was last read in the device settings
