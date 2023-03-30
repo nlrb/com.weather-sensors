@@ -14,24 +14,6 @@ const utils = require('utils')
 
 const ACTIVE = 1;
 const INACTIVE = 2;
-// Default settings:
-var inactiveTime = 180000; // 30 mins
-var activityNotifications = 0; // no notifications
-/*
-function updateAppSettings() {
-	let appSettings = this.homey.settings.get('app');
-	if (appSettings) {
-		inactiveTime = appSettings.inactive * 1000;
-		activityNotifications = appSettings.notify;
-	}
-}
-updateAppSettings();
-
-this.homey.settings.on('set', function (name) {
-	if (name === 'app') {
-		updateAppSettings();
-	}
-});*/
 
 const capability = {
 	temperature: 'measure_temperature',
@@ -60,6 +42,9 @@ const genericType = {
 
 
 class SensorDriver extends Homey.Driver {
+	// Default settings:
+	inactiveTime = 180000; // 30 mins
+	activityNotifications = 0; // no notifications
 
 	onInit() {
 		this.log('SensorDriver Init')
@@ -95,8 +80,20 @@ class SensorDriver extends Homey.Driver {
 				if (setting != null) {
 					this.registerSignals(setting)
 				}
+			} else if (key === 'app') {
+				this.updateAppSettings();
 			}
 		})
+
+		this.updateAppSettings();
+	}
+
+	updateAppSettings() {
+		let appSettings = this.homey.settings.get('app');
+		if (appSettings) {
+			this.inactiveTime = appSettings.inactive * 1000;
+			this.activityNotifications = appSettings.notify;
+		}
 	}
 
 	// Generic sensor pairing (NOT USED)
@@ -119,7 +116,7 @@ class SensorDriver extends Homey.Driver {
 		this.Sensors.forEach((sensor, key) => {
 			// Only remove if there is no Homey device associated
 			if (sensor.display !== undefined && sensor.raw !== undefined) {
-				if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > inactiveTime)) {
+				if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > this.inactiveTime)) {
 					this.log('Removing', key, 'from display list')
 					this.Sensors.delete(key);
 				}
@@ -129,11 +126,11 @@ class SensorDriver extends Homey.Driver {
 		this.Devices.forEach((device, key) => {
 			// Check if the device needs to be set unavailable
 			let last = device.getSetting('update')
-			if (device.getAvailable() && now - Date.parse(last) > inactiveTime) {
+			if (device.getAvailable() && now - Date.parse(last) > this.inactiveTime) {
 				this.log('Marking', key, 'as inactive')
 				device.setUnavailable(this.homey.__('error.no_data', { since: last }))
 					.catch(err => this.error('Cannot mark device as unavailable', err.message))
-				if (activityNotifications & INACTIVE) {
+				if (this.activityNotifications & INACTIVE) {
 					this.homey.notifications.createNotification({
 						excerpt: Homey.__('notification.inactive', { name: device.getName() })
 					});
@@ -292,7 +289,7 @@ class SensorDriver extends Homey.Driver {
 
 	// Get app settings which notifications to send (used by device)
 	getActivityNotifications() {
-		return activityNotifications
+		return this.activityNotifications
 	}
 
 	// getSensors: return a list of sensors of type <x>

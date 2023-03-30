@@ -30,7 +30,7 @@ class SensorDevice extends Homey.Device {
     let id = this.getSetting('id')
     if (typeof id !== 'string') {
       this.log('Sensor', this.id, 'has invalid ID in settings! Marking it unavailable.')
-      this.setUnavailable(Homey.__('error.corrupt'))
+      this.setUnavailable(this.homey.__('error.corrupt'))
         .catch(err => this.error('Error displaying error for', this.id, '-', err.message))
     } else {
       this.driver.addListener('value:' + this.id, (cap, value) => {
@@ -39,8 +39,8 @@ class SensorDevice extends Homey.Device {
       this.driver.addListener('update:' + this.id, when => {
         // Send notification that the device is available again (when applicable)
         if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
-          Homey.ManagerNotifications.registerNotification({
-            excerpt: Homey.__('notification.active', { name: this.getName() })
+          this.homey.notifications.createNotification({
+            excerpt: this.homey.__('notification.active', { name: this.getName() })
           })
         }
         this.setAvailable()
@@ -66,7 +66,7 @@ class SensorDevice extends Homey.Device {
   }
 
   // Catch offset updates
-  onSettings(oldSettings, newSettings, changedKeys, callback) {
+  onSettings({ oldSettings, newSettings, changedKeys }) {
     this.log('Settings updated')
     // Update display values if offset has changed
     for (let k in changedKeys) {
@@ -80,7 +80,6 @@ class SensorDevice extends Homey.Device {
           .catch(err => this.error(err))
       }
     }
-    callback(null, true);
   }
 
   updateValue(cap, value) {
