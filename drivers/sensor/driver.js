@@ -131,10 +131,10 @@ class SensorDriver extends Homey.Driver {
 			let last = device.getSetting('update')
 			if (device.getAvailable() && now - Date.parse(last) > inactiveTime) {
 				this.log('Marking', key, 'as inactive')
-				device.setUnavailable(Homey.__('error.no_data', { since: last }))
+				device.setUnavailable(this.homey.__('error.no_data', { since: last }))
 					.catch(err => this.error('Cannot mark device as unavailable', err.message))
 				if (activityNotifications & INACTIVE) {
-					Homey.ManagerNotifications.registerNotification({
+					this.homey.notifications.createNotification({
 						excerpt: Homey.__('notification.inactive', { name: device.getName() })
 					});
 				}
@@ -145,7 +145,6 @@ class SensorDriver extends Homey.Driver {
 	// Update the sensor data
 	update(signal) {
 		let result = signal.getResult();
-		this.log('update ' + result)
 		if (this.Sensors !== undefined && typeof result !== 'string' && result != null) {
 			let when = result.lastupdate.toString();
 			let pid = result.pid || result.protocol;
@@ -221,7 +220,7 @@ class SensorDriver extends Homey.Driver {
 					// Register signal defitinion with Homey
 					let gs = signal.getSignal();
 					this.log('Registering signal', gs.def);
-					this.signals[s] = new Homey.Signal433(gs.def);
+					this.signals[s] = this.homey.rf.getSignal433(gs.def);
 					this.signals[s].enableRX().then((success) => {
 						utils.debug('Signal', s, 'registered.', success);
 						// Register data receive event
@@ -272,7 +271,7 @@ class SensorDriver extends Homey.Driver {
 	_mapValue(cap, val) {
 		// language mapping for string type values
 		if (typeof val === 'string') {
-			val = Homey.__('mobile.' + cap + '.' + val)
+			val = this.homey.__('mobile.' + cap + '.' + val)
 		}
 		return val;
 	}
