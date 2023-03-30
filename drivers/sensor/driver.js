@@ -132,7 +132,7 @@ class SensorDriver extends Homey.Driver {
 					.catch(err => this.error('Cannot mark device as unavailable', err.message))
 				if (this.activityNotifications & INACTIVE) {
 					this.homey.notifications.createNotification({
-						excerpt: Homey.__('notification.inactive', { name: device.getName() })
+						excerpt: this.homey.__('notification.inactive', { name: device.getName() })
 					});
 				}
 			}
