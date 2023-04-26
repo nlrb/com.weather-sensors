@@ -19,10 +19,10 @@ class RainDriver extends Homey.Driver {
   onPair(socket) {
     this.log('Pairing started')
 
-    socket.on('list_devices', (data, callback) => {
-      let SensorDriver = Homey.ManagerDrivers.getDriver('sensor')
+    socket.setHandler('list_devices', async (data) => {
+      let SensorDriver = this.homey.drivers.getDriver('sensor')
       let devices = SensorDriver.getSensors('R')
-      callback(null, devices)
+      return devices
     })
   }
 
