@@ -7,5 +7,8 @@
 	},
 	"2.5.2": {
 		"en": "• Changed driver model, updated app settings UI\n• Added support for Auriol HG05124A-DCF-TX (Auriol v2)\n• Added support for Alecto WS-1700\n• Fixed wind speed for Alecto, Cresta & Oregon Scientific\n• Stricter timing to improve reception\n• Removed Oregon Scientific v2.2 (sensors need re-pairing)\n• Removed Labs, moved into Alecto v1"
+	},
+	"3.0.0": {
+		"en": "Converted to SDK v3 by Marius Gundersen"
 	}
 }

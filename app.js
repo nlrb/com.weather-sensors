@@ -8,9 +8,6 @@ class WeatherSensorApp extends Homey.App {
 
 	onInit() {
 		this.log('WeatherSensorApp is running...')
-
-
-
 	}
 
 	// API exported functions
