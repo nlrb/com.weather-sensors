@@ -1,10 +1,9 @@
 'use strict'
 
 const Homey = require('homey')
-
+const utils = require('utils')
 
 class WeatherSensorApp extends Homey.App {
-
 
 	onInit() {
 		this.log('WeatherSensorApp is running...')
@@ -12,21 +11,21 @@ class WeatherSensorApp extends Homey.App {
 
 	// API exported functions
 	getSensors() {
-		let driver = this.homey.drivers.getDriver('sensor')
-		if (driver !== undefined && typeof driver.getAllSensors === 'function') {
-			return driver.getAllSensors()
+		let helper = this.homey.drivers.getDriver('sensor').helper;
+		if (helper !== undefined && typeof helper.getAllSensors === 'function') {
+			return helper.getAllSensors();
 		}
 	}
 
 	getProtocols() {
-		const driver = this.homey.drivers.getDriver('sensor')
-		return driver.protocols;
+		const helper = this.homey.drivers.getDriver('sensor').helper;
+		return helper.protocols;
 	}
 
 	getStatistics() {
 		let result = {}
 		let ws = utils.WeatherSignal.get()
-		const signals = this.homey.drivers.getDriver('sensor').signals;
+		const signals = this.homey.drivers.getDriver('sensor').helper.signals;
 		for (let sig in ws) {
 			let signal = utils.WeatherSignal.get(ws[sig])
 			result[ws[sig]] = {

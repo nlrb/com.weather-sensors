@@ -10,5 +10,8 @@
 	},
 	"3.0.0": {
 		"en": "Converted to SDK v3 by Marius Gundersen"
+	},
+	"3.1.0": {
+		"en": "• Added repair capability\n• Made FineOffset separate protocol within Alectov3 (needs re-pairing)\n• Restructured code\n• Fixed 'getStatistics'"
 	}
 }

@@ -22,8 +22,8 @@ class SensorDevice extends Homey.Device {
   onInit() {
     let data = this.getData()
     this.id = data.id
-    this.driver = this.homey.drivers.getDriver('sensor')
-    this.driver.Devices.set(this.id, this)
+    this.sensorHelper = this.homey.drivers.getDriver('sensor').helper;
+    this.sensorHelper.Devices.set(this.id, this)
 
     // Check if settings type is correct - update if needed
     // Type could be wrong due to an earlier bug
@@ -33,10 +33,10 @@ class SensorDevice extends Homey.Device {
       this.setUnavailable(this.homey.__('error.corrupt'))
         .catch(err => this.error('Error displaying error for', this.id, '-', err.message))
     } else {
-      this.driver.addListener('value:' + this.id, (cap, value) => {
+      this.sensorHelper.addListener('value:' + this.id, (cap, value) => {
         this.updateValue(cap, value)
       })
-      this.driver.addListener('update:' + this.id, when => {
+      this.sensorHelper.addListener('update:' + this.id, when => {
         // Send notification that the device is available again (when applicable)
         if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
           this.homey.notifications.createNotification({
@@ -51,7 +51,7 @@ class SensorDevice extends Homey.Device {
       })
 
       // Set all capability values
-      let values = this.driver.getSensorValues(this.id)
+      let values = this.sensorHelper.getSensorValues(this.id)
       for (let c in values) {
         this.updateValue(values[c].cap, values[c].value)
       }
@@ -60,9 +60,10 @@ class SensorDevice extends Homey.Device {
 
   // Called on removal
   onDeleted() {
-    this.log('Deleting sensor device', this.id)
-    this.driver.removeAllListeners(this.id)
-    this.driver.Devices.delete(this.id)
+    this.log('Deleting sensor device', this.id);
+    this.sensorHelper.removeAllListeners('value:' + this.id);
+    this.sensorHelper.removeAllListeners('update:' + this.id);
+    this.sensorHelper.Devices.delete(this.id);
   }
 
   // Catch offset updates

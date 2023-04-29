@@ -1,7 +1,5 @@
 'use strict'
 
-const Homey = require('homey')
-
 module.exports = {
   async getSensors({ homey }) {
     return homey.app.getSensors();

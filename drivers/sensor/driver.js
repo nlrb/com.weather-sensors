@@ -11,6 +11,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 const Homey = require('homey')
 const protocols = require('protocols')
 const utils = require('utils')
+const SensorDevice = require('../sensor/device.js')
+const Events = require('events')
 
 const ACTIVE = 1;
 const INACTIVE = 2;
@@ -40,27 +42,28 @@ const genericType = {
 	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, icon: '/drivers/wind/assets/icon.svg' }
 }
 
+class SensorHelper extends Events {
 
-class SensorDriver extends Homey.Driver {
 	// Default settings:
 	inactiveTime = 180000; // 30 mins
 	activityNotifications = 0; // no notifications
 
-	onInit() {
-		this.log('SensorDriver Init')
+	constructor(driver) {
+		super();
+		this.driver = driver;
 		this.Sensors = new Map() // all sensors we've found
 		this.Devices = new Map() // all devices that have been added
-		this.locale = this.homey.i18n.getLanguage() == 'nl' ? 'nl' : 'en' // only Dutch & English supported
+		this.locale = driver.homey.i18n.getLanguage() == 'nl' ? 'nl' : 'en' // only Dutch & English supported
 
 		// Set up check to mark devices inactive, remove sensors
-		this.homey.setInterval(this.healthCheck.bind(this), 1000)
+		this.driver.homey.setInterval(this.healthCheck.bind(this), 1000)
 
 		this.signals = {}
 		this.protocols = {}
 
 		// Read app settings for protocol selection
-		let setting = this.homey.settings.get('protocols');
-		this.log('settings', setting);
+		let setting = this.driver.homey.settings.get('protocols');
+		this.driver.log('settings', setting);
 		if (setting == null) {
 			// No setting? Register all signals
 			setting = {}
@@ -69,14 +72,14 @@ class SensorDriver extends Homey.Driver {
 				let s = ws[sig]
 				setting[s] = { watching: true }
 			}
-			this.homey.settings.set('protocols', setting)
+			this.driver.homey.settings.set('protocols', setting)
 		}
 		this.registerSignals(setting)
 
 		// Catch setting changes
-		this.homey.settings.on('set', key => {
+		this.driver.homey.settings.on('set', key => {
 			if (key === 'protocols') {
-				let setting = this.homey.settings.get('protocols')
+				let setting = driver.homey.settings.get('protocols')
 				if (setting != null) {
 					this.registerSignals(setting)
 				}
@@ -89,27 +92,14 @@ class SensorDriver extends Homey.Driver {
 	}
 
 	updateAppSettings() {
-		let appSettings = this.homey.settings.get('app');
+		let appSettings = this.driver.homey.settings.get('app');
 		if (appSettings) {
 			this.inactiveTime = appSettings.inactive * 1000;
 			this.activityNotifications = appSettings.notify;
 		}
 	}
 
-	// Generic sensor pairing (NOT USED)
-	onPair(socket) {
-		this.log('Pairing started')
-
-		socket.setHandler('list_devices', async (data) => {
-			let devices = []
-			for (let t in genericType) {
-				devices = devices.concat(this.getSensors(t))
-			}
-			return devices
-		})
-	}
-
-	// heathCheck: check if sensor values keep being updated
+	// healthCheck: check if sensor values keep being updated
 	healthCheck() {
 		let now = new Date()
 		// Iterate over sensors
@@ -117,7 +107,7 @@ class SensorDriver extends Homey.Driver {
 			// Only remove if there is no Homey device associated
 			if (sensor.display !== undefined && sensor.raw !== undefined) {
 				if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > this.inactiveTime)) {
-					this.log('Removing', key, 'from display list')
+					this.driver.log('Removing', key, 'from display list')
 					this.Sensors.delete(key);
 				}
 			}
@@ -127,12 +117,12 @@ class SensorDriver extends Homey.Driver {
 			// Check if the device needs to be set unavailable
 			let last = device.getSetting('update')
 			if (device.getAvailable() && now - Date.parse(last) > this.inactiveTime) {
-				this.log('Marking', key, 'as inactive')
-				device.setUnavailable(this.homey.__('error.no_data', { since: last }))
+				this.driver.log('Marking', key, 'as inactive')
+				device.setUnavailable(this.driver.homey.__('error.no_data', { since: last }))
 					.catch(err => this.error('Cannot mark device as unavailable', err.message))
 				if (this.activityNotifications & INACTIVE) {
-					this.homey.notifications.createNotification({
-						excerpt: this.homey.__('notification.inactive', { name: device.getName() })
+					this.driver.homey.notifications.createNotification({
+						excerpt: this.driver.homey.__('notification.inactive', { name: device.getName() })
 					});
 				}
 			}
@@ -141,85 +131,87 @@ class SensorDriver extends Homey.Driver {
 
 	// Update the sensor data
 	update(signal) {
-		let result = signal.getResult();
-		if (this.Sensors !== undefined && typeof result !== 'string' && result != null) {
-			let when = result.lastupdate.toString();
-			let pid = result.pid || result.protocol;
-			let did = pid + ':' + result.id + ':' + (result.channel || 0);
-			if (this.Sensors.get(did) === undefined) {
-				this.Sensors.set(did, { raw: { data: {} } });
-				signal.debug('Found a new sensor. Total found is now', this.Sensors.size);
-			}
-			let current = this.Sensors.get(did).raw;
-			// Check if a value has changed
-			let newdata = false;
-			let newvalue = JSON.parse(JSON.stringify(result));
-			newvalue.data = current.data;
-			for (let c in result.data) {
-				if (result.data[c] !== newvalue.data[c]) {
-					newdata = true;
-					newvalue.data[c] = result.data[c];
-					let cap = capability[c];
-					if (cap !== undefined) {
-						let val = this._mapValue(c, newvalue.data[c]);
-						this.emit('value:' + did, cap, val)
+		let result;
+		while ((result = signal.getResult()) != null) {
+			if (this.Sensors !== undefined && typeof result !== 'string' && result != null && result.valid) {
+				let when = result.lastupdate.toLocaleString(this.driver.homey.i18n.getLanguage());
+				let pid = result.pid || result.protocol;
+				let did = pid + ':' + result.id + ':' + (result.channel || 0);
+				if (this.Sensors.get(did) === undefined) {
+					this.Sensors.set(did, { raw: { data: {} } });
+					signal.debug('Found a new sensor. Total found is now', this.Sensors.size);
+				}
+				let current = this.Sensors.get(did).raw;
+				// Check if a value has changed
+				let newdata = false;
+				let newvalue = JSON.parse(JSON.stringify(result));
+				newvalue.data = current.data;
+				for (let c in result.data) {
+					if (result.data[c] !== newvalue.data[c]) {
+						newdata = true;
+						newvalue.data[c] = result.data[c];
+						let cap = capability[c];
+						if (cap !== undefined) {
+							let val = this._mapValue(c, newvalue.data[c]);
+							this.emit('value:' + did, cap, val)
+						}
 					}
 				}
-			}
-			this.emit('update:' + did, when)
+				this.emit('update:' + did, when)
 
-			// Determine the sensor type based on its values
-			newvalue.type = this._determineType(newvalue.data);
-			if (newvalue.type !== undefined) {
-				signal.debug('Sensor value has changed:', newdata);
+				// Determine the sensor type based on its values
+				newvalue.type = this._determineType(newvalue.data);
+				if (newvalue.type !== undefined) {
+					signal.debug('Sensor value has changed:', newdata);
 
-				// Add additional data
-				newvalue.count = (current.count || 0) + 1;
-				newvalue.newdata = newdata;
+					// Add additional data
+					newvalue.count = (current.count || 0) + 1;
+					newvalue.newdata = newdata;
 
-				let device = this.Devices.get(did)
-				let name = newvalue.name
-				if (device) {
-					name = device.getName()
+					let device = this.Devices.get(did)
+					let name = newvalue.name
+					if (device) {
+						name = device.getName()
+					}
+
+					// Update the sensor log
+					let display = {
+						protocol: signal.getName(),
+						type: genericType[newvalue.type].txt[this.locale] || genericType[newvalue.type].txt.en,
+						icon: genericType[newvalue.type].icon,
+						name: name,
+						channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
+						id: newvalue.id,
+						update: when,
+						data: newvalue.data,
+						paired: this.Devices.has(did)
+					}
+					this.Sensors.set(did, { raw: newvalue, display: display });
+					//signal.debug(this.Sensors);
+					// Send an event to the front-end as well for the app settings page
+					this.driver.homey.api.realtime('sensor_update', Array.from(this.Sensors.values()).map(x => x.display));
+				} else {
+					signal.debug('ERROR: cannot determine sensor type for data', newvalue);
 				}
-
-				// Update the sensor log
-				let display = {
-					protocol: signal.getName(),
-					type: genericType[newvalue.type].txt[this.locale] || genericType[newvalue.type].txt.en,
-					icon: genericType[newvalue.type].icon,
-					name: name,
-					channel: (newvalue.channel ? newvalue.channel.toString() : '-'),
-					id: newvalue.id,
-					update: when,
-					data: newvalue.data,
-					paired: this.Devices.has(did)
-				}
-				this.Sensors.set(did, { raw: newvalue, display: display });
-				//signal.debug(this.Sensors);
-				// Send an event to the front-end as well for the app settings page
-				this.homey.api.realtime('sensor_update', Array.from(this.Sensors.values()).map(x => x.display));
-			} else {
-				signal.debug('ERROR: cannot determine sensor type for data', newvalue);
 			}
 		}
 	}
 
 	// Register all needed signals with Homey
 	registerSignals(setting) {
-		this.log("registerSignals");
+		this.driver.log('registerSignals');
 		for (let s in protocols) {
-			this.log("protocol " + s, setting[s])
+			this.driver.log('protocol', s, setting[s])
 			let signal = new protocols[s];
 			this.protocols[s] = { id: s, name: signal.getName(), hint: signal.getHint(this.locale) };
 			if (setting && setting[s]) {
 				if (setting[s].watching && this.signals[s] === undefined) {
 					// Register signal defitinion with Homey
 					let gs = signal.getSignal();
-					this.log('Registering signal', gs.def);
-					this.signals[s] = this.homey.rf.getSignal433(gs.def);
-					this.signals[s].enableRX().then((success) => {
-						utils.debug('Signal', s, 'registered.', success);
+					this.driver.log('Registering signal', gs.def);
+					this.signals[s] = this.driver.homey.rf.getSignal433(gs.def);
+					this.signals[s].enableRX().then(() => {
+						utils.debug('Signal', s, 'registered.');
 						// Register data receive event
 						this.signals[s].on('payload', (payload, first) => {
 							signal.debug('Received payload for', signal.getName());
@@ -229,7 +221,7 @@ class SensorDriver extends Homey.Driver {
 									this.update(signal);
 									let stats = signal.getStatistics();
 									// Only send needed statistics
-									this.homey.api.realtime('stats_update', { protocol: s, stats: { total: stats.total, ok: stats.ok } });
+									this.driver.homey.api.realtime('stats_update', { protocol: s, stats: { total: stats.total, ok: stats.ok } });
 								}
 							}
 						})
@@ -268,7 +260,7 @@ class SensorDriver extends Homey.Driver {
 	_mapValue(cap, val) {
 		// language mapping for string type values
 		if (typeof val === 'string') {
-			val = this.homey.__('mobile.' + cap + '.' + val)
+			val = this.driver.homey.__('mobile.' + cap + '.' + val)
 		}
 		return val;
 	}
@@ -289,37 +281,39 @@ class SensorDriver extends Homey.Driver {
 
 	// Get app settings which notifications to send (used by device)
 	getActivityNotifications() {
-		return this.activityNotifications
+		return this.activityNotifications;
 	}
 
 	// getSensors: return a list of sensors of type <x>
-	getSensors(type) {
+	getSensors(type, protocol) {
 		var list = [];
 		for (let i of this.Sensors.keys()) {
-			let val = this.Sensors.get(i);
-			if (type != null && val.raw.type == type) {
-				let capabilities = [];
-				// Add sensor capabilities based on sensor values
-				for (let v in val.raw.data) {
-					//this.log(v, capability[v]);
-					if (capability[v] !== undefined) {
-						capabilities.push(capability[v]);
+			if (protocol === undefined || protocol === i.split(':')[0]) {
+				let val = this.Sensors.get(i);
+				if (type != null && val.raw.type == type) {
+					let capabilities = [];
+					// Add sensor capabilities based on sensor values
+					for (let v in val.raw.data) {
+						//this.driver.log(v, capability[v]);
+						if (capability[v] !== undefined) {
+							capabilities.push(capability[v]);
+						}
 					}
-				}
-				this.log(capabilities, val.raw.data);
-				let device = {
-					name: val.raw.name || (val.display.protocol + ': ' + type + ' ' + val.raw.id),
-					data: { id: i, type: type },
-					capabilities: capabilities,
-					settings: {
-						protocol: val.display.protocol,
-						type: val.raw.name || val.display.type,
-						channel: val.display.channel || 0,
-						id: val.raw.id,
-						update: val.display.update
+					this.driver.log(capabilities, val.raw.data);
+					let device = {
+						name: val.raw.name || (val.display.protocol + ': ' + type + ' ' + val.raw.id),
+						data: { id: i, type: type },
+						capabilities: capabilities,
+						settings: {
+							protocol: val.display.protocol,
+							type: val.raw.name || val.display.type,
+							channel: val.display.channel || 0,
+							id: val.raw.id,
+							update: val.display.update
+						}
 					}
+					list.push(device);
 				}
-				list.push(device);
 			}
 		}
 		return list;
@@ -328,6 +322,48 @@ class SensorDriver extends Homey.Driver {
 	getAllSensors() {
 		return Array.from(this.Sensors.values()).map(x => x.display)
 	}
+
+}
+
+class SensorDriver extends Homey.Driver {
+
+	onInit() {
+		this.sensorDriver = this.homey.drivers.getDriver('sensor');
+		// Only exectute the initialization once
+		if (this === this.sensorDriver) {
+			this.log('SensorHelper Init');
+			this.helper = new SensorHelper(this);
+		} else {
+			this.helper = this.sensorDriver.helper;
+		}
+	}
+
+	// Generic sensor pairing
+	_onPair(session, type) {
+		this.log('Pairing started for type', type);
+
+    session.setHandler('list_devices', async (data) => {
+      let devices = this.helper.getSensors(type);
+      return devices;
+    });
+	}
+
+	onRepair(session, device) {
+		let id = device.getData().id;
+		let type = device.getData().type;
+    let pid = id.split(':')[0];
+    this.log('Repairing started for device', device.getName(), 'of type', type, 'and with protocol', pid);
+
+    session.setHandler('list_devices', async (data) => {
+      let devices = this.helper.getSensors(type, pid);
+      return devices;
+    })
+	}
+
+  onMapDeviceClass(device) {
+    this.log('Mapping device', device.getName());
+    return SensorDevice;
+  }
 
 }
 
