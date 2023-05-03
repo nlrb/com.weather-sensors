@@ -186,13 +186,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -278,13 +278,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -406,13 +406,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -525,13 +525,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -634,13 +634,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -725,13 +725,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [
@@ -817,13 +817,13 @@
 				{
 					"id": "list_sensors",
 					"template": "list_devices",
+					"options": { "singular": true },
 					"navigation": {
-						"next": "add_sensors"
+						"next": "repair_device"
 					}
 				},
 				{
-					"id": "add_sensors",
-					"template": "add_devices"
+					"id": "repair_device"
 				}
 			],
 			"settings": [

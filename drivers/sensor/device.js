@@ -1,7 +1,7 @@
 'use strict'
 
 /*
-Copyright (c) 2018 Ramón Baas
+Copyright (c) 2018-2023 Ramón Baas
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
@@ -20,10 +20,12 @@ class SensorDevice extends Homey.Device {
 
   // Class initialization
   onInit() {
-    let data = this.getData()
-    this.id = data.id
+    let data = this.getData();
+    let repairId = this.getStoreValue('repairId');
+    this.id = repairId || data.id;
+    this.log('Initializing sensor device', this.id);
     this.sensorHelper = this.homey.drivers.getDriver('sensor').helper;
-    this.sensorHelper.Devices.set(this.id, this)
+    this.sensorHelper.Devices.set(this.id, this);
 
     // Check if settings type is correct - update if needed
     // Type could be wrong due to an earlier bug
@@ -38,7 +40,7 @@ class SensorDevice extends Homey.Device {
       })
       this.sensorHelper.addListener('update:' + this.id, when => {
         // Send notification that the device is available again (when applicable)
-        if (this.getAvailable() === false && (this.driver.getActivityNotifications() & ACTIVE)) {
+        if (this.getAvailable() === false && (this.sensorHelper.getActivityNotifications() & ACTIVE)) {
           this.homey.notifications.createNotification({
             excerpt: this.homey.__('notification.active', { name: this.getName() })
           })

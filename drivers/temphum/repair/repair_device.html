@@ -1,0 +1,7 @@
+<script type="application/javascript">
+  /*
+     Note: depends on implementation of 'list_devices' template
+     Uses variables 'selected_devices' (not 'found_devices')
+  */
+  Homey.emit("repair_device", JSON.parse(window.selected_devices));
+</script>

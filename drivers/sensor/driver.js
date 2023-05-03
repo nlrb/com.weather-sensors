@@ -101,7 +101,10 @@ class SensorHelper extends Events {
 
 	// healthCheck: check if sensor values keep being updated
 	healthCheck() {
-		let now = new Date()
+		let now = new Date();
+		let tz = this.driver.homey.clock.getTimezone();
+		now = Date.parse(now.toLocaleString(this.driver.homey.i18n.getLanguage(), { timeZone: tz }));
+
 		// Iterate over sensors
 		this.Sensors.forEach((sensor, key) => {
 			// Only remove if there is no Homey device associated
@@ -134,7 +137,8 @@ class SensorHelper extends Events {
 		let result;
 		while ((result = signal.getResult()) != null) {
 			if (this.Sensors !== undefined && typeof result !== 'string' && result != null && result.valid) {
-				let when = result.lastupdate.toLocaleString(this.driver.homey.i18n.getLanguage());
+				let tz = this.driver.homey.clock.getTimezone();
+				let when = result.lastupdate.toLocaleString(this.driver.homey.i18n.getLanguage(), { timeZone: tz });
 				let pid = result.pid || result.protocol;
 				let did = pid + ':' + result.id + ':' + (result.channel || 0);
 				if (this.Sensors.get(did) === undefined) {
@@ -349,7 +353,7 @@ class SensorDriver extends Homey.Driver {
 	}
 
 	onRepair(session, device) {
-		let id = device.getData().id;
+		let id = device.id;
 		let type = device.getData().type;
     let pid = id.split(':')[0];
     this.log('Repairing started for device', device.getName(), 'of type', type, 'and with protocol', pid);
@@ -358,6 +362,21 @@ class SensorDriver extends Homey.Driver {
       let devices = this.helper.getSensors(type, pid);
       return devices;
     })
+
+		session.setHandler('repair_device', async (data) => {
+			this.log('repair_device', data);
+			let newId = data.id;
+			// Remove device with current ID
+			device.onDeleted();
+			// Update the device settings with the new ID
+			await device.setSettings({ id: newId.split(':')[1] });
+			// Set an override iD in the device store
+			await device.setStoreValue('repairId', newId);
+			// Initialize device with new ID§
+			device.onInit();
+	    // Close the repair session
+			await session.done();
+		})
 	}
 
   onMapDeviceClass(device) {
