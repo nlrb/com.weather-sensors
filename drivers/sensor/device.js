@@ -38,18 +38,20 @@ class SensorDevice extends Homey.Device {
       this.sensorHelper.addListener('value:' + this.id, (cap, value) => {
         this.updateValue(cap, value)
       })
-      this.sensorHelper.addListener('update:' + this.id, when => {
+      this.sensorHelper.addListener('update:' + this.id, async (when, whenUTC) => {
         // Send notification that the device is available again (when applicable)
         if (this.getAvailable() === false && (this.sensorHelper.getActivityNotifications() & ACTIVE)) {
           this.homey.notifications.createNotification({
             excerpt: this.homey.__('notification.active', { name: this.getName() })
           })
         }
-        this.setAvailable()
+        await this.setAvailable()
           .catch(err => this.error('Error marking', this.id, 'as available', err.message))
-        // Update the date/time that the value was last read in the device settings
-        this.setSettings({ update: when })
+        // Update the date/time that the value was last read in the device settings & store
+        await this.setSettings({ update: when })
           .catch(err => this.error('Error updating settings for', this.id, '-', err.message))
+        await this.setStoreValue('update', whenUTC)
+          .catch(err => this.error('Error updating store for', this.id, '-', err.message))
       })
 
       // Set all capability values
@@ -63,9 +65,7 @@ class SensorDevice extends Homey.Device {
   // Called on removal
   onDeleted() {
     this.log('Deleting sensor device', this.id);
-    this.sensorHelper.removeAllListeners('value:' + this.id);
-    this.sensorHelper.removeAllListeners('update:' + this.id);
-    this.sensorHelper.Devices.delete(this.id);
+    this.sensorHelper.removeSensor(this.id);
   }
 
   // Catch offset updates

@@ -24,7 +24,7 @@
 		"UPM"
 	],
 	"category": "climate",
-	"version": "3.1.0",
+	"version": "3.1.1",
 	"compatibility": ">=5.0.0",
 	"author": {
 		"name": "Ramón Baas"

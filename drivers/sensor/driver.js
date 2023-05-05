@@ -102,15 +102,13 @@ class SensorHelper extends Events {
 	// healthCheck: check if sensor values keep being updated
 	healthCheck() {
 		let now = new Date();
-		let tz = this.driver.homey.clock.getTimezone();
-		now = Date.parse(now.toLocaleString(this.driver.homey.i18n.getLanguage(), { timeZone: tz }));
 
 		// Iterate over sensors
 		this.Sensors.forEach((sensor, key) => {
 			// Only remove if there is no Homey device associated
 			if (sensor.display !== undefined && sensor.raw !== undefined) {
-				if (!sensor.display.paired && (now - Date.parse(sensor.raw.lastupdate) > this.inactiveTime)) {
-					this.driver.log('Removing', key, 'from display list')
+				if (!sensor.display.paired && (now - sensor.raw.lastupdate > this.inactiveTime)) {
+					this.driver.log('Removing', key, 'from display list');
 					this.Sensors.delete(key);
 				}
 			}
@@ -118,11 +116,13 @@ class SensorHelper extends Events {
 		// Iterate over devices
 		this.Devices.forEach((device, key) => {
 			// Check if the device needs to be set unavailable
-			let last = device.getSetting('update')
-			if (device.getAvailable() && now - Date.parse(last) > this.inactiveTime) {
-				this.driver.log('Marking', key, 'as inactive')
+			let last = device.getSetting('update');
+			let lastUTC = device.getStoreValue('update');
+			// Due to a Homey bug that converts the Date type to String in the store, we have to parse the value
+			if (device.getAvailable() && now - Date.parse(lastUTC) > this.inactiveTime) {
+				this.driver.log('Marking', key, 'as inactive');
 				device.setUnavailable(this.driver.homey.__('error.no_data', { since: last }))
-					.catch(err => this.error('Cannot mark device as unavailable', err.message))
+					.catch(err => this.driver.error('Cannot mark device as unavailable', err.message))
 				if (this.activityNotifications & INACTIVE) {
 					this.driver.homey.notifications.createNotification({
 						excerpt: this.driver.homey.__('notification.inactive', { name: device.getName() })
@@ -139,6 +139,7 @@ class SensorHelper extends Events {
 			if (this.Sensors !== undefined && typeof result !== 'string' && result != null && result.valid) {
 				let tz = this.driver.homey.clock.getTimezone();
 				let when = result.lastupdate.toLocaleString(this.driver.homey.i18n.getLanguage(), { timeZone: tz });
+				let whenUTC = result.lastupdate; // UTC
 				let pid = result.pid || result.protocol;
 				let did = pid + ':' + result.id + ':' + (result.channel || 0);
 				if (this.Sensors.get(did) === undefined) {
@@ -148,8 +149,10 @@ class SensorHelper extends Events {
 				let current = this.Sensors.get(did).raw;
 				// Check if a value has changed
 				let newdata = false;
-				let newvalue = JSON.parse(JSON.stringify(result));
-				newvalue.data = current.data;
+				let newvalue = {
+					...result,
+					data: current.data
+				};
 				for (let c in result.data) {
 					if (result.data[c] !== newvalue.data[c]) {
 						newdata = true;
@@ -161,7 +164,7 @@ class SensorHelper extends Events {
 						}
 					}
 				}
-				this.emit('update:' + did, when)
+				this.emit('update:' + did, when, whenUTC);
 
 				// Determine the sensor type based on its values
 				newvalue.type = this._determineType(newvalue.data);
@@ -325,6 +328,15 @@ class SensorHelper extends Events {
 
 	getAllSensors() {
 		return Array.from(this.Sensors.values()).map(x => x.display)
+	}
+
+	removeSensor(id) {
+		this.removeAllListeners('value:' + id);
+    this.removeAllListeners('update:' + id);
+    this.Devices.delete(id);
+    let sensor = this.Sensors.get(id);
+    sensor.display.paired = false;
+    this.Sensors.set(id, sensor);
 	}
 
 }

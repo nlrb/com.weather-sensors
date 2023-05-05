@@ -13,5 +13,8 @@
 	},
 	"3.1.0": {
 		"en": "• Added repair capability\n• Made FineOffset separate protocol within Alectov3 (needs re-pairing)\n• Restructured code\n• Fixed 'getStatistics'"
+	},
+	"3.1.1": {
+		"en": "Adjust time(zone) handling"
 	}
 }
