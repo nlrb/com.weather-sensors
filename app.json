@@ -952,6 +952,24 @@
 				"minimalLength": 40,
 				"maximalLength": 56
 			},
+			"AmbientWeather": {
+				"agc": [
+					1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0
+				],
+				"sof": [
+					1,0,0,1,1,0
+				],
+				"words": [
+					[0,1],
+					[1,0]
+				],
+				"eof": [],
+				"manchesterUnit": 500,
+				"manchesterMaxUnits": 2,
+				"sensitivity": 0.1,
+				"minimalLength": 48,
+				"maximalLength": 150
+			},
 			"AuriolZ31130": {
 				"sof": [],
 				"words": [
