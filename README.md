@@ -10,6 +10,7 @@ Currently the following protocols are supported on 433 MHz.
 * La Crosse: only TX3 decoding fully implemented, WS7000 partially (untested)
 * Oregon Scientific: version 2 and 3 of the protocol are supported
 * UPM/Esic: only tested with WT440H
+* Ambient Weather: only tested with OneConcept 10029372 by ElectronicStar
 
 These types of devices are supported:
 

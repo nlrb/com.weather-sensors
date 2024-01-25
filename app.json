@@ -21,10 +21,11 @@
 		"TFA",
 		"Orgeon Scientific",
 		"Rubicson",
-		"UPM"
+		"UPM",
+		"Ambient Weather"
 	],
 	"category": "climate",
-	"version": "3.1.1",
+	"version": "3.2.0",
 	"compatibility": ">=5.0.0",
 	"author": {
 		"name": "Ramón Baas"
@@ -42,6 +43,10 @@
 			{
 				"name": "Marius Gundersen",
 				"email": "me@mariusgundersen.net"
+			},
+			{
+				"name": "Damien Villeneuve",
+				"email": "contact@dvilleneuve.fr"
 			}
 		]
 	},

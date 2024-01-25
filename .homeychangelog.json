@@ -16,5 +16,8 @@
 	},
 	"3.1.1": {
 		"en": "Adjust time(zone) handling"
+	},
+	"3.2.0": {
+		"en": "Support for Ambient Weather protocol added by Damien Villeneuve"
 	}
 }
