@@ -25,7 +25,7 @@
 		"Ambient Weather"
 	],
 	"category": "climate",
-	"version": "3.2.0",
+	"version": "3.2.1",
 	"compatibility": ">=5.0.0",
 	"author": {
 		"name": "Ramón Baas"

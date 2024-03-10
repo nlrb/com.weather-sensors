@@ -19,5 +19,9 @@
 	},
 	"3.2.0": {
 		"en": "Support for Ambient Weather protocol added by Damien Villeneuve"
+	},
+	{
+		"3.2.1": {
+			"en": "Fix temperature issue for Cresta wind sensor"
 	}
 }
