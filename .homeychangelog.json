@@ -3,13 +3,15 @@
 		"en": "• Changed driver model, updated app settings UI\n• Added support for Auriol HG05124A-DCF-TX (Auriol v2)\n• Stricter timing to improve reception\n• Removed Oregon Scientific v2.2 (sensors need re-pairing)\n• Removed Labs, moved into Alecto v1"
 	},
 	"2.5.1": {
-		"en": "Added support for Alecto WS-1700."
+		"en": "Added support for Alecto WS-1700.",
+		"pl": "Dodano wsparcie dla Alecto WS-1700."
 	},
 	"2.5.2": {
 		"en": "• Changed driver model, updated app settings UI\n• Added support for Auriol HG05124A-DCF-TX (Auriol v2)\n• Added support for Alecto WS-1700\n• Fixed wind speed for Alecto, Cresta & Oregon Scientific\n• Stricter timing to improve reception\n• Removed Oregon Scientific v2.2 (sensors need re-pairing)\n• Removed Labs, moved into Alecto v1"
 	},
 	"3.0.0": {
-		"en": "Converted to SDK v3 by Marius Gundersen"
+		"en": "Converted to SDK v3 by Marius Gundersen",
+		"pl": "Przekonwertowano do SDK v3 przez Mariusa Gundersena"
 	},
 	"3.1.0": {
 		"en": "• Added repair capability\n• Made FineOffset separate protocol within Alectov3 (needs re-pairing)\n• Restructured code\n• Fixed 'getStatistics'"
@@ -18,9 +20,11 @@
 		"en": "Adjust time(zone) handling"
 	},
 	"3.2.0": {
-		"en": "Support for Ambient Weather protocol added by Damien Villeneuve"
+		"en": "Support for Ambient Weather protocol added by Damien Villeneuve",
+		"pl": "Wsparcie dla protokołu Ambient Weather dodane przez Damiena Villeneuve'a"
 	},
 	"3.2.1": {
-		"en": "Fix temperature issue for Cresta wind sensor"
+		"en": "Fix temperature issue for Cresta wind sensor",
+		"pl": "Naprawiono problem z temperaturą w czujniku wiatru Cresta"
 	}
 }

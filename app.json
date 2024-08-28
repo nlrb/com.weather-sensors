@@ -3,11 +3,13 @@
 	"sdk": 3,
 	"name": {
 		"en": "Wireless Weather Sensors",
-		"nl": "Draadloze Weersensoren"
+		"nl": "Draadloze Weersensoren",
+		"pl": "Bezprzewodowe Czujniki Pogodowe"
 	},
 	"description": {
 		"en": "Reads data from several brands of wireless weather sensors.",
-		"nl": "Leest data van verschillende merken draadloze weersensoren."
+		"nl": "Leest data van verschillende merken draadloze weersensoren.",
+		"pl": "Odczytuje dane z bezprzewodowych czujników pogodowych różnych marek."
 	},
 	"brandColor": "#3E8EFE",
 	"keywords": [
@@ -48,7 +50,12 @@
 				"name": "Damien Villeneuve",
 				"email": "contact@dvilleneuve.fr"
 			}
-		]
+		],
+		"translators": [
+			{
+			  "name": "🇵🇱 Hubert Ryglowski"
+			}
+		  ]
 	},
 	"contributing": {
 		"donate": {
@@ -74,7 +81,8 @@
 			"type": "string",
 			"title": {
 				"en": "Forecast",
-				"nl": "Voorspelling"
+				"nl": "Voorspelling",
+				"pl": "Prognoza"
 			},
 			"icon": "./drivers/temphumbar/assets/forecast.svg",
 			"getable": true,
@@ -100,7 +108,8 @@
 			"id": "sensor",
 			"name": {
 				"en": "Weather sensor",
-				"nl": "Weer sensor"
+				"nl": "Weer sensor",
+				"pl": "Czujnik pogodowy"
 			},
 			"class": "sensor",
 			"capabilities": [],
@@ -113,14 +122,16 @@
 					"type": "group",
 					"label": {
 						"en": "Sensor information",
-						"nl": "Sensor informatie"
+						"nl": "Sensor informatie",
+						"pl": "Informacje o czujniku"
 					},
 					"children": [
 						{
 							"id": "protocol",
 							"type": "label",
 							"label": {
-								"en": "Protocol"
+								"en": "Protocol",
+								"pl": "Protokół"
 							},
 							"value": ""
 						},
@@ -128,7 +139,8 @@
 							"id": "type",
 							"type": "label",
 							"label": {
-								"en": "Type"
+								"en": "Type",
+								"pl": "Typ"
 							},
 							"value": ""
 						},
@@ -137,7 +149,8 @@
 							"type": "label",
 							"label": {
 								"en": "Channel",
-								"nl": "Kanaal"
+								"nl": "Kanaal",
+								"pl": "Kanał"
 							},
 							"value": ""
 						},
@@ -154,7 +167,8 @@
 							"type": "label",
 							"label": {
 								"en": "Last update",
-								"nl": "Laaste data van"
+								"nl": "Laaste data van",
+								"pl": "Ostatnia aktualizacja"
 							},
 							"value": ""
 						}

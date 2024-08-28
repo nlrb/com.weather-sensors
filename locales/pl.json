@@ -1,0 +1,79 @@
+{
+	"settings": {
+		"message": "Wiadomość",
+		"protocols": {
+			"title": "Wybór protokołu",
+			"description": "Wybierz protokoły bezprzewodowych czujników pogodowych, które Homey musi odbierać. Dla najlepszej wydajności Homey zaleca się wybrać tylko protokoły, które są naprawdę potrzebne.",
+			"header": "Protokoły",
+			"submit": "Zapisz ustawienia",
+			"success": "Ustawienia zostały zapisane."
+		},
+		"app": {
+			"header": "Aktywność",
+			"inactive": {
+				"pre": "Oznacz czujnik jako nieaktywny, gdy nie otrzymano żadnych danych przez",
+				"post": ".",
+				"option": {
+					"1min": "1 minutę",
+					"2min": "2 minuty",
+					"5min": "5 minut",
+					"10min": "10 minut",
+					"30min": "30 minut",
+					"1hr": "1 godzinę",
+					"2hr": "2 godziny",
+					"5hr": "5 godzin",
+					"10hr": "10 godzin",
+					"1day": "1 dzień"
+				}
+			},
+			"notify": {
+				"pre": "Kiedy powinno zostać wysłane powiadomienie o aktywności?",
+				"post": ".",
+				"option": {
+					"none": "Nigdy",
+					"active": "Gdy czujnik staje się aktywny",
+					"inactive": "Gdy czujnik staje się nieaktywny",
+					"both": "Gdy czujnik staje się aktywny lub nieaktywny"
+				}
+			}
+		},
+		"sensors": {
+			"title": "Dostępne czujniki",
+			"description": "Poniżej wymienione są czujniki, które do tej pory zostały znalezione przez Homey. Gdy czujnik znajdzie się na liście, można go dodać do Homey w zakładce 'Urządzenia' ('+') 'Bezprzewodowe Czujniki Pogodowe', jeśli chcesz.",
+			"header": "Czujniki",
+			"details": {
+				"protocol": "Protokół",
+				"type": "Typ",
+				"channel": "Kanał",
+				"id": "ID",
+				"update": "Ostatnia aktualizacja",
+				"data": "Surowe dane",
+				"lowbattery": "Niski poziom baterii",
+				"paired": "Urządzenie Homey"
+			}
+		},
+		"debug": {
+			"title": "Debug",
+			"description": "Używaj poniższych funkcji wyłącznie na prośbę twórcy aplikacji.",
+			"header": "Debug functions",
+			"statistics": "Pobierz statystyki",
+			"heapdump": "Heap dump"
+		}
+	},
+	"error": {
+		"no_data": "Brak danych z czujnika od __since__",
+		"corrupt": "To urządzenie Homey jest uszkodzone. Usuń je i dodaj ponownie."
+	},
+	"notification": {
+		"active": "Czujnik __name__ jest znowu aktywny",
+		"inactive": "Czujnik __name__ jest nieaktywny"
+	},
+	"mobile": {
+		"forecast": {
+			"Partly cloudy": "Częściowo Pochmurno",
+			"Cloudy": "Pochmurno",
+			"Rainy": "Deszczowo",
+			"Sunny": "Słonecznie"
+		}
+	}
+}

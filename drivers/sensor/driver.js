@@ -33,13 +33,13 @@ const capability = {
 }
 
 const genericType = {
-	L: { txt: { en: 'Brightness', nl: 'Lichtsterkte' }, icon: '/drivers/luminance/assets/icon.svg' },
-	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter' }, icon: '/drivers/rain/assets/icon.svg' },
-	T: { txt: { en: 'Temperature', nl: 'Temperatuur' }, icon: '/drivers/temp/assets/icon.svg' },
-	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid' }, icon: '/drivers/temphum/assets/icon.svg' },
-	THB: { txt: { en: 'Weather station', nl: 'Weerstation' }, icon: '/drivers/temphumbar/assets/icon.svg' },
-	UV: { txt: { en: 'Ultra Violet' }, icon: '/drivers/uv/assets/icon.svg' },
-	W: { txt: { en: 'Anemometer', nl: 'Windmeter' }, icon: '/drivers/wind/assets/icon.svg' }
+	L: { txt: { en: 'Brightness', nl: 'Lichtsterkte', pl: 'Jasność' }, icon: '/drivers/luminance/assets/icon.svg' },
+	R: { txt: { en: 'Rain gauge', nl: 'Regenmeter', pl: 'Deszczomierz' }, icon: '/drivers/rain/assets/icon.svg' },
+	T: { txt: { en: 'Temperature', nl: 'Temperatuur', pl: 'Temperatura' }, icon: '/drivers/temp/assets/icon.svg' },
+	TH: { txt: { en: 'Temperature/humidity', nl: 'Temperatuur/vochtigheid', pl: 'Temperatura/Wilgotność' }, icon: '/drivers/temphum/assets/icon.svg' },
+	THB: { txt: { en: 'Weather station', nl: 'Weerstation', pl: 'Stacja pogodowa' }, icon: '/drivers/temphumbar/assets/icon.svg' },
+	UV: { txt: { en: 'Ultra Violet', pl: 'Ultrafiolet' }, icon: '/drivers/uv/assets/icon.svg' },
+	W: { txt: { en: 'Anemometer', nl: 'Windmeter', pl: 'Wiatromierz' }, icon: '/drivers/wind/assets/icon.svg' }
 }
 
 class SensorHelper extends Events {
