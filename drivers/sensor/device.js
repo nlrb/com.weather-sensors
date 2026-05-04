@@ -44,6 +44,7 @@ class SensorDevice extends Homey.Device {
           this.homey.notifications.createNotification({
             excerpt: this.homey.__('notification.active', { name: this.getName() })
           })
+            .catch(err => this.error('Error creating notification', err.message));
         }
         await this.setAvailable()
           .catch(err => this.error('Error marking', this.id, 'as available', err.message))

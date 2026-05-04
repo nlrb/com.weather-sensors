@@ -208,9 +208,11 @@
 								$scope.$apply();
 								// Show statistics for active protocols
 								Homey.api('GET', '/getStatistics/', {}, (err, stats) => {
+									console.log('stats', stats);
 									if (stats) {
 										for (let s in stats) {
-											if ($scope.app.protocols[s].watching) {
+											console.log('s', s);
+											if (stats[s].enabled) {
 												$scope.app.protocols[s].stats = stats[s].stats;
 											}
 										}

@@ -22,5 +22,8 @@
 	},
 	"3.2.1": {
 		"en": "Fix temperature issue for Cresta wind sensor"
+	},
+	"3.2.2": {
+		"en": "Catch notification errors, fix repair function"
 	}
 }

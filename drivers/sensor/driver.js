@@ -126,7 +126,8 @@ class SensorHelper extends Events {
 				if (this.activityNotifications & INACTIVE) {
 					this.driver.homey.notifications.createNotification({
 						excerpt: this.driver.homey.__('notification.inactive', { name: device.getName() })
-					});
+					})
+						.catch(err => this.error('Error creating notification', err.message));
 				}
 			}
 		})
@@ -235,9 +236,9 @@ class SensorHelper extends Events {
 					}, err => utils.debug('Signal', s, '; err', err))
 				} else if (!setting[s].watching && this.signals[s] !== undefined) {
 					// Un-register signal with Homey
-					this.signals[s].disableRX()
-					delete this.signals[s]
-					utils.debug('Signal', s, 'unregistered.')
+					this.signals[s].disableRX();
+					delete this.signals[s];
+					utils.debug('Signal', s, 'unregistered.');
 				}
 			}
 		}
@@ -379,15 +380,16 @@ class SensorDriver extends Homey.Driver {
 			this.log('repair_device', data);
 			let newId = data.id;
 			// Remove device with current ID
-			device.onDeleted();
+			this.helper.removeSensor(data.id);
 			// Update the device settings with the new ID
 			await device.setSettings({ id: newId.split(':')[1] });
 			// Set an override iD in the device store
 			await device.setStoreValue('repairId', newId);
-			// Initialize device with new ID§
+			// Initialize device with new ID
 			device.onInit();
 	    // Close the repair session
 			await session.done();
+			this.log('Repair completed for', newId);
 		})
 	}
 
