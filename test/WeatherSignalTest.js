@@ -178,6 +178,81 @@ var testSignals = [
     data: [1,1,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,1,1,1,1,1,0,0,0,1,1,1,0], protocol: "auriol2",
     result: {id:'200',channel:1,data:{temperature:22.3,humidity:34,lowbattery:false}}
   },
+/***************/
+/*** Bresser ***/
+/***************/
+  {
+    id: 'Bresser 7009995 #1',
+    data: [
+      1,0,1,1,0,1,0,1,
+      1,0,1,0,0,1,1,1,
+      1,0,1,0,0,0,1,0,
+      0,0,1,1,0,1,0,1,
+      1,1,0,0,1,0,1,0,
+      0,1,0,1,1,0,0,0,
+      0,1,0,1,1,1,0,1,
+      1,1,0,0,1,0,1,0,
+      0,0,1,0,1,1,1,0
+    ],
+    protocol: "Bresser",
+    result: {
+      id: '9995',
+      channel: 2,
+      data: {
+        temperature: 23.5,
+        humidity: 35,
+        lowbattery: false
+      }
+    }
+  },
+  {
+    id: 'Bresser 7009995 #2',
+    data: [
+      1,1,1,0,0,1,0,0,
+      1,0,0,1,1,1,0,1,
+      1,0,1,1,0,0,0,0,
+      0,0,0,0,0,0,1,1,
+      1,0,0,1,1,0,1,1,
+      0,1,1,0,0,0,1,0,
+      0,1,0,0,1,1,1,1,
+      1,1,1,1,1,1,0,0,
+      0,0,0,1,1,1,1,1
+    ],
+    protocol: "Bresser",
+    result: {
+      id: '9995',
+      channel: 1,
+      data: {
+        temperature: -0.3,
+        humidity: 64,
+        lowbattery: false
+      }
+    }
+  },
+  {
+    id: 'Bresser 7009995 #3',
+    data: [
+      1,1,0,1,0,1,0,0,
+      1,1,0,1,0,1,1,1,
+      1,1,1,0,0,0,1,0,
+      0,1,0,0,0,0,0,1,
+      1,0,1,0,1,0,1,1,
+      0,0,1,0,1,0,0,0,
+      0,0,0,1,1,1,0,1,
+      1,0,1,1,1,1,1,0,
+      1,1,0,1,0,0,1,1
+    ],
+    protocol: "Bresser",
+    result: {
+      id: '9995',
+      channel: 1,
+      data: {
+        temperature: 24.1,
+        humidity: 54,
+        lowbattery: true
+      }
+    }
+  },
 /**************/
 /*** Cresta ***/
 /**************/
@@ -374,6 +449,7 @@ for (var i = 0; i < testSignals.length; i++) {
   if (parsed) {
     delete result.protocol;
     delete result.lastupdate;
+	delete result.valid;
     if (ts.result !== undefined) {
       if (JSON.stringify(ts.result) === JSON.stringify(result)) {
         testResults.passed++;
