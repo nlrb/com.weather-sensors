@@ -14,6 +14,7 @@
 		"Weather sensor",
 		"Alecto",
 		"Auriol",
+		"Bresser",
 		"Cresta",
 		"Esic",
 		"Labs",
@@ -1019,6 +1020,28 @@
 				"sensitivity": 0.2,
 				"minimalLength": 39,
 				"maximalLength": 40
+			},
+			"Bresser": {
+				"sof": [
+					1950,
+					1950,
+					1950,
+					3900
+				],
+				"eof": [],
+				"words": [
+					[
+						1950,
+						1950
+					],
+					[
+						1950,
+						3900
+					]
+				],
+			"sensitivity": 0.35,
+			"minimalLength": 72,
+			"maximalLength": 72
 			},
 			"Cresta": {
 				"sof": [
