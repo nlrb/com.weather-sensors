@@ -25,5 +25,8 @@
 	},
 	"3.2.2": {
 		"en": "Catch notification errors, fix repair function"
+	},
+	"3.3.0": {
+		"en": "Support added for Bresser by Artur Łukowski"
 	}
 }
