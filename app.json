@@ -1314,6 +1314,24 @@
 				"minimalLength": 60,
 				"maximalLength": 140
 			},
+			"Rubicson": {
+				"sof": [],
+				"eof": [],
+				"words": [
+				[
+					400,
+					900
+				],
+				[
+					400,
+					1900
+				]
+				],
+				"repetitions": 5,
+				"sensitivity": 0.25,
+				"minimalLength": 34,
+				"maximalLength": 38
+			},
 			"UPM": {
 				"sof": [
 					1000,
