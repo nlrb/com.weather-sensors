@@ -1328,7 +1328,7 @@
 				]
 				],
 				"repetitions": 5,
-				"sensitivity": 0.25,
+				"sensitivity": 0.15,
 				"minimalLength": 34,
 				"maximalLength": 38
 			},
